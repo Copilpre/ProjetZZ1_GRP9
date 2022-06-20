@@ -6,5 +6,3 @@ fenetre.o : fenetre.c
 
 
 
-
-

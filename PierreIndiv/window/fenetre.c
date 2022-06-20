@@ -7,11 +7,7 @@
 int main(){
 
     SDL_Window 
-       *window_1 = NULL,
-       *window_2 = NULL,
-       *window_3 = NULL,
-       *window_4 = NULL,
-       *window_5 = NULL;
+       *window_1 = NULL;
 
     SDL_DisplayMode current;
 
@@ -22,9 +18,6 @@ int main(){
     }
 
     SDL_GetCurrentDisplayMode(0, &current);
-
-    SDL_Texture *image; 
-    //image = IMG_LoadTexture(renderer,"./images/nyancat.bmp");
 
 
     window_1 = SDL_CreateWindow(
@@ -39,10 +32,8 @@ int main(){
     while (x<=current.w-current.w/6){
         SDL_SetWindowPosition(window_1, x, y);
         x +=5;
-        printf("%d",current.h);
         y = 660 - 660 * fabs((sin(x*0.01))/(0.01*x));
         SDL_Delay(20);
-        printf("{%f,%f}\n",y,x);
     }
 
     SDL_DestroyWindow(window_1);
