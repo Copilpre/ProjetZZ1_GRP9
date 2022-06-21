@@ -66,7 +66,7 @@ int main( int argc, char ** argv)
 	point_t * p ;
 	c1->rayon = 100 ;
 	c1->angle = 0 ;
-	float pas = 0.0001 ;
+	float pas = 0.01 ;
 	point_t * origin = malloc(sizeof(point_t)) ;
 	origin->x = 300;
 	origin->y = 400;
@@ -77,6 +77,10 @@ int main( int argc, char ** argv)
 	while (keepContinu) {
 		c1 = polaire(c1, pas) ;
 		p = cartesien(c1) ;
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);	
+		SDL_RenderClear(renderer) ;
+
 		if (SDL_SetRenderDrawColor(renderer,
 			cos(c1->angle) * 255, 
 			sin(c1->angle) * 255,
@@ -91,7 +95,6 @@ int main( int argc, char ** argv)
 			SDL_ErrorCase("Trouble with Rect") ;
 		if (SDL_RenderFillRect(renderer, &rect) != 0)
 			SDL_ErrorCase("Trouble with fill") ;
-		SDL_RenderPresent(renderer) ;
 
 		if (SDL_PollEvent(&event)) 
 		{
@@ -108,10 +111,10 @@ int main( int argc, char ** argv)
 			default :
 				break ;
 			}
-		}	
+		}
+		SDL_RenderPresent(renderer) ;
 	}
 
-	SDL_RenderClear(renderer) ;
 
 	SDL_DestroyRenderer(renderer) ;
 	SDL_DestroyWindow(window) ;

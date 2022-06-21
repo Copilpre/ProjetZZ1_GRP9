@@ -82,7 +82,13 @@ int main( int argc, char ** argv)
 		if (SDL_PollEvent(&event)) 
 		{
 			switch(event.type) {
+			case SDL_WINDOWEVENT_CLOSE :
+				keepContinu = SDL_FALSE ;
+				break ;
 			case SDL_QUIT :
+				keepContinu = SDL_FALSE ;
+				break ;
+			case SDL_WINDOWEVENT_LEAVE :
 				keepContinu = SDL_FALSE ;
 				break ;
 			case SDL_KEYDOWN :
@@ -100,7 +106,6 @@ int main( int argc, char ** argv)
 					SDL_ErrorCase("Trouble with Rect") ;
 				if (SDL_RenderFillRect(renderer, &rect) != 0)
 					SDL_ErrorCase("Trouble with fill") ;
-				SDL_RenderPresent(renderer) ;
 				break ;
 			case SDL_KEYUP:
 				if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, 
@@ -110,7 +115,6 @@ int main( int argc, char ** argv)
 					(int)(p->x + origin->x), 
 					(int)(p->y + origin->y)) != 0)
 					SDL_ErrorCase("Trouble with Point") ;
-				SDL_RenderPresent(renderer) ;
 			case SDL_MOUSEBUTTONUP :
 				if (SDL_SetRenderDrawColor(renderer, 
 					255 * cos(c1->angle) ,
@@ -124,18 +128,16 @@ int main( int argc, char ** argv)
 					origin->x,
 					origin->y) != 0)
 					SDL_ErrorCase("Trouble with Line") ;
-				SDL_RenderPresent(renderer) ;
 				if (c1->angle > 360)  SDL_RenderClear(renderer) ;
 				break ;
 			default :
 				break ;
 			} 
+			SDL_RenderPresent(renderer) ;
+			SDL_Delay(50) ;
 		}
 	}
 
-	SDL_Delay(6000) ;
-
-	SDL_RenderClear(renderer) ;
 
 	SDL_DestroyRenderer(renderer) ;
 	SDL_DestroyWindow(window) ;

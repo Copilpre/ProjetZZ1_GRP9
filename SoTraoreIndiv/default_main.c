@@ -2,12 +2,32 @@
 #include <SDL2/SDL.h>
 #include<stdlib.h>
 
+void SDL_ErrorCase(char * msg) ;
+void dessinRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_Bool fill) ; 
+void dessinLine(SDL_Renderer * renderer, int x1, int y1, int x2, int y2) ;
+void dessinPoint(SDL_Renderer * renderer, int x, int y) ;
+void dessinSerpent(SDL_Renderer * renderer, int x, int y) ;
+
+int main(int argc, char ** argc) {
+	SDL_Window * window ;
+	SDL_Renderer * renderer ;
+
+
+
+	SDL_DestroyRenderer(renderer) ;
+	SDL_DestroyWindow(window) ;
+	SLD_Quit() ;
+
+	exit(EXIT_FAILURE) ;
+}
+
+
 void SDL_ErrorCase(char * msg) {
 	SDL_Log("%s %s\n", msg, SDL_GetError()) ;
 	exit(EXIT_FAILURE) ;
 }
 
-void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_bool fill) 
+void dessinRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_Bool fill) 
 {
 	if (fill == SDL_TRUE)
 	if (SDL_RenderFillRect(renderer, r, g, b, SDL_ALPHA_OPAQUE) != 0)
@@ -22,7 +42,7 @@ void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, S
 	SDL_RendererPresent(renderer) ;
 }
 
-void SDL_DrawLine(SDL_Renderer * renderer, int x1, int y1, int x2, int y2) 
+void dessinLine(SDL_Renderer * renderer, int x1, int y1, int x2, int y2) 
 {
 	if (SDL_RenderDrawLine(renderer, x1, y1, x2, y2) != 0) 
 		SDL_ErrorCase("Trouble with draw line") ;
@@ -30,7 +50,7 @@ void SDL_DrawLine(SDL_Renderer * renderer, int x1, int y1, int x2, int y2)
 	SDL_RendererPresent(renderer) ;
 }
 
-void SDL_DrawPoint(SDL_Renderer * renderer, int x, int y) 
+void dessinPoint(SDL_Renderer * renderer, int x, int y) 
 {
 	if (SDL_RenderDrawPoint(renderer, x, y) != 0) 
 		SDL_ErrorCase("Trouble with draw point") ;
@@ -43,7 +63,7 @@ void SDL_DrawPoint(SDL_Renderer * renderer, int x, int y)
 	la tete est un circle.
 */
 
-void SDL_DrawSnake(SDL_Renderer * renderer, int x, int y) 
+void dessinSerpent(SDL_Renderer * renderer, int x, int y) 
 {
 
 
