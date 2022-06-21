@@ -8,13 +8,14 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
 ```
   Implémentation d'une fenètre suivant un trajectoire arcsin.
   Implémentation graphique d'un bohomme qui tend la main.`
+  Essaie implémentation du serpent en cours (avancé).
   (Sera complété).
 ```
   
 - Corentin Pilpré
 ```
   Implémentation d'une fenètre suiavnt un trajectoire rectangulaire restant dans le cadre l'ecran.
-  Implementation de makefile.
+  Essaie implémentation du serpent en cours (avancé).
   (Sera complété).
 ```
 
