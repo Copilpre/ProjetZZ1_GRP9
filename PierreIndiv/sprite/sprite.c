@@ -17,6 +17,13 @@ void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
     if(my_texture==NULL){
         printf("NULL");
     }
+    int posX;
+    int posY;
+    SDL_GetWindowPosition(window,&posX, &posY);
+
+    SDL_GetWindowSize(window,              // Récupération des dimensions de la fenêtre
+                        &window_dimensions.w,
+                        &window_dimensions.h);
 
     SDL_QueryTexture(my_texture, NULL, NULL ,&source.w, &source.h);
 
@@ -26,10 +33,11 @@ void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
     sprite.h = source.h;
 
     SDL_Rect position;
-    position.x = 200;
-    position.y = 200;
-    position.w =sprite.w;
-    position.h = sprite.h;
+    position.x = (posX)+window_dimensions.w/8;
+    position.y = (posY)+window_dimensions.h/8;
+    position.w =sprite.w*window_dimensions.w/1000;
+    position.h = sprite.h*window_dimensions.w/1000;
+
     
     SDL_RenderCopy(renderer, my_texture, &sprite, &position);
     
@@ -58,7 +66,7 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
 
     source2.x = stage*source.w/10;
     source2.y = 0;
-    source2.w = source.w-source2.x;
+    source2.w = source.w;
     source2.h = source.h;
 
     SDL_Rect position;
@@ -72,11 +80,11 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
     source2.x = 0;
     source2.y = 0;
     source2.w = stage*source.w/10;
-    source2.h = window_dimensions.h;
+    source2.h = source.h;
 
-    position.x = source.w-source2.x;
+    position.x = source.w-source2.w;
     position.y = 0;
-    position.w = source2.x;
+    position.w = 500;
     position.h = window_dimensions.h;
 
 
@@ -111,9 +119,8 @@ int main(){
     int ticks = 0;
 
     while (ticks < 150){
-        if(ticks%3==0){
-            dessinePaysage(renderer,ticks/3,window_1);
-        }
+        dessinePaysage(renderer,ticks%5,window_1);
+
         
 
         dessinePerso(renderer,ticks%5,window_1);
