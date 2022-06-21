@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#//include <SDL2/SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -29,13 +29,15 @@ int main(){
 
     float x = 0;
     float y = 0;
+    float pas = 5;
     while (x<=current.w-current.w/6){
         SDL_SetWindowPosition(window_1, x, y);
-        x +=5;
-        y = 660 - 660 * fabs((sin(x*0.01))/(0.01*x));
+        x +=pas;
+        y = current.h-current.w/6 - (current.h-current.w/6) * fabs((sin(x*0.01))/(0.01*x));
         SDL_Delay(20);
+        printf("(%f %f)\n", x,y);
     }
-
+    
     SDL_DestroyWindow(window_1);
     SDL_Quit();
 }

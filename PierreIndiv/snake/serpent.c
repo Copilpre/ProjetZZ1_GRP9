@@ -49,16 +49,109 @@ void dessineRectCouleur(int i, int j, int width, SDL_Renderer * renderer){
 void dessineBonhomme(SDL_Renderer * renderer, int width){
     SDL_SetRenderDrawColor(renderer, 0,0,0,255);
     SDL_Rect rectangle;
-    rectangle.x = width/2+10;                                                // x haut gauche du rectangle
-    rectangle.y = 300;                                                 // y haut gauche du rectangle
-    rectangle.w = width/8;                                                // sa largeur (w = width)
-    rectangle.h = width/3; 
+    float posBonhommeX=0.3+rand()%12*0.1;
+    float posBonhommeY=0.3+rand()%15*0.1;
+    int CorpsX = posBonhommeX*width/2;
+    int CorpsY = posBonhommeY*width/4;
+    int CorpsW = width/8;
+    int CorpsH = width/3;
+
+    //corps
+    rectangle.x = CorpsX;                                               
+    rectangle.y = CorpsY;                                               
+    rectangle.w = CorpsW;
+    rectangle.h = CorpsH; 
     SDL_RenderFillRect(renderer, &rectangle);
 
+    //tete
+    rectangle.x = CorpsX+0.2*CorpsW;
+    rectangle.y = CorpsY-0.8*CorpsW;
+    rectangle.w = CorpsW*0.65;
+    rectangle.h = CorpsW*0.65;
+    SDL_RenderFillRect(renderer, &rectangle);
+
+    //jambes
+    rectangle.x = CorpsX;
+    rectangle.y = CorpsY+CorpsH;
+    rectangle.w = CorpsW*0.3;
+    rectangle.h = CorpsH*0.7;
+    SDL_RenderFillRect(renderer, &rectangle);
+
+    rectangle.x = CorpsX+CorpsW-CorpsW*0.3;
+    rectangle.y = CorpsY+CorpsH;
+    rectangle.w = CorpsW*0.3;
+    rectangle.h = CorpsH*0.7;
+    SDL_RenderFillRect(renderer, &rectangle);
+
+    //chaussures
+    
+
     switch(rand()%2){
-        case 0 ://cas bras en bas
+        case 0 ://cas tete à gauche
+            //cou
+            rectangle.x = CorpsX+CorpsW*0.5;
+            rectangle.y = CorpsY-0.15*CorpsW;
+            rectangle.w = CorpsW*0.3;
+            rectangle.h = CorpsY - rectangle.y;
+            SDL_RenderFillRect(renderer, &rectangle);
+            
+            //brasG
+            rectangle.x = CorpsX-CorpsH*0.4;
+            rectangle.y = CorpsY;
+            rectangle.h = CorpsW*0.25;
+            rectangle.w = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+            rectangle.x = CorpsX-CorpsH*0.4;
+            rectangle.y = CorpsY-CorpsH*0.4;
+            rectangle.w = CorpsW*0.25;
+            rectangle.h = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+
+            //brasD
+            rectangle.x = CorpsX+CorpsW;
+            rectangle.y = CorpsY;
+            rectangle.h = CorpsW*0.25;
+            rectangle.w = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+            rectangle.x = CorpsX+CorpsW-CorpsW*0.25+CorpsH*0.4;
+            rectangle.y = CorpsY+CorpsW*0.25;
+            rectangle.w = CorpsW*0.25;
+            rectangle.h = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+            
             break;
-        case 1 : //cas bras en haut
+        case 1 : //cas tete à droite
+            //cou
+            rectangle.x = CorpsX+0.25*CorpsW;
+            rectangle.y = CorpsY-0.15*CorpsW;
+            rectangle.w = CorpsW*0.3;
+            rectangle.h = CorpsY - rectangle.y;
+            SDL_RenderFillRect(renderer, &rectangle);
+
+            //brasG
+            rectangle.x = CorpsX-CorpsH*0.4;
+            rectangle.y = CorpsY;
+            rectangle.h = CorpsW*0.25;
+            rectangle.w = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+            rectangle.x = CorpsX-CorpsH*0.4;
+            rectangle.y = CorpsY+CorpsW*0.25;
+            rectangle.w = CorpsW*0.25;
+            rectangle.h = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+
+            //brasD
+            rectangle.x = CorpsX+CorpsW;
+            rectangle.y = CorpsY;
+            rectangle.h = CorpsW*0.25;
+            rectangle.w = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+            rectangle.x = CorpsX+CorpsW-CorpsW*0.25+CorpsH*0.4;
+            rectangle.y = CorpsY-CorpsH*0.4;
+            rectangle.w = CorpsW*0.25;
+            rectangle.h = CorpsH*0.4;
+            SDL_RenderFillRect(renderer, &rectangle);
+
             break;
     }
     
@@ -79,11 +172,10 @@ int main(){
 
     SDL_GetCurrentDisplayMode(0, &current);
 
-    window_1 = SDL_CreateWindow(
-      "Piste de Danse",                    // codage en utf8, donc accents possibles
-      current.w/4, current.w/4,                                  // coin haut gauche en haut gauche de l'écran
-      current.w/2, current.w/2,                              // largeur = 400, hauteur = 300
-      SDL_WINDOW_RESIZABLE);
+    int WindowW = current.w/2;
+    int WindowH = current.w/2;
+
+    window_1 = SDL_CreateWindow("Piste de Danse",current.w/4,current.w/4,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
 
     SDL_Renderer *renderer;
 
@@ -92,12 +184,12 @@ int main(){
     while(ticks <25){
         for (int i =0; i < 4; i++){
             for (int j = 0; j<4;j++){
-                dessineRectCouleur(i,j,current.w/2,renderer);
+                dessineRectCouleur(i,j,WindowW,renderer);
             }
         }
-        dessineBonhomme(renderer,current.w/2);
+        dessineBonhomme(renderer,WindowW);
         SDL_RenderPresent(renderer);  
-        SDL_Delay(250);
+        SDL_Delay(300);
         ticks++;
     }
         
