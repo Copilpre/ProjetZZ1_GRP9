@@ -25,5 +25,6 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
   Implémentation d'un rendu qui place des points suivant un trajectoire circulaire
   à chaque clique, carrés, droite tracés suivant également un trajectoire circulaire
   en fonction du mouvement de la souris et de clique.
+  Pas mise en ligne car pas sur la même branch error lors de git push.
   (Sera complété).
 ```
