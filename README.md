@@ -14,6 +14,7 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
 - Corentin Pilpré
 ```
   Implémentation d'une fenètre suiavnt un trajectoire rectangulaire restant dans le cadre l'ecran.
+  Implementation de makefile.
   (Sera complété).
 ```
 
