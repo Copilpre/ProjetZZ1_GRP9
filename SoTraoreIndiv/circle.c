@@ -48,5 +48,5 @@ void SDL_DrawCircle(SDL_Renderer * renderer, SDL_Color c, point_t origin, int r)
 			SDL_ErrorCase("Trouble with draw point") ;
 
 	}
-	SDL_RendererPresent(renderer) ;
+	//SDL_RendererPresent(renderer) ;
 }
