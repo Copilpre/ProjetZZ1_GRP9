@@ -17,6 +17,8 @@ void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
     if(my_texture==NULL){
         printf("NULL");
     }
+
+
     int posX;
     int posY;
     SDL_GetWindowPosition(window,&posX, &posY);
@@ -33,9 +35,9 @@ void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
     sprite.h = source.h;
 
     SDL_Rect position;
-    position.x = (posX)+window_dimensions.w/8;
-    position.y = (posY)+window_dimensions.h/8;
-    position.w =sprite.w*window_dimensions.w/1000;
+    position.x = window_dimensions.w/8;
+    position.y = window_dimensions.h/8;
+    position.w = sprite.w*window_dimensions.w/1000;
     position.h = sprite.h*window_dimensions.w/1000;
 
     
@@ -107,8 +109,8 @@ int main(){
 
     SDL_GetCurrentDisplayMode(0, &current);
 
-    int WindowW = current.w/2;
-    int WindowH = current.w/2;
+    int WindowW = current.w;
+    int WindowH = current.w;
 
     window_1 = SDL_CreateWindow("Petite animation",current.w/4,current.w/4,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
 
