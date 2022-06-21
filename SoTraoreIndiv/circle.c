@@ -1,9 +1,26 @@
+<<<<<<< HEAD
 #include "circle.h"
+=======
+#include <math.h>
+#define TAILLE 40
+#include "serpent.h"
+
+typedef struct circle {
+	int rayon ;	
+	float angle ;
+} circle_t ;
+
+typedef struct point {
+	int x ;
+	int y ;
+} point_t ;
+
+>>>>>>> 9343aae2d9e09d90c67f28013d71b5acd51c69f1
 
 circle_t * polaire(circle_t * c1, float angle) {
 	circle_t * c = malloc(sizeof(circle_t)) ;
 	c->rayon = c1->rayon ;
-	if (c1->angle > 360) c1->angle = 0 ;
+	//if (c1->angle > 360) c1->angle = 0 ;
 	c->angle = (c1->angle + angle) ;
 	return c ;
 }
@@ -35,5 +52,5 @@ void SDL_DrawCircle(SDL_Renderer * renderer, SDL_Color c, point_t origin, int r)
 			SDL_ErrorCase("Trouble with draw point") ;
 
 	}
-	SDL_RendererPresent(renderer) ;
+	//SDL_RendererPresent(renderer) ;
 }

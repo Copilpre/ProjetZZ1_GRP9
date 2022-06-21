@@ -1,125 +1,88 @@
 #include <SDL2/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 
-SDL_Color rouge = {255,0,0,255};
-SDL_Color vert = {0,255,0,255};
-SDL_Color bleu = {0,0,255,255};
-SDL_Color orange ={255,128,0,255};
-SDL_Color cyan = {0,250,255,255};
-SDL_Color jaune = {255,242,0,255};
-SDL_Color noir = {0,0,0,255};
-SDL_Color blanc = {255,255,255,255};
-SDL_Color gris = {155,155,155,255};
+void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
+    
+    SDL_Rect 
+            source = {0},
+            sprite = {0},                      // Rectangle définissant la zone de la texture à récupérer
+            window_dimensions = {0},              // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+            destination = {0}; 
 
-void dessinePerso(SDL_Renderer * renderer,int  width,int  stage){
-    SDL_SetRenderDrawColor(renderer, gris.r,gris.g,gris.b,gris.a);
-    SDL_Rect rectangle;
-    float posBonhommeX=0.3+rand()%12*0.1;
-    float posBonhommeY=0.3+rand()%15*0.1;
-    int CorpsX = posBonhommeX*width/2;
-    int CorpsY = posBonhommeY*width/4;
-    int CorpsW = width/8;
-    int CorpsH = width/3;
+    SDL_Texture *my_texture; 
+    my_texture = IMG_LoadTexture(renderer,"./images/nyan.png");
+    if(my_texture==NULL){
+        printf("NULL");
+    }
 
-    //corps
-    rectangle.x = CorpsX;                                               
-    rectangle.y = CorpsY;                                               
-    rectangle.w = CorpsW;
-    rectangle.h = CorpsH; 
-    SDL_RenderFillRect(renderer, &rectangle);
+    SDL_QueryTexture(my_texture, NULL, NULL ,&source.w, &source.h);
 
-    //tete
-    rectangle.x = CorpsX+0.2*CorpsW;
-    rectangle.y = CorpsY-0.8*CorpsW;
-    rectangle.w = CorpsW*0.65;
-    rectangle.h = CorpsW*0.65;
-    SDL_RenderFillRect(renderer, &rectangle);
+    sprite.x = stage*source.w/5;
+    sprite.y = 0;
+    sprite.w = source.w/5;
+    sprite.h = source.h;
 
-    //jambes
-    rectangle.x = CorpsX;
-    rectangle.y = CorpsY+CorpsH;
-    rectangle.w = CorpsW*0.3;
-    rectangle.h = CorpsH*0.7;
-    SDL_RenderFillRect(renderer, &rectangle);
-
-    rectangle.x = CorpsX+CorpsW-CorpsW*0.3;
-    rectangle.y = CorpsY+CorpsH;
-    rectangle.w = CorpsW*0.3;
-    rectangle.h = CorpsH*0.7;
-    SDL_RenderFillRect(renderer, &rectangle);
-
-    //chaussures
+    SDL_Rect position;
+    position.x = 200;
+    position.y = 200;
+    position.w =sprite.w;
+    position.h = sprite.h;
+    
+    SDL_RenderCopy(renderer, my_texture, &sprite, &position);
     
 
-    switch(stage){
-        case 0 ://cas tete à gauche
-            //cou
-            rectangle.x = CorpsX+CorpsW*0.5;
-            rectangle.y = CorpsY-0.15*CorpsW;
-            rectangle.w = CorpsW*0.3;
-            rectangle.h = CorpsY - rectangle.y;
-            SDL_RenderFillRect(renderer, &rectangle);
-            
-            //brasG
-            rectangle.x = CorpsX-CorpsH*0.4;
-            rectangle.y = CorpsY;
-            rectangle.h = CorpsW*0.25;
-            rectangle.w = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
-            rectangle.x = CorpsX-CorpsH*0.4;
-            rectangle.y = CorpsY-CorpsH*0.4;
-            rectangle.w = CorpsW*0.25;
-            rectangle.h = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
+    SDL_DestroyTexture(my_texture);
+}
 
-            //brasD
-            rectangle.x = CorpsX+CorpsW;
-            rectangle.y = CorpsY;
-            rectangle.h = CorpsW*0.25;
-            rectangle.w = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
-            rectangle.x = CorpsX+CorpsW-CorpsW*0.25+CorpsH*0.4;
-            rectangle.y = CorpsY+CorpsW*0.25;
-            rectangle.w = CorpsW*0.25;
-            rectangle.h = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
-            
-            break;
-        case 1 : //cas tete à droite
-            //cou
-            rectangle.x = CorpsX+0.25*CorpsW;
-            rectangle.y = CorpsY-0.15*CorpsW;
-            rectangle.w = CorpsW*0.3;
-            rectangle.h = CorpsY - rectangle.y;
-            SDL_RenderFillRect(renderer, &rectangle);
+void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
+     SDL_Rect 
+            source = {0},
+            source2 = {0},                      // Rectangle définissant la zone de la texture à récupérer
+            window_dimensions = {0},              // Rectangle définissant la fenêtre, on n'utilisera que largeur et hauteur
+            destination = {0}; 
 
-            //brasG
-            rectangle.x = CorpsX-CorpsH*0.4;
-            rectangle.y = CorpsY;
-            rectangle.h = CorpsW*0.25;
-            rectangle.w = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
-            rectangle.x = CorpsX-CorpsH*0.4;
-            rectangle.y = CorpsY+CorpsW*0.25;
-            rectangle.w = CorpsW*0.25;
-            rectangle.h = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
+    SDL_Texture *my_texture; 
+    my_texture = IMG_LoadTexture(renderer,"./images/galaxy.jpg");
+    if(my_texture==NULL){
+        printf("NULL");
+    }
 
-            //brasD
-            rectangle.x = CorpsX+CorpsW;
-            rectangle.y = CorpsY;
-            rectangle.h = CorpsW*0.25;
-            rectangle.w = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
-            rectangle.x = CorpsX+CorpsW-CorpsW*0.25+CorpsH*0.4;
-            rectangle.y = CorpsY-CorpsH*0.4;
-            rectangle.w = CorpsW*0.25;
-            rectangle.h = CorpsH*0.4;
-            SDL_RenderFillRect(renderer, &rectangle);
+    SDL_QueryTexture(my_texture, NULL, NULL ,&source.w, &source.h);
 
+    SDL_GetWindowSize(window,              // Récupération des dimensions de la fenêtre
+                        &window_dimensions.w,
+                        &window_dimensions.h);
+
+    source2.x = stage*source.w/10;
+    source2.y = 0;
+    source2.w = source.w-source2.x;
+    source2.h = source.h;
+
+    SDL_Rect position;
+    position.x = 0;
+    position.y = 0;
+    position.w = source.w-source2.x;
+    position.h = window_dimensions.h;
+    
+    SDL_RenderCopy(renderer, my_texture, &source2, &position);
+    
+    source2.x = 0;
+    source2.y = 0;
+    source2.w = stage*source.w/10;
+    source2.h = window_dimensions.h;
+
+    position.x = source.w-source2.x;
+    position.y = 0;
+    position.w = source2.x;
+    position.h = window_dimensions.h;
+
+
+    SDL_RenderCopy(renderer, my_texture, &source2, &position);
+    
+    SDL_DestroyTexture(my_texture);
 }
 
 int main(){
@@ -139,7 +102,7 @@ int main(){
     int WindowW = current.w/2;
     int WindowH = current.w/2;
 
-    window_1 = SDL_CreateWindow("Chevalier",current.w/4,current.w/4,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
+    window_1 = SDL_CreateWindow("Petite animation",current.w/4,current.w/4,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
 
     SDL_Renderer *renderer;
 
@@ -147,12 +110,15 @@ int main(){
 
     int ticks = 0;
 
-    while (ticks < 25){
-        dessinePaysage(renderer,WindowW,ticks%3);
+    while (ticks < 150){
+        if(ticks%3==0){
+            dessinePaysage(renderer,ticks/3,window_1);
+        }
+        
 
-        dessinePerso(renderer,WindowW,ticks%2);
-
-        SDL_Delay(400);
+        dessinePerso(renderer,ticks%5,window_1);
+        SDL_RenderPresent(renderer); 
+        SDL_Delay(50);
         ticks++;
     }
 

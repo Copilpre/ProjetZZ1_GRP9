@@ -32,7 +32,7 @@ void SDL_DrawPoint(SDL_Renderer * renderer, int x, int y)
 
 /*
 	Un serpent est composé de 5 carrés avec 4 ligne intermediaire
-	la tete est un circle.
+	la tete est un cercle.
 */
 
 void SDL_DrawSnake(SDL_Renderer * renderer, int x, int y) 
