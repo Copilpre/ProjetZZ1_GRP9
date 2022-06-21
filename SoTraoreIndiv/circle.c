@@ -13,11 +13,10 @@ typedef struct point {
 } point_t ;
 
 
-
 circle_t * polaire(circle_t * c1, float angle) {
 	circle_t * c = malloc(sizeof(circle_t)) ;
 	c->rayon = c1->rayon ;
-	if (c1->angle > 360) c1->angle = 0 ;
+	//if (c1->angle > 360) c1->angle = 0 ;
 	c->angle = (c1->angle + angle) ;
 	return c ;
 }
