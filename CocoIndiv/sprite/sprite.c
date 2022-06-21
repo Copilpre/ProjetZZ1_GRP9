@@ -80,8 +80,6 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
 int main(){
     
     
-    SDL_bool program_on = SDL_TRUE;               // Booléen pour dire que le programme doit continuer
-    SDL_Event event;                              // c'est le type IMPORTANT !!
     
     SDL_Window 
        *window_1 = NULL;
@@ -106,28 +104,30 @@ int main(){
     renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
 
     int ticks = 0;
-    
-    
-    while (SDL_PollEvent(&event)||(program_on)){
+    int acceleration = 30;
+    SDL_Event event;
+    SDL_bool quit = SDL_FALSE;
+    while(!quit)
+    {
+        while(SDL_PollEvent(&event))
+            {
+                if(event.type == SDL_QUIT)
+                    quit = SDL_TRUE;
+                else if(event.type == SDL_KEYDOWN)
+                    {
+                    if(event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+                        acceleration -= 10;
+                    if(event.key.keysym.sym == SDLK_LEFT)
+                        acceleration += 10;
+                    }
+            } 
+        SDL_Delay(acceleration);
         
-        switch(event.type)
-    
-        {
-            case SDL_QUIT :
-                program_on = SDL_FALSE;
-                break;
-            default:
-                dessinePaysage(renderer,ticks%5,window_1);
-                dessinePerso(renderer,ticks%5,window_1);
-                SDL_RenderPresent(renderer); 
-                
-                ticks++;
+        dessinePaysage(renderer,ticks%5,window_1);
+        dessinePerso(renderer,ticks%5,window_1);
+        SDL_RenderPresent(renderer); 
+        ticks++;
 
-            break;
-
-        }
-        SDL_Delay(50);
-    }
-
+    } 
     return 0;
 }
