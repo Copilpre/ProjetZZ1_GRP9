@@ -1,6 +1,6 @@
 #include "table.h"
+#include "config.c"
 #include <SDL2/SDL.h>
-
 #define TAILLE 9
 
 typedef struct point {
@@ -14,7 +14,7 @@ typedef struct table {
 } table_t ;
 
 point_t voisinHaut(table_t * T, int i, int j) {
-	point p = {i , j} ;
+	point p ;
 	if (i-1 < 0) {
 		p->i = TAILLE-1 ;
 	} else {
@@ -48,7 +48,7 @@ point_t voisinDroite(table_t * T, int i, int j) {
 } 
 
 point_t voisinGauche(table_t * T, int i, int j) {
-	point p = {i , j} ;
+	point p ;
 	if (i-1 < 0 && j-1 < 0) {
 		p->i = TAILLE-1 ;
 		p->j = TAILLE-1 ;
@@ -59,20 +59,23 @@ point_t voisinGauche(table_t * T, int i, int j) {
 	return p ;
 }
 
-void gestionVie(table_t * T, int i, int j) {
-	if (i == 0 || j == 0) {
-		int e1 = 
-
-		if (T->survie[i][j] == 1) {
+table_t * initTable(table_t * T) {
+	int i, j ;
+	for (i=0; i<TAILLE; i++) {
+		for (j=0; j<TAILLE; j++) {
 			T->survie[i][j] = 0 ;
+			T->naissance[i][j] = 0 ;
 		}
 	}
+
+}
+
+void gestionVie(table_t * T, int i, int j) {
+
 }
 
 void gestionMort(table_t * T, int i, int j) {
-	if (T->naissance[i][j] ==) {
 
-	}
 }
 
 
