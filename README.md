@@ -6,10 +6,11 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
 
 - Pierre Labazuy 
 ```
-  Implémentation d'une fenètre suivant un trajectoire arcsin.
-  Implémentation graphique d'un bohomme qui tend la main.`
-  Essaie implémentation du serpent en cours (avancé).
-  (Sera complété).
+   Implémentation d'une fenètre suivant un trajectoire arcsin.
+   Implémentation graphique d'un bonhomme en rectangle qui danse sur une piste de discothèque.`
+   Implémentation d'une animation de nyan cat dans l'espace.
+   Début de la création du menu du jeu de la vie.
+   (Sera complété).
 ```
   
 - Corentin Pilpré
