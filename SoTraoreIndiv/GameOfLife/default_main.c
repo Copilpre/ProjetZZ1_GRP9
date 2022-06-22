@@ -44,7 +44,7 @@ int main(int argc, char ** argc) {
 		{
 			switch (event.type) 
 			{
-				case SDL_BUTTOn_LEFT :
+				case SDL_BUTTON_LEFT :
 					vitesse = (vitesse < 100) ? vetesse+10 : 100 ;
 					break ;
 				case SDL_BUTTON_RIGHT :
@@ -52,10 +52,12 @@ int main(int argc, char ** argc) {
 					break ;
 				case SDL_MOUSEBUTTONDOWN :
 					SDL_GetMouseState(i, j) ;
-					(*i) = (int)(((*i) * rect.w) / rect.w) ;
-					(*j) = (int)(((*j) * rect.h) / rect.h) ;
+					(*i) = (int)((*i) / rect.w) ;
+					(*j) = (int)((*j) / rect.h) ;
 					rect.x = (*i) * rect.w ;
 					rect.y = (*j) * rect.h ;
+					// Ici on doit prendre en compte certains 
+					// changement au niveau de l'ecran et de la grille 
 					newColor = SDL_TRUE ;
 					SDL_ChangeColor(renderer, rect, newColor) ;
 					break ;
