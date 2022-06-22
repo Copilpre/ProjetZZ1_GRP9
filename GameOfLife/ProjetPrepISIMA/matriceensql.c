@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #define HEIGHT 601
 #define WIDTH 1201
 
 
-void matriceensql(int ** mat,int hauteur,SDL_Surface * ecran)
+void matriceSDL(int ** mat,int hauteur,SDL_Surface * ecran)
 {
 
   SDL_Rect position ;
@@ -34,6 +34,7 @@ void matriceensql(int ** mat,int hauteur,SDL_Surface * ecran)
 
   position.x = a;
   position.y = a;
+  position.
   
   for(int i = 0; i < hauteur ;i++)
   {
@@ -41,7 +42,7 @@ void matriceensql(int ** mat,int hauteur,SDL_Surface * ecran)
     {
       if(mat[i][j] == 0)
       {
-        SDL_BlitSurface(rectangle2,NULL,ecran,&position);
+        ;
       }
       else if(mat[i][j] == 1)
       {
