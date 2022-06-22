@@ -9,8 +9,6 @@ int main()
 {
     //faire toute l'initialisation
 
-    int masqueSurvie[9]={0,0,1,1,0,0,0,0,0};
-    int masqueNaissance[9]={0,0,1,1,0,0,0,0,0};
 
 
     
@@ -51,8 +49,7 @@ int main()
 					clic(i,j,tab,type);
 					// Ici on doit prendre en compte certains 
 					// changement au niveau de l'ecran et de la grille 
-					newColor = SDL_TRUE ;
-					SDL_ChangeColor(renderer, rect, newColor) ;
+			
 					break ;
 				case SDL_WINDOWEVENT_CLOSE :
 					keepLoop = SDL_FALSE ;
