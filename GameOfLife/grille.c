@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include "config.c"
 #define TAILLE 20
 
 int ** tab ;
