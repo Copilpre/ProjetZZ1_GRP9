@@ -20,16 +20,15 @@ void affichageTableau(int ligne, int col,int ** tab,SDL_Renderer * renderer,SDL_
     SDL_Rect window_dimensions;
 
     SDL_GetWindowSize(window,&window_dimensions.w,&window_dimensions.h);
-	int dimCase = window_dimensions.h/ligne;
+	float dimCase = (float)window_dimensions.h/ligne;
     SDL_Rect position = {0,0,window_dimensions.h/col,window_dimensions.w/ligne};
-
+	position.h=dimCase;
+	position.w=dimCase;
     for (i=0;i<ligne;i++){
         position.y = i*dimCase;
         for (j=0;j<col;j++){
             position.x=j*dimCase;
-            if(tab[j][i]==1){
-				
-				printf("(%d %d)",position.x,position.y);
+            if(tab[i][j]==1){
 				SDL_RenderFillRect(renderer,&position);
         	}
         }
@@ -51,13 +50,13 @@ int main()
 
 	Tableau2=initTab(TAILLE);
 
-	Tableau2[0][1]=1;
+	Tableau2[7][1]=1;
 	
 	int w, h, i = 0, j = 0, vitesse = 100;
 
 	char type;
     SDL_Event event;
-    SDL_bool keepLoop = SDL_FALSE;
+    SDL_bool keepLoop = SDL_TRUE;
 
 	/*				INIT 
 					SDL				*/
@@ -76,7 +75,7 @@ int main()
 	SDL_GetCurrentDisplayMode(0, &current);
 	SDL_Rect window = {0,0,current.h, current.h};
 	SDL_Rect rect ; 
-	window_1 = SDL_CreateWindow("Menu",window.w/2,window.y,window.w,window.w,SDL_WINDOW_RESIZABLE);
+	window_1 = SDL_CreateWindow("Menu",window.w/2,window.y,window.w*0.8,window.w*0.8,SDL_WINDOW_RESIZABLE);
 
 	SDL_Renderer * renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
 
@@ -89,7 +88,6 @@ int main()
 
 		while (SDL_PollEvent(&event)) 
 		{
-			printf("coicou");
 			switch (event.type) 
 			{
 				case SDL_BUTTON_LEFT :
@@ -161,5 +159,5 @@ int main()
 			SDL_Delay(vitesse) ;
 		}
 	}
-
+	SDL_DestroyWindow(window_1);
 }
