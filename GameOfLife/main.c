@@ -1,9 +1,39 @@
-#include "dessin.h"
 #include "menuT.h"
-#include "recherche_voisins.h"
+#include "affichageSDL.h"
+
+#include <SDL2/SDL.h>
 
 
 
+
+
+
+#define TAILLE 20
+
+void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,SDL_Window * window){
+    int i,j;
+    SDL_SetRenderDrawColor(renderer, 255,255,255, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 0,0,0, 0);
+    SDL_Rect window_dimensions;
+
+    SDL_GetWindowSize(window,&window_dimensions.w,&window_dimensions.h);
+
+    SDL_Rect position = {0,0,window_dimensions.w/col,window_dimensions.w/ligne};
+    for (i=0;i<ligne;i++){
+        position.y = i*window_dimensions.h/ligne;
+        for (j=0;j<col;j++){
+            position.x=j*window_dimensions.w/(col);
+            if(tab[i][j]==1){
+            printf("salut");
+            SDL_RenderFillRect(renderer,&position);
+        }
+        }
+        
+    }
+
+     SDL_RenderPresent(renderer);
+}
 
 int main()
 {
@@ -12,17 +42,41 @@ int main()
 	int masqueNaissance[9],masqueSurvie[9];
 	int ** Tableau1,**Tableau2;
 
-    
-    
+    int nbrLigne=TAILLE;
+	int nbrCol=TAILLE;
     char mode = menu(masqueNaissance,masqueSurvie,Tableau1);
 
-	int w, h, i = 0, j = 0, vitesse = 0, taille ;
+	Tableau2=initTab(TAILLE);
+
+	int w, h, i = 0, j = 0, vitesse = 0;
 
 	char type;
     SDL_Event event;
-    SDL_bool quit = SDL_FALSE;
+    SDL_bool keepLoop = SDL_TRUE;
+
+	/*				INIT 
+					SDL				*/
+
+	SDL_Window 
+       *window_1 = NULL;
+
+    SDL_DisplayMode current;
+
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("Error : SDL initialisation - %s\n", 
+            SDL_GetError());                // l'initialisation de la SDL a échoué 
+        exit(EXIT_FAILURE);
+    }
+	
+	SDL_Rect window = {0,0,current.w, current.w};
+	SDL_Rect rect ; 
+	window_1 = SDL_CreateWindow("Menu",window.x,window.y,window.w/2,window.h/2,SDL_WINDOW_RESIZABLE);
+
+	SDL_Renderer * renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
+
+	//FIN INIT
     
-    while (!quit) {
+    while (keepLoop) {
 
 		while (SDL_PollEvent(&event)) 
 		{
@@ -48,7 +102,7 @@ int main()
 					SDL_GetMouseState(&i, &j) ;
 					i = (int)(i / rect.w) ;
 					j = (int)(j / rect.h) ;
-					clic(i,j,Tableau1,type);
+					clic(type,i,j,TAILLE,Tableau2);
 					
 					break ;
 				case SDL_WINDOWEVENT_CLOSE :
@@ -93,7 +147,7 @@ int main()
                 {printf("Etat stable atteind");} 
 			
             //il faut rentrer les bonnes variables
-            affichageTableau(nbrLigne, nbrCol,tab[nbrLigne][nbrCol],renderer, window);
+            affichageTableau(nbrLigne, nbrCol,Tableau2,renderer, window_1);
             SDL_RenderPresent(renderer) ;
 			SDL_Delay(vitesse) ;
 		}

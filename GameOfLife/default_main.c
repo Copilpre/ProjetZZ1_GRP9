@@ -1,4 +1,5 @@
 #include "dessin.h"
+#include "grille.h"
 #define H 800
 #define W 800
 #define TAILLE 20
@@ -31,7 +32,8 @@ int main(int argc, char ** argv) {
 	taille = TAILLE ;
 	SDL_Rect rect ; 
 	rect.w = (int)(w/taille) ;
-	rect.h = (int)(h/taille) ;			
+	rect.h = (int)(h/taille) ;
+	int type;			
 
 	SDL_DrawWindowOfGame(renderer, taille, h, w) ;
 	
@@ -48,15 +50,18 @@ int main(int argc, char ** argv) {
 					vitesse =  (vitesse > 10) ? vitesse-10 : 10;
 					break ;
 				case SDL_MOUSEBUTTONDOWN :
+					if(event.button.button == SDL_BUTTON_LEFT){
+						type = 1;
+					}
+					else{
+						if(event.button.button == SDL_BUTTON_RIGHT){
+							type = 0;
+						}
+					}
 					SDL_GetMouseState(&i, &j) ;
 					i = (int)(i / rect.w) ;
 					j = (int)(j / rect.h) ;
-					rect.x = i * rect.w ;
-					rect.y = j * rect.h ;
-					// Ici on doit prendre en compte certains 
-					// changement au niveau de l'ecran et de la grille 
-					newColor = SDL_TRUE ;
-					SDL_ChangeColor(renderer, rect, newColor) ;
+					clic(i,j,tab,type);
 					break ;
 				case SDL_WINDOWEVENT_CLOSE :
 					keepLoop = SDL_FALSE ;

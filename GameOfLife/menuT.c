@@ -1,11 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <SDL2/SDL_ttf.h>
-#include <string.h>
-#include "grille.h"
+
+#include "menuT.h"
+
 //#include "lectureFichier.h"
 
 char menu(int * masqueNaissance, int * masqueSurvie,int ** tab){
@@ -19,7 +14,6 @@ char menu(int * masqueNaissance, int * masqueSurvie,int ** tab){
     int i;
     char  survie[9];
     char naissance[9];
-    int ** tab;
     
 
     while(tor != 'i'&&tor!='d'){

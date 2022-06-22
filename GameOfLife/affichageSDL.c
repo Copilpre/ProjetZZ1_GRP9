@@ -1,10 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <SDL2/SDL.h>
-#include <math.h>
+#include "affichageSDL.h"
 
-void affichageTableau(int ligne, int col,int tab[ligne][col],SDL_Renderer * renderer,SDL_Window * window){
+void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,SDL_Window * window){
     int i,j;
     SDL_SetRenderDrawColor(renderer, 255,255,255, 255);
     SDL_RenderClear(renderer);
@@ -27,35 +23,4 @@ void affichageTableau(int ligne, int col,int tab[ligne][col],SDL_Renderer * rend
     }
 
      SDL_RenderPresent(renderer);
-    SDL_Delay(3500);
-}
-
-int main(){
-
-    SDL_Window 
-       *window_1 = NULL;
-
-    SDL_DisplayMode current;
-
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("Error : SDL initialisation - %s\n", 
-            SDL_GetError());                // l'initialisation de la SDL a échoué 
-        exit(EXIT_FAILURE);
-    }
-
-    SDL_GetCurrentDisplayMode(0, &current);
-
-    int WindowW = current.w;
-    int WindowH = current.h;
-
-    window_1 = SDL_CreateWindow("Piste de Danse",current.w/4,current.w/4,WindowH,WindowH,SDL_WINDOW_RESIZABLE);
-
-    SDL_Renderer *renderer;
-
-    renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
-
-    int tab[3][2]={{1,0},{0,1},{0,0}};
-
-    affichageTableau(3,2,tab,renderer,window_1);
-    return 0;
 }

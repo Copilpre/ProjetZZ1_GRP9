@@ -1,13 +1,8 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <SDL2/SDL_ttf.h>
+#include "recherche_voisins.h"
 
 
 
-int nb_voisins_torrique(int tab[5][5] , int i, int j, int n, int m)
+int nb_voisins_torrique(int **tab , int i, int j, int n, int m)
 {
     int nb_voisins_torrique = 0; //On initialise le nombre de voisins de la cellule à zéro
  
@@ -41,7 +36,7 @@ int nb_voisins_torrique(int tab[5][5] , int i, int j, int n, int m)
 }
 
 
-int nb_voisins_delimite(int tab[5][5] , int i, int j, int n, int m)
+int nb_voisins_delimite(int **tab , int i, int j, int n, int m)
 {
     int nb_voisins = 0; //On initialise le nombre de voisins de la cellule à zéro
  
@@ -72,30 +67,6 @@ int nb_voisins_delimite(int tab[5][5] , int i, int j, int n, int m)
     
     printf("nb voisins en delimite %d\n ",nb_voisins);
     return nb_voisins;
-}
-
-
-
-
-int main()
-{
-    int tab[5][5] = {  
-        {0, 0, 1, 1, 1} ,   
-        {0, 0, 1, 1, 1} ,   
-        {0, 0, 1, 1, 1} ,
-        {0, 0, 1, 1, 1} ,
-        {0, 0, 1, 1, 1} ,
-        }; 
-    for (int a=0; a<5; a++)
-    {
-        for (int b=0; b<5; b++)
-        {
-            printf("Coordonées : (%d/%d)\n",a,b);
-            nb_voisins_delimite(tab,a,b,5,5);
-            nb_voisins_torrique(tab,a,b,5,5);
-        } 
-    } 
-
 }
 
 

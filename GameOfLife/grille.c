@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
+#include "grille.h"
 #define TAILLE 20
 
 int ** tab ;
@@ -16,8 +14,6 @@ int ** initTab(int taille) {
 	return tab ;
 }
 
-// Ici Il faudra inclure ce que Conrentin a fait
-// Pour compter le nombre de voisin
 
 void clic(int type,int x, int y, int tailleC, int ** tab) {
 	tab[x][y]=type;

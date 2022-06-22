@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "affichageSDL.h"
 
 int nb_voisins_torrique(int **tab , int i, int j, int n, int m);
 
