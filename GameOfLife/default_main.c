@@ -1,12 +1,13 @@
 #include "dessin.h"
 #define H 800
 #define W 800
+#define TAILLE 20
 
-int main(int argc, char ** argc) {
+int main(int argc, char ** argv) {
 	SDL_Window * window ;
 	SDL_Renderer * renderer ;
 	
-	window = SDL_CreateWindow("GameOfLife"
+	window = SDL_CreateWindow("GameOfLife",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
 			H, W, 0
@@ -20,17 +21,15 @@ int main(int argc, char ** argc) {
 	if (renderer == 0) 
 		SDL_ErrorCase("Trouble with renderer") ;
 
-	int *w, *h, *i, *j, vitesse = 0, taille ;
+	int w, h, i = 0, j = 0, vitesse = 0, taille ;
 
-	SDL_GetWindowSize(window, w, h) ;
+	SDL_GetWindowSize(window, &w, &h) ;
 
 	SDL_bool keepLoop = SDL_TRUE , newColor = SDL_FALSE ;
 
 	SDL_Event event ;
-
-	printf("Veuillez entrer la taille de la table : ");
-	scanf("%d", &taille) ;
-	SDL_Rect rect ;
+	taille = TAILLE ;
+	SDL_Rect rect ; 
 	rect.w = (int)(w/taille) ;
 	rect.h = (int)(h/taille) ;			
 
@@ -38,24 +37,22 @@ int main(int argc, char ** argc) {
 	
 	while (keepLoop) {
 
-		SDL_RenderClear(renderer) ;
-		
 		while (SDL_PollEvent(&event)) 
 		{
 			switch (event.type) 
 			{
 				case SDL_BUTTON_LEFT :
-					vitesse = (vitesse < 100) ? vetesse+10 : 100 ;
+					vitesse = (vitesse < 100) ? vitesse+10 : 100 ;
 					break ;
 				case SDL_BUTTON_RIGHT :
 					vitesse =  (vitesse > 10) ? vitesse-10 : 10;
 					break ;
 				case SDL_MOUSEBUTTONDOWN :
-					SDL_GetMouseState(i, j) ;
-					(*i) = (int)((*i) / rect.w) ;
-					(*j) = (int)((*j) / rect.h) ;
-					rect.x = (*i) * rect.w ;
-					rect.y = (*j) * rect.h ;
+					SDL_GetMouseState(&i, &j) ;
+					i = (int)(i / rect.w) ;
+					j = (int)(j / rect.h) ;
+					rect.x = i * rect.w ;
+					rect.y = j * rect.h ;
 					// Ici on doit prendre en compte certains 
 					// changement au niveau de l'ecran et de la grille 
 					newColor = SDL_TRUE ;
@@ -68,7 +65,7 @@ int main(int argc, char ** argc) {
 					keepLoop = SDL_FALSE ;
 					break ;
 				case SDL_WINDOWEVENT_LEAVE :
-					keepLOop = SDL_FALSE ;*
+					keepLoop = SDL_FALSE ;
 					break ;
 				default :
 					break ;
@@ -81,7 +78,7 @@ int main(int argc, char ** argc) {
 
 	SDL_DestroyRenderer(renderer) ;
 	SDL_DestroyWindow(window) ;
-	SLD_Quit() ;
+	SDL_Quit() ;
 
 	exit(EXIT_FAILURE) ;
 }
