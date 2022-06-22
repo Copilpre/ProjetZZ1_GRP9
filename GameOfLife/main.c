@@ -15,9 +15,10 @@ int main()
 
     
     
-    menu(SDL_bool * masqueNaissance, SDL_bool * masqueSurvie);
+    menu(masqueNaissance,masqueSurvie);
 
-
+	char type;
+	int i,j;
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
     
@@ -34,11 +35,20 @@ int main()
 					vitesse =  (vitesse > 10) ? vitesse-10 : 10;
 					break ;
 				case SDL_MOUSEBUTTONDOWN :
+
+					if(event.button.button == SDL_BUTTON_LEFT){
+						type = 1;
+					}
+					else{
+						if(event.button.button == SDL_BUTTON_RIGHT){
+							type = 0;
+						}
+					}
+
 					SDL_GetMouseState(&i, &j) ;
 					i = (int)(i / rect.w) ;
 					j = (int)(j / rect.h) ;
-					rect.x = i * rect.w ;
-					rect.y = j * rect.h ;
+					clic(i,j,tab,type);
 					// Ici on doit prendre en compte certains 
 					// changement au niveau de l'ecran et de la grille 
 					newColor = SDL_TRUE ;
