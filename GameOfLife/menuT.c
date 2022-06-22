@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <SDL2/SDL_ttf.h>
 #include <string.h>
+#include "grille.h"
+//#include "lectureFichier.h"
 
 char menu(int * masqueNaissance, int * masqueSurvie,int ** tab){
 
@@ -17,14 +19,30 @@ char menu(int * masqueNaissance, int * masqueSurvie,int ** tab){
     int i;
     char  survie[9];
     char naissance[9];
+    int ** tab;
     
+
     while(tor != 'i'&&tor!='d'){
         printf("Monde torique (i) ou délimité (d) ?\n");
         scanf("%c",&tor);
         getchar();
     }
-    printf("Choisir entre configuration à la main (c), chargement d'un fichier (f)\n");
-    
+
+    while(config!='c'&&config!='f'){
+        printf("Choisir entre configuration à la main (c), chargement d'un fichier (f)\n");
+        scanf("%c",&config);
+        getchar();
+    }
+
+    if (config=='f'){
+        //ouverture fichier
+        printf("Précisez le no du fichier.\n");
+        char * nom = "matrice.txt";
+
+    }
+    else{
+        tab =initTab(20);
+    }
     printf("Entrez à la suite le masque survie (ex : 02536)\n");
     scanf("%s",survie);
     printf("Entrez à la suite le masque naissance (ex : 1456)\n");//problème si un nombre est présent dans les 2 masques
@@ -38,17 +56,4 @@ char menu(int * masqueNaissance, int * masqueSurvie,int ** tab){
 
     
     return tor;
-}
-
-int main(){
-
-    int masqueSurvie[9];
-    int masqueNaissance[9];
-    int ** matrice;
-
-    char mode;
-
-    mode = menu(masqueNaissance,masqueSurvie,matrice);
-    printf("%c",mode);
-    return 0;
 }

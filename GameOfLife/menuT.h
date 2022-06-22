@@ -7,4 +7,4 @@
 #include <string.h>
 
 
-int menu(SDL_bool * masqueNaissance, SDL_bool * masqueSurvie);
+int menu(SDL_bool * masqueNaissance, SDL_bool * masqueSurvie, int ** tab);

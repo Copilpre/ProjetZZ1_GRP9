@@ -9,15 +9,16 @@ int main()
 {
      //faire toute l'initialisation
 
-
+	int masqueNaissance[9],masqueSurvie[9];
+	int ** Tableau1,**Tableau2;
 
     
     
-    char mode = menu(masqueNaissance,masqueSurvie);
+    char mode = menu(masqueNaissance,masqueSurvie,Tableau1);
 
+	int w, h, i = 0, j = 0, vitesse = 0, taille ;
 
 	char type;
-	int i,j;
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
     
@@ -47,10 +48,8 @@ int main()
 					SDL_GetMouseState(&i, &j) ;
 					i = (int)(i / rect.w) ;
 					j = (int)(j / rect.h) ;
-					clic(i,j,tab,type);
-					// Ici on doit prendre en compte certains 
-					// changement au niveau de l'ecran et de la grille 
-			
+					clic(i,j,Tableau1,type);
+					
 					break ;
 				case SDL_WINDOWEVENT_CLOSE :
 					keepLoop = SDL_FALSE ;
@@ -73,17 +72,17 @@ int main()
                         {
                         if (mode=='i') //mettre la bonne variable
                             {
-                            if (Tableau1[i][j]==1)        
-                                {Tableau2[i][j]= masqueSurvie[nb_voisins_torrique(**tab , i, j, nrbLignes, int nbrColonnes)];}
+                            if (Tableau1[i][j]==1){
+								Tableau2[i][j]= masqueSurvie[nb_voisins_torrique(tab , i, j, nbrLignes, nbrColonnes)];}
                             else
-                                {Tableau2[i][j]= masqueNaissance[nb_voisins_torrique(**tab , i, j, nrbLignes, int nbrColonnes)];}
+                                {Tableau2[i][j]= masqueNaissance[nb_voisins_torrique(tab , i, j, nbrLignes, nbrColonnes)];}
                             } 
                         else
                         {
                             if (Tableau1[i][j]==1)        
-                                {Tableau2[i][j]= masqueSurvie[nb_voisins_delimite(**tab , i, j, nrbLignes, int nbrColonnes)];}
+                                {Tableau2[i][j]= masqueSurvie[nb_voisins_delimite(tab , i, j, nbrLignes, nbrColonnes)];}
                             else
-                                {Tableau2[i][j]= masqueNaissance[nb_voisins_delimite(**tab , i, j, nrbLignes, int nbrColonnes)];}
+                                {Tableau2[i][j]= masqueNaissance[nb_voisins_delimite(tab , i, j, nbrLignes, nbrColonnes)];}
                             } 
                         if (Tableau1[i][j]!=Tableau2[i][j])
                             compteurDifferences += 1;
@@ -94,7 +93,7 @@ int main()
                 {printf("Etat stable atteind");} 
 			
             //il faut rentrer les bonnes variables
-            affichageTableau(int ligne, int col,int tab[ligne][col],SDL_Renderer * renderer,SDL_Window * window);
+            affichageTableau(ligne, col,tab[ligne][col],renderer, window);
             SDL_RenderPresent(renderer) ;
 			SDL_Delay(vitesse) ;
 		}
