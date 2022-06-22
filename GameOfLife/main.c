@@ -73,16 +73,16 @@ int main()
                         if (mode=='i') //mettre la bonne variable
                             {
                             if (Tableau1[i][j]==1){
-								Tableau2[i][j]= masqueSurvie[nb_voisins_torrique(tab , i, j, nbrLignes, nbrColonnes)];}
+								Tableau2[i][j]= masqueSurvie[nb_voisins_torrique(Tableau1 , i, j, nbrLignes, nbrColonnes)];}
                             else
-                                {Tableau2[i][j]= masqueNaissance[nb_voisins_torrique(tab , i, j, nbrLignes, nbrColonnes)];}
+                                {Tableau2[i][j]= masqueNaissance[nb_voisins_torrique(Tableau1 , i, j, nbrLignes, nbrColonnes)];}
                             } 
                         else
                         {
                             if (Tableau1[i][j]==1)        
-                                {Tableau2[i][j]= masqueSurvie[nb_voisins_delimite(tab , i, j, nbrLignes, nbrColonnes)];}
+                                {Tableau2[i][j]= masqueSurvie[nb_voisins_delimite(Tableau1 , i, j, nbrLignes, nbrColonnes)];}
                             else
-                                {Tableau2[i][j]= masqueNaissance[nb_voisins_delimite(tab , i, j, nbrLignes, nbrColonnes)];}
+                                {Tableau2[i][j]= masqueNaissance[nb_voisins_delimite(Tableau1 , i, j, nbrLignes, nbrColonnes)];}
                             } 
                         if (Tableau1[i][j]!=Tableau2[i][j])
                             compteurDifferences += 1;
@@ -93,7 +93,7 @@ int main()
                 {printf("Etat stable atteind");} 
 			
             //il faut rentrer les bonnes variables
-            affichageTableau(ligne, col,tab[ligne][col],renderer, window);
+            affichageTableau(nbrLigne, nbrCol,tab[nbrLigne][nbrCol],renderer, window);
             SDL_RenderPresent(renderer) ;
 			SDL_Delay(vitesse) ;
 		}
