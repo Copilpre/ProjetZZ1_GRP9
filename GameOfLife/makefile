@@ -1,7 +1,6 @@
-menu : menu.o
-	gcc -o menu menu.o -lSDL2 -lm -lSDL2_image -lSDL2_ttf
+menuT : menuT.o
+	gcc -o menuT menuT.o -lSDL2 -lm -lSDL2_image -lSDL2_ttf
 
-menu.o : menu.c
-	gcc -c -Wall -Wextra menu.c -o menu.o -lSDL2 -lm -lSDL2_image -lSDL2_ttf
+menuT.o : menuT.c
+	gcc -c -Wall -Wextra menuT.c -o menuT.o -lSDL2 -lm -lSDL2_image -lSDL2_ttf
 
-d PRo
