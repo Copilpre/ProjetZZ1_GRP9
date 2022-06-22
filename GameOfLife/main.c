@@ -10,29 +10,32 @@
 
 #define TAILLE 20
 
-void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,SDL_Window * window){
+void affichageTableau(int ligne, int col,int ** tab,SDL_Renderer * renderer,SDL_Window * window){
     int i,j;
+	
     SDL_SetRenderDrawColor(renderer, 255,255,255, 255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0,0,0, 0);
+	SDL_SetRenderDrawColor(renderer, 0,0,0, 255);
+    
     SDL_Rect window_dimensions;
 
     SDL_GetWindowSize(window,&window_dimensions.w,&window_dimensions.h);
+	int dimCase = window_dimensions.h/ligne;
+    SDL_Rect position = {0,0,window_dimensions.h/col,window_dimensions.w/ligne};
 
-    SDL_Rect position = {0,0,window_dimensions.w/col,window_dimensions.w/ligne};
     for (i=0;i<ligne;i++){
-        position.y = i*window_dimensions.h/ligne;
+        position.y = i*dimCase;
         for (j=0;j<col;j++){
-            position.x=j*window_dimensions.w/(col);
-            if(tab[i][j]==1){
-            printf("salut");
-            SDL_RenderFillRect(renderer,&position);
+            position.x=j*dimCase;
+            if(tab[j][i]==1){
+				
+				printf("(%d %d)",position.x,position.y);
+				SDL_RenderFillRect(renderer,&position);
+        	}
         }
-        }
-        
     }
 
-     SDL_RenderPresent(renderer);
+	SDL_RenderPresent(renderer);
 }
 
 int main()
@@ -44,15 +47,17 @@ int main()
 
     int nbrLigne=TAILLE;
 	int nbrCol=TAILLE;
-    char mode = menu(masqueNaissance,masqueSurvie,Tableau1);
+    //char mode = menu(masqueNaissance,masqueSurvie,Tableau1);
 
 	Tableau2=initTab(TAILLE);
 
-	int w, h, i = 0, j = 0, vitesse = 0;
+	Tableau2[0][1]=1;
+	
+	int w, h, i = 0, j = 0, vitesse = 100;
 
 	char type;
     SDL_Event event;
-    SDL_bool keepLoop = SDL_TRUE;
+    SDL_bool keepLoop = SDL_FALSE;
 
 	/*				INIT 
 					SDL				*/
@@ -61,25 +66,30 @@ int main()
        *window_1 = NULL;
 
     SDL_DisplayMode current;
+	
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Error : SDL initialisation - %s\n", 
             SDL_GetError());                // l'initialisation de la SDL a échoué 
         exit(EXIT_FAILURE);
     }
-	
-	SDL_Rect window = {0,0,current.w, current.w};
+	SDL_GetCurrentDisplayMode(0, &current);
+	SDL_Rect window = {0,0,current.h, current.h};
 	SDL_Rect rect ; 
-	window_1 = SDL_CreateWindow("Menu",window.x,window.y,window.w/2,window.h/2,SDL_WINDOW_RESIZABLE);
+	window_1 = SDL_CreateWindow("Menu",window.w/2,window.y,window.w,window.w,SDL_WINDOW_RESIZABLE);
 
 	SDL_Renderer * renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
 
 	//FIN INIT
-    
+
+	affichageTableau(20,20,Tableau2,renderer,window_1);
+	SDL_Delay(2000);
+
     while (keepLoop) {
 
 		while (SDL_PollEvent(&event)) 
 		{
+			printf("coicou");
 			switch (event.type) 
 			{
 				case SDL_BUTTON_LEFT :
@@ -120,7 +130,7 @@ int main()
             int compteurDifferences=0;
             int nbrColonnes =20;
             int nbrLignes=20;
-            for(int i;i<nbrLignes;i++)
+            /*for(int i;i<nbrLignes;i++)
                 {
                     for(int j;j < nbrColonnes; j++)
                         {
@@ -145,10 +155,9 @@ int main()
 
             if (compteurDifferences == 0)
                 {printf("Etat stable atteind");} 
-			
+			*/
             //il faut rentrer les bonnes variables
             affichageTableau(nbrLigne, nbrCol,Tableau2,renderer, window_1);
-            SDL_RenderPresent(renderer) ;
 			SDL_Delay(vitesse) ;
 		}
 	}
