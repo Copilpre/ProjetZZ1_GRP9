@@ -1,3 +1,6 @@
+#ifndef __DESSIN__
+#define __DESSIN__
+
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include<stdlib.h>
@@ -7,4 +10,6 @@ void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, S
 void SDL_DrawLine(SDL_Renderer * renderer, int x1, int y1, int x2, int y2) ;
 void SDL_DrawPoint(SDL_Renderer * renderer, int x, int y) ;
 void SDL_DrawWindowOfGame(SDL_Renderer * renderer, int nbElts, int h, int w) ;
-void SDL_ChangeColor(SDL_Renderer * renderer, SDL_Rect rect, SDL_bool newColor) ;
+void SDL_ChangeColor(SDL_Renderer * renderer, SDL_Rect rect, SDL_Color c) ;
+
+#endif
