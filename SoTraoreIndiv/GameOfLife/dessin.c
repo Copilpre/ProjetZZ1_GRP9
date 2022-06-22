@@ -34,7 +34,7 @@ void SDL_DrawPoint(SDL_Renderer * renderer, int x, int y)
 void SDL_DrawWindowOfGame(SDL_Renderer * renderer, int nbElts, int h, int w) 
 {
 	// Mise de la couleur de fond à noir 
-	if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255) != 0)
+	if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) != 0)
 		SDL_ErrorCase("Trouble with renderer") ;
 	
 	int pasH = h/nbElts, pasW = w/nbElts ;
@@ -56,9 +56,8 @@ void SDL_ChangeColor(SDL_Renderer * renderer, SDL_Rect rect, SDL_bool newColor)
 	if (newColor = SDL_TRUE) 
 	{
 		// Mise à noir de la case ciblée
-		if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) != 0) 
-			SDL_ErrorCase("Trouble with fill rect") ;
-		if (SDL_RenderFillRect(renderer, &rect) != 0) 
-			SDL_ErrorCase("Trouble with fill rect") ;
+		//if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) != 0) 
+		//	SDL_ErrorCase("Trouble with fill rect") ;
+		SDL_DrawRect(renderer, rect, 255, 0, 0, SDL_TRUE) ; 
 	}
 }
