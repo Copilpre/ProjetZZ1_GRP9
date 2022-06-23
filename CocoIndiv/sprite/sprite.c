@@ -8,7 +8,7 @@
 
 
 
-void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
+void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window, int temps){
     
     SDL_Rect 
             source = {0},
@@ -17,23 +17,25 @@ void dessinePerso(SDL_Renderer * renderer,int stage,SDL_Window * window){
             destination = {0}; 
 
     SDL_Texture *my_texture; 
-    my_texture = IMG_LoadTexture(renderer,"perso2.png");
+    my_texture = IMG_LoadTexture(renderer,"indiana.png");
     if(my_texture==NULL){
         printf("NULL");
     }
 
     SDL_QueryTexture(my_texture, NULL, NULL ,&source.w, &source.h);
 
-    sprite.x = stage*source.w/6;
-    sprite.y = 0;
-    sprite.w = source.w/6;
-    sprite.h = source.h;
+    sprite.x = stage*source.w/8;
+    sprite.y = source.h/7*2;
+    sprite.w = source.w/8;
+    sprite.h = source.h/7;
 
+    
+    
     SDL_Rect position;
-    position.x = 200;
-    position.y = 500;
-    position.w =sprite.w;
-    position.h = sprite.h;
+    position.x = (temps*10)%source.w;
+    position.y = 800;
+    position.w =sprite.w*3;
+    position.h = sprite.h*3;
     
     SDL_RenderCopy(renderer, my_texture, &sprite, &position);
     
@@ -49,7 +51,7 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
             destination = {0}; 
 
     SDL_Texture *my_texture; 
-    my_texture = IMG_LoadTexture(renderer,"route.jpg");
+    my_texture = IMG_LoadTexture(renderer,"desert.png");
     if(my_texture==NULL){
         printf("NULL");
     }
@@ -65,6 +67,7 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
     source2.w = source.w;
     source2.h = source.h;
 
+    
     SDL_Rect position;
     position.x = 0;
     position.y = 0;
@@ -80,7 +83,7 @@ void dessinePaysage(SDL_Renderer * renderer,int stage,SDL_Window * window){
 int main(){
     
     
-    
+    int temps = 0;
     SDL_Window 
        *window_1 = NULL;
 
@@ -104,7 +107,7 @@ int main(){
     renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
 
     int ticks = 0;
-    int acceleration = 30;
+    int acceleration = 150;
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
     while(!quit)
@@ -116,7 +119,8 @@ int main(){
                 else if(event.type == SDL_KEYDOWN)
                     {
                     if(event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
-                        acceleration -= 10;
+                       {if (acceleration>0)
+                            acceleration -= 10;}
                     if(event.key.keysym.sym == SDLK_LEFT)
                         acceleration += 10;
                     }
@@ -124,10 +128,11 @@ int main(){
         SDL_Delay(acceleration);
         
         dessinePaysage(renderer,ticks%5,window_1);
-        dessinePerso(renderer,ticks%5,window_1);
-        SDL_RenderPresent(renderer); 
+        dessinePerso(renderer,ticks%5,window_1,temps);
+        
+        SDL_RenderPresent(renderer);
+        temps += 1;
         ticks++;
-
     } 
     return 0;
 }

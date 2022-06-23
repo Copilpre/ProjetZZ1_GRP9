@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "sceneSDL.h"
 
 SDL_Color gris = {155,155,155,255};

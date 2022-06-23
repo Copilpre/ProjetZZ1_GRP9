@@ -163,4 +163,7 @@ int main(){
         actionUser = SDL_FALSE;
         //printf("Sommeil : %f, faim : %f, joie : %f | Programme on :%d\n",barreD,barreM,barreJ,program_on);
     }
+    
+    printf("%f",barreM);
+    
 }
