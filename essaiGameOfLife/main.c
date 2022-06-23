@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 
-#define taille 10
+#define taille 15
 
 void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,int tailleCase){
     int i,j;
@@ -33,7 +33,7 @@ int compteVoisin(int ** tab, int n,int m, int i, int j)
     if (i - 1 >= 0 && tab[i-1][j] == 1) // voisin haut
         nb_voisins += 1;
  
-    if (i - 1 >= 0 && j + 1 < n && tab[i-1][j+1] == 1) //voisin haut droite
+    if (i - 1 >= 0 && j + 1 < m && tab[i-1][j+1] == 1) //voisin haut droite
         nb_voisins += 1;
  
     if (j - 1 >= 0 && tab[i][j-1] == 1) //voisin gauche
@@ -48,10 +48,11 @@ int compteVoisin(int ** tab, int n,int m, int i, int j)
     if (i + 1 < n && tab[i+1][j] == 1) //voisin bas
         nb_voisins += 1;
  
-    if (i + 1 < n && j + 1 < n && tab[i+1][j+1]) //voisin bas droite
+    if (i + 1 < n && j + 1 < m && tab[i+1][j+1]) //voisin bas droite
         nb_voisins += 1;
     
     return nb_voisins;
+    
 }
 
 int compteVoisinTorrique(int ** tab, int n,int m, int i, int j)
@@ -85,13 +86,18 @@ int compteVoisinTorrique(int ** tab, int n,int m, int i, int j)
     return nb_voisins_torrique;
 }
 
-void initFichier(int ** tab,char * nomF){
-    
-
-}
 
 
 int main(){
+    
+    
+    char type = 'a';
+    
+    while (type != 'y' && type != 'n')
+    {printf("Voulez vous charger la configuration ? (y/n)\n ");
+    scanf("%c", &type);}
+
+
 
     /*				INIT 
 					SDL				*/
@@ -110,16 +116,35 @@ int main(){
 	SDL_GetCurrentDisplayMode(0, &current);
 	SDL_Rect window = {0,0,current.h, current.h};
 	
+    //options disponibles
+    printf("*************Menu Options******************\n");
+    printf("Clic gauche   : Ajout d'une cellule vivante\n");
+    printf("Clic droit    : Suppression d'une cellule vivante\n");
+    printf("SPACE         : Démarrer/Pause\n");
+    printf("T             : Monde torrique\n");
+    printf("D             : Monde délimité\n");
+    printf("S             : Permet de sauvegarder la configuration\n");
+    printf("Flèche droite : Augmenter la vitesse\n");
+    printf("Flèche gauche : Diminuer la vitesse\n");
+    printf("*******************************************\n");
+
+
+
+
     
 	//FIN INIT
 
     int ligne = taille,colonne =taille;
-    char mode = 'f';
-    char type = 'c';
+    char mode = 'i';
+    
+    //Changer les masques pour changer les règles de naissance et de survie
+
     int masqueSurvie[9] = {0,0,1,1,0,0,0,0,0};
     int masqueNaissance[9] = {0,0,0,1,0,0,0,0,0};
 
-    char * nomF = "";
+    int stable;
+    int affichageStable = 1;
+
     int i,j,mouseX,mouseY,vitesse = 250,nbVoisins;
     int ** plateau;
 
@@ -127,20 +152,26 @@ int main(){
         for (i = 0; i < ligne; i++){
             plateau2[i] = calloc(colonne,sizeof(int));
         }
-    if(type=='c'){
+    if(type == 'n'){
         plateau = calloc(ligne,sizeof(int *));
         for (i = 0; i < ligne; i++){
             plateau[i] = calloc(colonne,sizeof(int));
         }
     }
     else{
-        nomF="matrice.txt";
-        FILE * fichier = fopen(nomF,"r");
-        fscanf(fichier,"%d %d",&ligne,&colonne);
+
+        FILE * fichier = fopen("matrice.txt","r");      //chargement d'un fichier
         plateau = calloc(ligne,sizeof(int *));
         for (i = 0; i < ligne; i++){
             plateau[i] = calloc(colonne,sizeof(int));
         }
+        for(i = 0; i < ligne; i++)
+            {
+                for (j = 0; j < colonne ; j++)
+                    {
+                        fscanf(fichier,"%d", &plateau[i][j]);
+                    } 
+            } 
 
 
     }
@@ -156,8 +187,6 @@ int main(){
     SDL_bool keepLoop = SDL_FALSE, program_on = SDL_TRUE;
 
     while(program_on){
-        affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
-        SDL_RenderPresent(renderer);
         if(SDL_WaitEvent(&event)){
             switch (event.type) 
                 {
@@ -171,9 +200,13 @@ int main(){
                         j = mouseX/tailleCase;
                         if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT) ) {
                             plateau[i][j] = 1;
+                            plateau2[i][j]= 1;
+                            affichageStable = 1;
                         }
                         else if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT) ){
                             plateau[i][j] = 0;
+                            plateau2[i][j]= 0;
+                            affichageStable = 1;
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -182,6 +215,8 @@ int main(){
                         }
                 }
         }
+        affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
+        SDL_RenderPresent(renderer);
         while (keepLoop) {
             while (SDL_PollEvent(&event)) 
             {
@@ -203,6 +238,32 @@ int main(){
                                 case SDLK_SPACE:
                                     keepLoop=SDL_FALSE;
                                     break;
+                                case SDLK_s:
+                                    {
+                                        FILE *fichier = fopen ("matrice.txt", "w" );
+                                        if (fichier == NULL)
+                                        {
+                                            printf("erreur lors de l'ouverture du fichier");
+                                        }
+                                        else
+                                        {
+                                            for (i = 0; i < taille; i++)
+                                            {for (j = 0; j < taille; j++)
+                                            {
+                                                fprintf (fichier, "%3d", plateau[i][j]);
+                                            }
+                                            fprintf (fichier, "\n" );
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case SDLK_t:
+                                    mode = 'i';
+                                    break;
+                                case SDLK_d:
+                                    mode ='f';
+                                    break;
+
                                     
                             }
                             break;
@@ -220,13 +281,12 @@ int main(){
                             nbVoisins = compteVoisinTorrique(plateau,ligne,colonne,i,j);
                             break;
                     }
-                    switch (plateau2[i][j])
+                    switch (plateau[i][j])
                     {
                         case 1:
                             plateau2[i][j]=masqueSurvie[nbVoisins];
                             break;
                         case 0:
-                            printf("%d (%d,%d)\n",nbVoisins,i,j);
                             plateau2[i][j]=masqueNaissance[nbVoisins];
                             break;
                     
@@ -236,13 +296,26 @@ int main(){
                 }
             }
 
+
             affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
             SDL_RenderPresent(renderer);
             SDL_Delay(vitesse);
-            plateau = plateau2;
+            for(i = 0;i<ligne;i++){
+                for(j=0;j<colonne;j++){
+                    if (plateau[i][j]!=plateau2[i][j]) //boucle permettant de verifier l'etat stable
+                        {
+                            stable=0;
+                        } 
+                    plateau[i][j]=plateau2[i][j];}}    
+            if (stable == 1 && affichageStable == 1) //variable affichage stable qui permet de ne pas afficcher "etat stable" en boucle/réinitialisée à chaque changement de configuration(clicdroit/gauche)
+                {
+                    printf("Etat stable atteint\n");
+                    affichageStable = 0;
+                } 
+            stable=1; 
         }
     }
-    
+
     for (i = 0;i<ligne;i++){
         free(plateau[i]);
     }
