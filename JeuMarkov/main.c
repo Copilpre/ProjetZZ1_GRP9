@@ -81,7 +81,11 @@ int main(){
             }
         }
     }
+
+    //ECRAN DE DEBUT
     eclosion(renderer,WindowW,WindowH);
+
+    //BOUCLE DE JEU
     while(program_on){
         while(SDL_PollEvent(&event)){
             switch(event.type){
@@ -103,26 +107,27 @@ int main(){
                     curY = event.motion.y;
                     actionUser=SDL_TRUE;
                     delai = 1000;
-
+                    
+                    //DETERMINATION BOUTON APPUYE
                     if((curY)>=WindowH*0.75 && curY<=WindowH*0.95+50){
                         if(curX >= 50 && curX <=WindowH*0.2+50){
                             manger(&barreD,&barreM,&barreJ,drain);
-                            //printf("Vous avez fait manger Tama.\n");
                         }
                         else if(curX >= 200 && curX <=WindowH*0.2+200){
                             jouer(&barreD,&barreM,&barreJ,drain);
-                            //printf("Vous avez fait jouer Tama.\n");
                         }
                         else if(curX >= 350 && curX <=WindowH*0.2+350){
                             dormir(&barreD,&barreM,&barreJ,drain);
-                            //printf("Vous avez fait dormir Tama.\n");
                         }
                     }
-
                 default:
                     break;
             }
         }
+
+        //BOUCLE DE DETERMINATION DE LA PROCHAINE ACTION (MARKOV)
+
+
         outil = rand()%10;
         nextState = 0;
         if(!actionUser){
@@ -145,6 +150,7 @@ int main(){
             }
             delai = 2000;
         }
+        //FIN MARKOV
         
         if(barreM<=0.0){
             barreM = 0.0;
@@ -155,15 +161,13 @@ int main(){
         if(barreJ<=0.0){
             barreJ = 0.0;
         }
+
         initSDL(currentRoom,currMood,barreM,barreJ,barreD,renderer,WindowW,WindowH);
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
         }
         SDL_Delay(delai);
         actionUser = SDL_FALSE;
-        //printf("Sommeil : %f, faim : %f, joie : %f | Programme on :%d\n",barreD,barreM,barreJ,program_on);
     }
-    
-    printf("%f",barreM);
     
 }
