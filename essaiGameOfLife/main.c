@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 
-#define taille 20
+#define taille 10
 
 void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,int tailleCase){
     int i,j;
@@ -22,7 +22,7 @@ void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,int t
     }
 }
 
-int compteVoisin(int ** tab, int n, int i, int j)
+int compteVoisin(int ** tab, int n,int m, int i, int j)
 {
   int nb_voisins = 0; //On initialise le nombre de voisins de la cellule à zéro
  
@@ -51,36 +51,35 @@ int compteVoisin(int ** tab, int n, int i, int j)
     if (i + 1 < n && j + 1 < n && tab[i+1][j+1]) //voisin bas droite
         nb_voisins += 1;
     
-    printf("nb voisins en delimite %d\n ",nb_voisins);
     return nb_voisins;
 }
 
-int compteVoisinTorrique(int ** tab, int n, int i, int j)
+int compteVoisinTorrique(int ** tab, int n,int m, int i, int j)
 {
   int nb_voisins_torrique = 0; //On initialise le nombre de voisins de la cellule à zéro
     
-    if (tab[(i-1+n)%n][(j-1+taille)%taille] == 1) //voisin haut gauche
+    if (tab[(i-1+n)%n][(j-1+m)%m] == 1) //voisin haut gauche
         nb_voisins_torrique += 1;
 
-    if (tab[(i-1+n)%n][j%taille] == 1) // voisin haut
+    if (tab[(i-1+n)%n][j%m] == 1) // voisin haut
         nb_voisins_torrique += 1;
  
-    if (tab[(i-1+n)%n][(j+1+taille)%taille] == 1) //voisin haut droite
+    if (tab[(i-1+n)%n][(j+1+m)%m] == 1) //voisin haut droite
         nb_voisins_torrique += 1;
  
-    if (tab[i][(j-1+taille)%taille] == 1) //voisin gauche
+    if (tab[i][(j-1+m)%m] == 1) //voisin gauche
         nb_voisins_torrique += 1;
  
-    if (tab[i][(j+1+taille)%taille] == 1) //voisin droite
+    if (tab[i][(j+1+m)%m] == 1) //voisin droite
         nb_voisins_torrique += 1;
  
-    if (tab[(i+1)%n][(j-1+taille)%taille] == 1) //voisin bas gauche
+    if (tab[(i+1)%n][(j-1+m)%m] == 1) //voisin bas gauche
         nb_voisins_torrique += 1;
 
-    if (tab[(i+1+n)%n][j%taille] == 1) //voisin bas
+    if (tab[(i+1+n)%n][j%m] == 1) //voisin bas
         nb_voisins_torrique += 1;
  
-    if (tab[(i+1)%n][(j+1+taille)%taille]==1) //voisin bas droite
+    if (tab[(i+1)%n][(j+1+m)%m]==1) //voisin bas droite
         nb_voisins_torrique += 1;
 
     return nb_voisins_torrique;
@@ -115,14 +114,19 @@ int main(){
 	//FIN INIT
 
     int ligne = taille,colonne =taille;
-    char mode = 'i';
-    char type = 'f';
-    int masqueSurvie[9] = {1,0,1,0,0,1,0,1,1};
-    int masqueNaissance[9] = {1,0,1,0,0,1,0,1,1};
+    char mode = 'f';
+    char type = 'c';
+    int masqueSurvie[9] = {0,0,1,1,0,0,0,0,0};
+    int masqueNaissance[9] = {0,0,0,1,0,0,0,0,0};
 
     char * nomF = "";
     int i,j,mouseX,mouseY,vitesse = 250,nbVoisins;
     int ** plateau;
+
+    int ** plateau2 = calloc(ligne,sizeof(int *));
+        for (i = 0; i < ligne; i++){
+            plateau2[i] = calloc(colonne,sizeof(int));
+        }
     if(type=='c'){
         plateau = calloc(ligne,sizeof(int *));
         for (i = 0; i < ligne; i++){
@@ -152,7 +156,7 @@ int main(){
     SDL_bool keepLoop = SDL_FALSE, program_on = SDL_TRUE;
 
     while(program_on){
-        affichageTableau(ligne,colonne,plateau,renderer,tailleCase);
+        affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
         SDL_RenderPresent(renderer);
         if(SDL_WaitEvent(&event)){
             switch (event.type) 
@@ -210,19 +214,20 @@ int main(){
                 for(j=0;j<colonne;j++){
                     switch(mode){
                         case 'f':
-                            nbVoisins = compteVoisin(plateau,taille,i,j);
+                            nbVoisins = compteVoisin(plateau,ligne,colonne,i,j);
                             break;
                         case 'i':
-                            nbVoisins = compteVoisinTorrique(plateau,taille,i,j);
+                            nbVoisins = compteVoisinTorrique(plateau,ligne,colonne,i,j);
                             break;
                     }
-                    switch (plateau[i][j])
+                    switch (plateau2[i][j])
                     {
                         case 1:
-                            plateau[i][j]=masqueSurvie[nbVoisins];
+                            plateau2[i][j]=masqueSurvie[nbVoisins];
                             break;
                         case 0:
-                            plateau[i][j]=masqueNaissance[nbVoisins];
+                            printf("%d (%d,%d)\n",nbVoisins,i,j);
+                            plateau2[i][j]=masqueNaissance[nbVoisins];
                             break;
                     
                     default:
@@ -231,9 +236,10 @@ int main(){
                 }
             }
 
-            affichageTableau(ligne,colonne,plateau,renderer,tailleCase);
+            affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
             SDL_RenderPresent(renderer);
             SDL_Delay(vitesse);
+            plateau = plateau2;
         }
     }
     
