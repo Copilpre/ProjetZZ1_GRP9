@@ -1,0 +1,65 @@
+# PROJET ZZ1 ISIMA GROUPE 9
+
+### Etudiants Intervenants
+```
+	LABAZUY Pierre 
+	PILPRE Corentin
+	TRAORE Souleymane
+```
+
+### Encadrants
+```
+	YON Loîc
+	LAURENCOT Patrice 
+	Yves-Jean DANIEL
+```
+
+## 1. JEU DE LA VIE
+![GameOfLife](http://math.pc.vh.free.fr/divers/life/graphics/gosper-gun.png)
+### [Vidéo d'illustration d'un cas d'essai]()
+
+## Principe du jeu :
+> Jeu de simulation dont le principe peut être utilisé pour évaluer l'évolution d'un virus.
+>  Il se base sur des règles fixant les conditions de survie pour un élément déjà en vivant,
+>  et de naissance pour un élément n'étant pas en vie.
+
+## Détails d'implémentation :
+> On fixe le départ avec des **SDL_Event** au clique on initialise l'écran de jeu.
+> Utilisation de deux tableaux dont **une table pour savegarder le cycle de vie**  et 
+> **une table pour sauvegader le nombre de voisin de chaque élément**. 
+> Utilisation de deux autres tables  pour fixer les règles de survie et de naissance des
+> éléments. 
+
+- Cas d'arrêt 
+> Le programme s'arrête quand on atteint un état stable, de façon théorique c'est un 
+> état ou la boucle de naissance et/ou décès ne produit pus de changement au niveau
+> des tableaux de gestion de cycle de vie.
+
+## 2. TAMAGOTCHI
+![Tamagotchi](http://math.pc.vh.free.fr/divers/life/graphics/gosper-gun.png)
+### [Vidéo d'illustration d'un cas d'essai]()
+
+### Matrice utilisée pour faire la simulation de Markov
+
+|  X/Y  |Manger  |Jouer    |Dormir   |             
+|-------|--------|---------|---------|
+|Manger |0.1     |0.4      | 0.5     |
+|Jouer  |0.4     |0.2      | 0.4     |
+|Dormir |0.5     |0.1      | 0.4     |
+
+```mermaid
+graph LR
+A[Manger] -- 10% --> A[Manger]
+A[Manger] -- 40% --> B((Jouer))
+A[Manger] -- 50% --> C((Dormir))
+A --> Out
+B((Jouer)) -- 20% --> B((Jouer)) 
+B((Jouer)) -- 40% --> A[Manger]
+B((Jouer)) -- 40% --> C((Dormir))
+B --> Out
+C((Dormir)) -- 10%---> C((Dormir))
+C((Dormir)) -- 50% --> A[Manger]
+C((Dormir)) -- 40% --> B((Jouer))
+C --> Out
+```
+
