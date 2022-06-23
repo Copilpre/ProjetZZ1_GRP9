@@ -28,9 +28,6 @@ body {
 }
 
 
-
-
-
 /**** HEADER ****/
 
 
@@ -43,7 +40,7 @@ header {
 
     font-size : 1.5em;
 
-    padding: 2em;
+    padding: 1em;
 
     text-align: left;
 
@@ -95,141 +92,7 @@ header>h1 {
 }
 
 
-
-.liste-principale,
-
-.liste-principale a {
-
-    text-align: center;
-
-    display: inline-block;
-
-}
-
-
-
-.liste-principale a {
-
-    border: none;
-
-    height: max-content;
-
-    width: max-content;
-
-}
-
-
-
-h2>a:hover {
-
-    position: relative;
-
-    border: solid;
-
-    border-radius: unset;
-
-    height: 100%;
-
-    color: mediumturquoise;
-
-}
-
-
-
-.sous-liste {
-
-    padding: 0;
-
-    background: darkgray;
-
-    width: max-content;
-
-    height: max-content;
-
-    text-align: left;
-
-}
-
-
-
-.sous-liste li a {
-
-    border: none;
-
-    padding: 0.2em;
-
-    margin: 0;
-
-    width: max-content;
-
-    height: auto;
-
-}
-
-
-
-.sous-liste li a:hover {
-
-    background: mediumaquamarine;
-
-}
-
-
-
-.deroulant>h2>a:hover .sous {
-
-    /*A faire plus tard*/
-
-    color: red;
-
-}
-
-
-
-.au_bout1 {
-
-    left: 0;
-
-    bottom: 55%;
-
-    position: absolute;
-
-    background-attachment: fixed;
-
-}
-
-
-
-.au_bout2 {
-
-    left: 0;
-
-    bottom: 58%;
-
-    position: absolute;
-
-    background-attachment: fixed;
-
-}
-
-
-
-.button1,
-
-.button2 {
-
-    display: flex;
-
-    width: 3em;
-
-}
-
-
-
-
-
 /*Mise en forme des liens*/
-
 
 
 a {
@@ -246,6 +109,12 @@ a {
 
 }
 
+ul {
+    font-size : 0.7em ;
+
+    font-align:left ;
+
+}
 
 
 li {
@@ -254,49 +123,19 @@ li {
 
     /*font-weight: bold;*/
 
-    font-size: larger;
+    font-size: larger ;
+
+    padding : 0.3em ;
 
 }
-
-
-
-
-
-/*** Lien pour s'inscrire ***/
-
-
-
-.rejuster {
-
-    position: absolute;
-
-    top: 3%;
-
-    right: 3%;
-
-    border: solid;
-
-}
-
-
-
-.rejuster:hover {
-
-    color: royalblue;
-
-}
-
-
-
 
 
 /***** MAIN *****/
 
 
-
 main {
 
-    background-color: whitesmoke;
+    background-color: green;
 
 }
 
@@ -367,27 +206,6 @@ h4 {
 }
 
 
-
-table {
-
-    border: lightseagreen;
-
-    margin: auto;
-
-    padding: 0.5em;
-
-}
-
-tbody {
-	width : 60% ;
-	height : 20% ;  
-}
-
-tr {
-	width : 60% ;
-	height : 2.5em ;
-} 
-
 iframe {
 
     display: inline-block;
@@ -418,15 +236,41 @@ iframe {
 }
 
 
-
 table {
 
+    border: lightseagreen;
+
+    margin: auto;
+
+    padding: 0.5em;
+
     background-color: whitesmoke;
-
-    padding: 0;
-
 }
 
+tbody {
+	width : 60% ;
+	height : 20% ;  
+}
+
+tr {
+    width : 60% ;
+
+    height : 2.5em ;
+
+    font-size: larger;
+
+    background-color: red ;
+}
+
+.tr_style {
+    background-color : white ;
+
+    margin : 15% ;
+
+    padding : 30% ;
+
+    background-position: left ;
+}  
 
 
 th {
@@ -444,14 +288,6 @@ th {
 
 
 
-tr {
-
-    font-size: larger;
-
-    background-color: red ;
-
-}
-
 td {
 	padding : 1em ;
 	font-weight : bold ;
@@ -459,71 +295,7 @@ td {
 }
 
 
-
-/**** Bouton de navigation ****/
-
-
-
-.nav_button {
-
-    display: flex;
-
-}
-
-
-
-.accueil_button,
-
-.next_button,
-
-.previous_button {
-
-    text-decoration: none;
-
-    border-color: black;
-
-    border-style: solid;
-
-    margin: 0.1em;
-
-    padding: 0.5em;
-
-}
-
-
-
-legend {
-
-    color: red;
-
-    font-size: x-large;
-
-}
-
-
-
-fieldset {
-
-    margin-top: 2%;
-
-}
-
-
-
-textarea {
-
-    width: 90%;
-
-    height: 8em;
-
-}
-
-
-
-
-
 /**** FOOTER ****/
-
 
 
 footer {
@@ -537,7 +309,6 @@ footer {
 }
 
 
-
 .footer-element {
 
     color: red;
@@ -549,95 +320,6 @@ footer {
 }
 
 
-
-.right,
-
-.left {
-
-    width: 40%;
-
-    padding-left: 4%;
-
-    padding-right: 4%;
-
-    padding-bottom: 0;
-
-    position: relative;
-
-    margin: 0;
-
-    padding-top: 0;
-
-}
-
-
-
-.left {
-
-    display: inline-block;
-
-    border-right: solid;
-
-}
-
-
-
-.right {
-
-    display: inline-block;
-
-    margin-left: 1%;
-
-}
-
-
-
-.lien_underline {
-
-    text-decoration: underline;
-
-    font-weight: bold;
-
-}
-
-
-
-
-
-/*Nom du prof et nos Noms en évidence*/
-
-
-
-.prof,
-
-.etudiants {
-
-    font-family: monospace;
-
-    color: green;
-
-    font-size: large;
-
-}
-
-
-
-.centrer {
-
-    position: relative;
-
-    background-attachment: fixed;
-
-    background-position: center;
-
-    font-display: initial;
-
-    font-size: larger;
-
-}
-
-
-
 @media (max-width: 952px) {
 
     nav ul li a {
@@ -646,19 +328,86 @@ footer {
 
     }
 
+    body {
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+    } 
+
+    img {
+	width : auto ;
+	height : auto ;
+	padding : 0 ;
+	margin : 10px ;
+	
+    }
+
+    main .main {
+
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+
+    }
+
+    header {
+
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+    }
 }
 
 
 
-@media (max-width: 858px) {
+@media (max-width: 100%) {
+
+    body {
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+    } 
+
+    header {
+
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+    }
+
+    .main {
+	width : 90% ;
+	padding : auto ;
+	margin : 0;
+    }
+
+    main table .main{
+
+	width : 100% ;
+	height:100% ;
+	padding : auto ;
+	margin : auto ;
+
+    }
+  
+
+    img {
+	width : auto ;
+	height : auto ;
+	padding : auto ;
+	margin : auto ;
+    }
 
     ul {
 
-        position: fixed;
-
         width: 100%;
 
-        height: 100vh;
+        height: 100;
 
         background: #2c3e50;
 
@@ -676,15 +425,11 @@ footer {
 
         display: block;
 
-        margin: 50px 0;
-
-        line-height: 30px;
-
     }
 
     nav ul li a {
 
-        font-size: 20px;
+        font-size: auto;
 
     }
 
