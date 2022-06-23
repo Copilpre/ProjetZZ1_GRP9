@@ -4,3 +4,5 @@
 
 
 void initSDL(int currentRoom,int currMood,float barreM,float barreD,float barreJ,SDL_Renderer * renderer,int windowW,int windowH);
+
+void eclosion(SDL_Renderer * renderer,int windowW,int windowH);

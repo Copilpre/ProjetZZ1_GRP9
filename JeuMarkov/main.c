@@ -56,7 +56,7 @@ int main(){
     renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
     //fin init
 
-
+    SDL_bool actionUser = SDL_TRUE;
     float barreD = 0.5,barreM=0.5,barreJ=0.5;
     srand( time( NULL ) );
 
@@ -64,7 +64,7 @@ int main(){
                             {0.4, 0.2, 0.4},
                             {0.5, 0.4, 0.1}};
     SDL_Event event;
-    
+
     int currentRoom = 0;
     int program_on = 1;
     int etat = 1;
@@ -72,7 +72,7 @@ int main(){
     int nextState=0;
     int probaCumul[3][3];
     int i,j,outil;
-
+    int delai = 1000;
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
             probaCumul[i][j]=probaEtat[i][j]*10;
@@ -81,7 +81,7 @@ int main(){
             }
         }
     }
-
+    eclosion(renderer,WindowW,WindowH);
     while(program_on){
         while(SDL_PollEvent(&event)){
             switch(event.type){
@@ -101,19 +101,21 @@ int main(){
                 case SDL_MOUSEBUTTONDOWN:
                     curX=event.motion.x;
                     curY = event.motion.y;
+                    actionUser=SDL_TRUE;
+                    delai = 1000;
 
                     if((curY)>=WindowH*0.75 && curY<=WindowH*0.95+50){
                         if(curX >= 50 && curX <=WindowH*0.2+50){
                             manger(&barreD,&barreM,&barreJ,drain);
-                            printf("Vous avez fait manger Tama.\n");
+                            //printf("Vous avez fait manger Tama.\n");
                         }
                         else if(curX >= 200 && curX <=WindowH*0.2+200){
                             jouer(&barreD,&barreM,&barreJ,drain);
-                            printf("Vous avez fait jouer Tama.\n");
+                            //printf("Vous avez fait jouer Tama.\n");
                         }
                         else if(curX >= 350 && curX <=WindowH*0.2+350){
                             dormir(&barreD,&barreM,&barreJ,drain);
-                            printf("Vous avez fait dormir Tama.\n");
+                            //printf("Vous avez fait dormir Tama.\n");
                         }
                     }
 
@@ -123,23 +125,27 @@ int main(){
         }
         outil = rand()%10;
         nextState = 0;
-        while(outil>probaCumul[nextState][etat]){
-            nextState++;
-        }
-        switch (nextState)
-            {
-            case 0:
-                dormir(&barreD,&barreM,&barreJ,drain);
-                break;
-            case 1:
-                manger(&barreM,&barreM,&barreJ,drain);
-                break;
-            case 2:
-                jouer(&barreD,&barreM,&barreJ,drain);
-                break;
-            default:
-                break;
+        if(!actionUser){
+            while(outil>probaCumul[nextState][etat]){
+                nextState++;
             }
+            switch (nextState)
+            {
+                case 0:
+                    dormir(&barreD,&barreM,&barreJ,drain);
+                    break;
+                case 1:
+                    manger(&barreM,&barreM,&barreJ,drain);
+                    break;
+                case 2:
+                    jouer(&barreD,&barreM,&barreJ,drain);
+                    break;
+                default:
+                    break;
+            }
+            delai = 2000;
+        }
+        
         if(barreM<=0.0){
             barreM = 0.0;
         }
@@ -153,7 +159,8 @@ int main(){
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
         }
-        SDL_Delay(1000);
+        SDL_Delay(delai);
+        actionUser = SDL_FALSE;
         //printf("Sommeil : %f, faim : %f, joie : %f | Programme on :%d\n",barreD,barreM,barreJ,program_on);
     }
 }
