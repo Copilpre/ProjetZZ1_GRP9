@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjetZZ1_Groupe9</title>
+</head>
+<body>
+    <h1 id="projet-zz1-isima-groupe-9">PROJET ZZ1 ISIMA GROUPE 9</h1>
+<h3 id="etudiants-intervenants">Etudiants Intervenants</h3>
+<pre><code><span class="hljs-attribute">    LABAZUY Pierre 
+    PILPRE Corentin
+    TRAORE Souleymane</span>
+</code></pre><h3 id="encadrants">Encadrants</h3>
+<pre><code>    YON Loîc
+    LAURENCOT Patrice 
+    Yves-<span class="hljs-keyword">Jean </span>DANIEL
+</code></pre><h2 id="1-jeu-de-la-vie">1. JEU DE LA VIE</h2>
+<p><img src="http://math.pc.vh.free.fr/divers/life/graphics/gosper-gun.png" alt="GameOfLife"></p>
+<h3 id="-vid-o-d-illustration-d-un-cas-d-essai-"><a href="">Vidéo d&#39;illustration d&#39;un cas d&#39;essai</a></h3>
+<h2 id="principe-du-jeu-">Principe du jeu :</h2>
+<blockquote>
+<p>Jeu de simulation dont le principe peut être utilisé pour évaluer l&#39;évolution d&#39;un virus.
+ Il se base sur des règles fixant les conditions de survie pour un élément déjà en vivant,
+ et de naissance pour un élément n&#39;étant pas en vie.</p>
+</blockquote>
+<h2 id="d-tails-d-impl-mentation-">Détails d&#39;implémentation :</h2>
+<blockquote>
+<p>On fixe le départ avec des <strong>SDL_Event</strong> au clique on initialise l&#39;écran de jeu.
+Utilisation de deux tableaux dont <strong>une table pour savegarder le cycle de vie</strong>  et 
+<strong>une table pour sauvegader le nombre de voisin de chaque élément</strong>. 
+Utilisation de deux autres tables  pour fixer les règles de survie et de naissance des
+éléments. </p>
+</blockquote>
+<ul>
+<li>Cas d&#39;arrêt <blockquote>
+<p>Le programme s&#39;arrête quand on atteint un état stable, de façon théorique c&#39;est un 
+état ou la boucle de naissance et/ou décès ne produit pus de changement au niveau
+des tableaux de gestion de cycle de vie.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="2-tamagotchi">2. TAMAGOTCHI</h2>
+<p><img src="http://math.pc.vh.free.fr/divers/life/graphics/gosper-gun.png" alt="Tamagotchi"></p>
+<h3 id="-vid-o-d-illustration-d-un-cas-d-essai-"><a href="">Vidéo d&#39;illustration d&#39;un cas d&#39;essai</a></h3>
+<h3 id="matrice-utilis-e-pour-faire-la-simulation-de-markov">Matrice utilisée pour faire la simulation de Markov</h3>
+<table>
+<thead>
+<tr>
+<th>X/Y</th>
+<th>Manger</th>
+<th>Jouer</th>
+<th>Dormir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manger</td>
+<td>0.1</td>
+<td>0.4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>Jouer</td>
+<td>0.4</td>
+<td>0.2</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>Dormir</td>
+<td>0.5</td>
+<td>0.1</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-mermaid"><span class="hljs-comment">graph</span> <span class="hljs-comment">LR</span>
+<span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">10%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span>
+<span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">40%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">B((Jouer))</span>
+<span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">50%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">C((Dormir))</span>
+<span class="hljs-comment">A</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">Out</span>
+<span class="hljs-comment">B((Jouer))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">20%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">B((Jouer))</span> 
+<span class="hljs-comment">B((Jouer))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">40%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span>
+<span class="hljs-comment">B((Jouer))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">40%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">C((Dormir))</span>
+<span class="hljs-comment">B</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">Out</span>
+<span class="hljs-comment">C((Dormir))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">10%</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">C((Dormir))</span>
+<span class="hljs-comment">C((Dormir))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">50%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">A</span><span class="hljs-title">[</span><span class="hljs-comment">Manger</span><span class="hljs-title">]</span>
+<span class="hljs-comment">C((Dormir))</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span> <span class="hljs-comment">40%</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">B((Jouer))</span>
+<span class="hljs-comment">C</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span>&gt; <span class="hljs-comment">Out</span>
+</code></pre>
+
+</body>
+</html>
