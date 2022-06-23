@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 
-#define taille 15
+#define taille 50
 
 void affichageTableau(int ligne, int col,int **tab,SDL_Renderer * renderer,int tailleCase){
     int i,j;
@@ -126,6 +126,7 @@ int main(){
     printf("S             : Permet de sauvegarder la configuration\n");
     printf("Flèche droite : Augmenter la vitesse\n");
     printf("Flèche gauche : Diminuer la vitesse\n");
+    printf("Q             : Quitter\n");
     printf("*******************************************\n");
 
 
@@ -263,8 +264,10 @@ int main(){
                                 case SDLK_d:
                                     mode ='f';
                                     break;
-
-                                    
+                                case SDLK_q:
+                                    keepLoop = SDL_FALSE ;
+                                    program_on = SDL_FALSE; 
+                                    break;                                    
                             }
                             break;
 
