@@ -44,12 +44,12 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
 
 - Souleymane Traore
 ```
-   Implémentation de formes dynamiques en SDL2
-   Début développement snake
+   Implémentation de formes dynamiques en SDL2 (un carré suivant un trajectoire circulaire)
+   Un exercice d'interraction au clique et aux appuis de touche.
+   Début développement snake (avancé).
    Début développement Jeu de la vie
 ```
 ## Mercredi 22 juin évolution du travail
-
 
 - Pierre Labazuy/Corentin Pilpré/Souleymane Traore
 ```
@@ -61,6 +61,7 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
 ```
 
 ## Jeudi 23 juin évolution du travail
+
 - Pierre Labazuy/Corentin Pilpré/Souleymane Traore
 ```
    Fin du développement du jeu de la vie
@@ -69,4 +70,6 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
    - Liaison de notre code à l'interface graphique
    - Gestion des fonds
    - Développement des différents sprite
+   Développement de notre page web qui nous servira 
+   de support de présentation.
 ```
