@@ -12,10 +12,7 @@ int ** SDL_LoadTvoisin(SDL_bool mode) ;
 int ** SDL_LoadGrille(int ** tab) ; 
 void SDL_LoadWindow(SDL_Renderer * renderer, SDL_Rect rect, int ** grille) ;
 void SDL_ErrorCase(char * msg) ;
-void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_bool fill) ; 
 void SDL_DrawWindowOfGame(SDL_Renderer * renderer, SDL_Color c, int nbElts, int h, int w) ;
-void SDL_ChangeColor(SDL_Renderer * renderer, SDL_Rect rect, SDL_Color c) ;
-
 
 int main() {
 	SDL_Window * window ;
@@ -24,8 +21,7 @@ int main() {
 	SDL_Event event ;
 	SDL_Rect rect = {0, 0, W, H} ; 
 	SDL_Color c = {0, 0, 0, 255} ;
-	int w, h, i = 0, j = 0, vitesse = 10, 
-			taille, code = 0, compteur ;
+	int w, h, i = 0, j = 0, vitesse = 100, taille ;
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		SDL_ErrorCase("Trouble with init video") ;
@@ -54,12 +50,12 @@ int main() {
 
 	rect.w = (int)(w/taille) ;
 	rect.h = (int)(h/taille) ;			
-	SDL_bool KeepEvent = SDL_TRUE ;
+	SDL_bool keepEvent = SDL_TRUE ;
 
 	//SDL_DrawWindowOfGame(renderer, c, taille, h, w) ;
 	
 	while ( keepLoop ) {
-		while (SDL_PollEvent(&event)) 
+		if (SDL_PollEvent(&event)) 
 		{
 			switch (event.type) {
 				case SDL_BUTTON_LEFT :
@@ -96,12 +92,13 @@ int main() {
 				default :
 					break ;
 			}
-			Tvoisin = SDL_LoadTvoisin(mode) ;
-			grille = SDL_LoadGrille(Tvoisin) ;
-			SDL_LoadWindow(renderer, rect, grille) ;
-			SDL_RenderPresent(renderer) ;
-			SDL_Delay(vitesse) ;
 		}
+		Tvoisin = SDL_LoadTvoisin(mode) ;
+		grille = SDL_LoadGrille(Tvoisin) ;
+		//SDL_RenderClear(renderer) ;
+		SDL_LoadWindow(renderer, rect, grille) ;
+		SDL_RenderPresent(renderer) ;
+		SDL_Delay(vitesse) ;
 	}
 
 	SDL_DestroyRenderer(renderer) ;
@@ -150,11 +147,14 @@ void SDL_LoadWindow(SDL_Renderer * renderer, SDL_Rect rect, int ** grille) {
 	int i, j ;
 	SDL_Color c = {0, 0, 0, 0} ;
 	for ( i = 0 ; i<TAILLE ; i++ ) {
-		for ( j = 0 ; TAILLE ; j++ ) {
+		for ( j = 0 ; j<TAILLE ; j++ ) {
 			c.r = c.g = c.b = (grille[i][j] == 1) ? 0 : 255 ;
 			rect.x = i * rect.w ;
 			rect.y = j * rect.h ;
-			SDL_ChangeColor(renderer, rect, c) ;
+			if (SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a) != 0)
+				SDL_ErrorCase("Trouble with draw color") ;
+			if (SDL_RenderFillRect(renderer, &rect) != 0) 
+				SDL_ErrorCase("Trouble with draw color") ;
 		}
 	}
 }
@@ -162,19 +162,6 @@ void SDL_LoadWindow(SDL_Renderer * renderer, SDL_Rect rect, int ** grille) {
 void SDL_ErrorCase(char * msg) {
 	SDL_Log("%s %s", msg, SDL_GetError()) ;
 	exit(EXIT_FAILURE) ;
-}
-
-void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_bool fill) 
-{
-	if (SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE) != 0)
-		SDL_ErrorCase("Trouble with draw color") ;
-
-	if (fill == SDL_TRUE)
-	if (SDL_RenderFillRect(renderer, &rect) != 0)
-		SDL_ErrorCase("Trouble with fill rect") ;
- 
-	if (SDL_RenderDrawRect(renderer, &rect) != 0)
-		SDL_ErrorCase("Trouble with draw rect") ;
 }
 
 void SDL_DrawWindowOfGame(SDL_Renderer * renderer, SDL_Color c, int nbElts, int h, int w) 
@@ -195,10 +182,3 @@ void SDL_DrawWindowOfGame(SDL_Renderer * renderer, SDL_Color c, int nbElts, int 
 	}
 }
 
-// rect = {i*pasH, j*pasW, pasH, pasW} ;
-
-void SDL_ChangeColor(SDL_Renderer * renderer, SDL_Rect rect, SDL_Color c) 
-{
-	// Mise à rouge de la case ciblée
-	SDL_DrawRect(renderer, rect, c.r, c.g, c.b, SDL_TRUE) ; 
-}
