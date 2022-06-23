@@ -5,10 +5,12 @@
 #define TAILLE 20
 #include <SDL2/SDL.h>
 
-int Tnaissance[9] = {1, 0, 0, 1, 1, 1, 0, 1, 0} ;
-int Tsurvie[9] = {1, 1, 0, 0, 0, 0, 0, 1, 1} ;
+int Tnaissance[9] = {0,0, 1, 1, 0, 0, 0, 1, 0} ;
+int Tsurvie[9] = {0, 1, 0, 1, 0, 0, 0, 1, 1} ;
 
-void SDL_LoadGrille(SDL_Renderer * renderer, SDL_Rect r, SDL_bool mode) ;
+int ** SDL_LoadTvoisin(SDL_bool mode) ;
+int ** SDL_LoadGrille(int ** tab) ; 
+void SDL_LoadWindow(SDL_Renderer * renderer, SDL_Rect rect, int ** grille) ;
 void SDL_ErrorCase(char * msg) ;
 void SDL_DrawRect(SDL_Renderer * renderer, SDL_Rect rect, int r, int g, int b, SDL_bool fill) ; 
 void SDL_DrawWindowOfGame(SDL_Renderer * renderer, SDL_Color c, int nbElts, int h, int w) ;
@@ -58,12 +60,13 @@ int main() {
 
 	rect.w = (int)(w/taille) ;
 	rect.h = (int)(h/taille) ;			
+	SDL_bool KeepEvent = SDL_TRUE ;
 
 	//SDL_DrawWindowOfGame(renderer, c, taille, h, w) ;
 	
 	while ( keepLoop ) {
 
-		while (SDL_PollEvent(&event)) 
+		while (KeepEvent || SDL_PollEvent(&event)) 
 		{
 			switch (event.type) {
 				case SDL_BUTTON_LEFT :
@@ -76,23 +79,15 @@ int main() {
 					SDL_GetMouseState(&i, &j) ;
 					i = (int)(i / rect.w) ;
 					j = (int)(j / rect.h) ;
-					rect.x = i * rect.w ;
-					rect.y = j * rect.h ;
-
       					if (SDL_GetMouseState(NULL, NULL) & 
           						SDL_BUTTON(SDL_BUTTON_LEFT) ) {
-						c.r = c.g = c.b = 255 ;
 						grille[i][j] = 0 ;
-						SDL_ChangeColor(renderer, rect, c) ;
       					} else if (SDL_GetMouseState(NULL, NULL) & 
                  					SDL_BUTTON(SDL_BUTTON_RIGHT) ) { 
-						c.r = c.g = c.b = 0 ;
 						grille[i][j] = 1 ;
-						SDL_ChangeColor(renderer, rect, c) ;
       					}
-
       					break;
-				case SDL_WINDOWEVENT_CLOSE | SDL_QUIT | SDL_WINDOWEVENT_LEAVE:
+				case SDL_WINDOWEVENT_CLOSE | SDL_QUIT :
 					keepLoop = SDL_FALSE ;
 					break ;
 				default :
@@ -101,7 +96,9 @@ int main() {
 
 		}
 
-		SDL_LoadGrille(renderer, rect, mode) ;
+		Tvoisin = SDL_LoadTvoisin(mode) ;
+		grille = SDL_LoadGrille(Tvoisin) ;
+		SDL_LoadWindow(renderer, rect, grille) ;
 		SDL_RenderPresent(renderer) ;
 		SDL_Delay(vitesse) ;
 
@@ -114,16 +111,12 @@ int main() {
 	exit(EXIT_FAILURE) ;
 }
 
-void SDL_LoadGrille(SDL_Renderer * renderer, SDL_Rect rect, SDL_bool mode) 
+int ** SDL_LoadTvoisin(SDL_bool mode) 
 {
 	int i, j , compteur ;
-	SDL_Color c ;
 	for ( i = 0 ; i < TAILLE ; i++ ) {
 		for ( j = 0 ;  j < TAILLE; j++ ) {
 			compteur = 0 ;
-			rect.x = i * rect.w ;
-			rect.y = j * rect.h ;
-
 			if ( mode == SDL_TRUE ) {
 				compteur = nbVoisinLimit(grille, i, j) ;
 			} 
@@ -133,16 +126,34 @@ void SDL_LoadGrille(SDL_Renderer * renderer, SDL_Rect rect, SDL_bool mode)
 			Tvoisin[i][j] = compteur ;
 		}
 	}
+	return Tvoisin ;
+}
 
+int ** SDL_LoadGrille(int ** tab) 
+{
+	int i, j ;
 	for (i=0; i<TAILLE; i++) {
 		for (j=0; j<TAILLE; j++) {
 			if (grille[i][j] == 1) {
-				grille[i][j] = Tsurvie[Tvoisin[i][j]] ;
+				grille[i][j] = Tsurvie[tab[i][j]] ;
 			} 
 			else {
-				grille[i][j] = Tnaissance[Tvoisin[i][j]] ;
+				grille[i][j] = Tnaissance[tab[i][j]] ;
 			}
+		}
+	}
+	return grille ;
+}
+
+
+void SDL_LoadWindow(SDL_Renderer * renderer, SDL_Rect rect, int ** grille) {
+	int i, j ;
+	SDL_Color c = {0, 0, 0, 0} ;
+	for ( i = 0 ; i<TAILLE ; i++ ) {
+		for ( j = 0 ; TAILLE ; j++ ) {
 			c.r = c.g = c.b = (grille[i][j] == 1) ? 0 : 255 ;
+			rect.x = i * rect.w ;
+			rect.y = j * rect.h ;
 			SDL_ChangeColor(renderer, rect, c) ;
 		}
 	}
