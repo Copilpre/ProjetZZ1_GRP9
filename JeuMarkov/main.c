@@ -156,11 +156,7 @@ int main(){
         SDL_Delay(1000);
         //printf("Sommeil : %f, faim : %f, joie : %f | Programme on :%d\n",barreD,barreM,barreJ,program_on);
     }
-<<<<<<< HEAD
     
     printf("%f",barreM);
     
 }
-=======
-}
->>>>>>> df188e58c1e02fab1e0d21100106532bfd855ea8

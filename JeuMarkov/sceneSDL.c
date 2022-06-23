@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-=======
 #include "sceneSDL.h"
->>>>>>> df188e58c1e02fab1e0d21100106532bfd855ea8
 
 SDL_Color gris = {155,155,155,255};
 SDL_Color grisF = {120,120,120,255};
@@ -208,8 +205,5 @@ int main(){
     }
     
     return 0;
-<<<<<<< HEAD
 }
-=======
 }*/
->>>>>>> df188e58c1e02fab1e0d21100106532bfd855ea8
