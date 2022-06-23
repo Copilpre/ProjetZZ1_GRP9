@@ -10,14 +10,12 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
    Implémentation graphique d'un bonhomme en rectangle qui danse sur une piste de discothèque.`
    Implémentation d'une animation de nyan cat dans l'espace.
    Début de la création du menu du jeu de la vie.
-   (Sera complété).
 ```
   
 - Corentin Pilpré
 ```
   Implémentation d'une fenètre suiavnt un trajectoire rectangulaire restant dans le cadre l'ecran.
   Essaie implémentation du serpent en cours (avancé).
-  (Sera complété).
 ```
 
 - Souleymane Traore
@@ -50,7 +48,25 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
    Début développement snake
    Début développement Jeu de la vie
 ```
+## Mercredi 22 juin évolution du travail
 
 
+- Pierre Labazuy/Corentin Pilpré/Souleymane Traore
+```
+   Développement Jeu de la vie
+   - Segmentation fault fixée
+   Début de développement de notre Jeu : "Tamagotchi"
+   - Ajout des interactions manger, activité, dormir avec markov
+   - Début de l'interface en SDL2
+```
 
-
+## Jeudi 23 juin évolution du travail
+- Pierre Labazuy/Corentin Pilpré/Souleymane Traore
+```
+   Fin du développement du jeu de la vie
+   - ajout des différentes option + dernier fix
+   Développement de notre Jeu : "Tamagotchi"
+   - Liaison de notre code à l'interface graphique
+   - Gestion des fonds
+   - Développement des différents sprite
+```
