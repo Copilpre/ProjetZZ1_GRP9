@@ -123,6 +123,7 @@ int main(){
     printf("SPACE         : Démarrer/Pause\n");
     printf("T             : Monde torrique\n");
     printf("D             : Monde délimité\n");
+    printf("S             : Permet de sauvegarder la configuration\n");
     printf("Flèche droite : Augmenter la vitesse\n");
     printf("Flèche gauche : Diminuer la vitesse\n");
     printf("*******************************************\n");
