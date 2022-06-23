@@ -156,8 +156,6 @@ int main(){
     SDL_bool keepLoop = SDL_FALSE, program_on = SDL_TRUE;
 
     while(program_on){
-        affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
-        SDL_RenderPresent(renderer);
         if(SDL_WaitEvent(&event)){
             switch (event.type) 
                 {
@@ -171,9 +169,11 @@ int main(){
                         j = mouseX/tailleCase;
                         if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT) ) {
                             plateau[i][j] = 1;
+                            plateau2[i][j]=1;
                         }
                         else if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT) ){
                             plateau[i][j] = 0;
+                            plateau2[i][j]=0;
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -182,6 +182,8 @@ int main(){
                         }
                 }
         }
+        affichageTableau(ligne,colonne,plateau2,renderer,tailleCase);
+        SDL_RenderPresent(renderer);
         while (keepLoop) {
             while (SDL_PollEvent(&event)) 
             {
@@ -226,7 +228,6 @@ int main(){
                             plateau2[i][j]=masqueSurvie[nbVoisins];
                             break;
                         case 0:
-                            printf("%d (%d,%d)\n",nbVoisins,i,j);
                             plateau2[i][j]=masqueNaissance[nbVoisins];
                             break;
                     
