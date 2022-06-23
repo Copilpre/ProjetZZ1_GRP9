@@ -29,3 +29,28 @@ Projet ZZ1 isima du groupe 9 composé de Souleymane Traore/Pierre Labazuy/Corent
   Pas mise en ligne car pas sur la même branch error lors de git push.
   (Sera complété).
 ```
+## Mardi 21 juin évolution du travail
+
+- Pierre Labazuy
+```
+   Utilisation des sprites pour réaliser un nyan cat animé sur fond galaxie animé
+   Début développement Jeu de la vie
+```
+
+- Corentin Pilpré
+```
+   Utilisation des sprites pour réaliser un indiana jones faisant des roulade en se déplaçant sur l'ecran
+   Ajout de fonctionnalité pour accélerer et ralentir sur le sprite(utilisé dans le jeu de la vie)
+   Début développement Jeu de la vie
+```
+
+- Souleymane Traore
+```
+   Implémentation de formes dynamiques en SDL2
+   Début développement snake
+   Début développement Jeu de la vie
+```
+
+
+
+
