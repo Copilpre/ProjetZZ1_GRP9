@@ -83,7 +83,9 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     
 }
 
-void initSDL(int currentRoom,int currMood,float barreM,float barreJ,float barreD,SDL_Renderer * renderer,int windowW,int windowH){
+
+
+void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer * renderer,int windowW,int windowH){
     char salles[3][20]={{"./image/chambre.jpg"},{"./image/cuisine.png"},{"./image/stade.jpg"}};
     char icones[3][20]={{"./image/manger.png"},{"./image/jouer.png"},{"./image/dormir.png"}};
     SDL_Rect position,position2,source;
@@ -105,29 +107,17 @@ void initSDL(int currentRoom,int currMood,float barreM,float barreJ,float barreD
     SDL_Color couleur[3]={rouge,vert,cyan};
     float barres[3] = {barreM,barreJ,barreD};
 
-    //tamagotchi
-    texture = IMG_LoadTexture(renderer,"image/pingouin.png");
-
-    SDL_QueryTexture(texture,NULL,NULL,NULL,&source.h);
-    source.x = 0;
-    source.y= 0;
-    source.w=source.h;
-
-    position.x = windowW/4;
-    position.y = windowH/8;
-    position.w = windowW/2;
-    position.h = windowH/2;
-    SDL_RenderCopy(renderer, texture, &source, &position);
-
     //barres de vie
+    int ecartBarre = windowW*0.02;
+
     position.w = windowW/16;
-    position.y = 5;
+    position.y = ecartBarre;
     position.h = windowH/4;
         
     for (int i = 0; i < 3;i++){
-        position.x= i *50+5*(i+1);
-        position2.x = position.x+5;
-        position2.w = position.w-10;
+        position.x= i * position.w + ecartBarre *(i+1);
+        position2.x = position.x+0.5*ecartBarre;
+        position2.w = position.w-ecartBarre;
         position2.h = position.h*barres[i];
         position2.y = (position.h+position.y-(position2.h));
            if(barres[i]!=0){
@@ -152,9 +142,11 @@ void initSDL(int currentRoom,int currMood,float barreM,float barreJ,float barreD
     SDL_SetRenderDrawColor(renderer,grisF.r,grisF.g,grisF.b,grisF.a);
     
     //positions boutons
+    int ecartBoutons = windowW*0.05;
     position.y = windowH*0.75;
-    position.h = windowH*0.2;
-    position.w = windowH*0.2;
+    position.w = (windowW-4*ecartBoutons)/3;
+    position.h = position.w;
+
 
     //positions icones relatives aux boutons
     SDL_Rect icone;
@@ -163,7 +155,7 @@ void initSDL(int currentRoom,int currMood,float barreM,float barreJ,float barreD
 
     for (int i = 0; i < 3;i++){
         //boutons
-        position.x= i * 100+50*(i+1);
+        position.x= i * position.w + ecartBoutons *(i+1);
         SDL_SetRenderDrawColor(renderer,couleur[i].r,couleur[i].g,couleur[i].b,couleur[i].a);
         SDL_RenderFillRect(renderer,&position);
 
@@ -175,8 +167,60 @@ void initSDL(int currentRoom,int currMood,float barreM,float barreJ,float barreD
 
         icone.x=position.x+0.1*icone.w;
         icone.y=position.y+0.1*icone.w;
-            
+
         SDL_RenderCopy(renderer, texture, &source, &icone);
     }
-    SDL_RenderPresent(renderer);
+
+    //bouton pause
+    SDL_DestroyTexture(texture);
+}
+
+void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH){
+    SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/spriteSheet.png");
+    SDL_Rect source,sprite;
+    
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+    int hauteurCase = source.h/7;
+    int LargeurCase = source.w/12;
+    sprite.w=LargeurCase;
+    sprite.h=hauteurCase;
+    
+    
+
+    int nbSprite;
+
+    switch(currMood){
+        case 0 :
+            nbSprite=12;
+            sprite.y = 0;
+            break;
+        case 1 :
+            nbSprite = 7;
+            sprite.y = hauteurCase;
+            break;
+        case 2 :
+            nbSprite=6;
+            sprite.y = 3*hauteurCase;
+            break;
+        case 3 :
+            nbSprite = 7;
+            sprite.y = 6*hauteurCase;
+            break;
+        case 4 :
+            break;
+    }
+
+    for (int i = 0;i<nbSprite;i++){
+        //ON AFFICHE LA SCENE AVANT LE PERSO
+        initSDL(currentRoom,barreM,barreJ,barreD,renderer,WindowW,WindowH);
+
+        //AFFICHAGE TAMAGOCHI
+
+        sprite.x = i*LargeurCase;
+        SDL_RenderCopy(renderer, texture, &sprite, &position);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(150);
+    }
+    
+    SDL_DestroyTexture(texture);
 }
