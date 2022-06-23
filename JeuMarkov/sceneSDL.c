@@ -73,6 +73,8 @@ int main(){
         position.w = WindowW;
         position.h = WindowH;
         SDL_RenderCopy(renderer, texture, &source, &position);
+        
+
 
         //tamagotchi
         texture = IMG_LoadTexture(renderer,"tama.png");
@@ -102,11 +104,27 @@ int main(){
         position.y = WindowH*0.75;
         position.h = WindowH*0.2;
         position.w = WindowH*0.2;
+
+        texture = IMG_LoadTexture(renderer,"image/manger.png");
+        if(texture ==NULL){
+            printf("toto");
+        }
+        SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+
+        SDL_Rect icone;
+        
+        icone.w=position.w*0.85;
+        icone.h=position.h*0.85;
+
         for (int i = 0; i < 3;i++){
             position.x= i * 100+50*(i+1);
             SDL_RenderFillRect(renderer,&position);
+            icone.x=position.x+0.1*icone.w;
+            icone.y=position.y+0.1*icone.w;
+            
+            SDL_RenderCopy(renderer, texture, &source, &icone);
             }
-
+        
         
 
 
