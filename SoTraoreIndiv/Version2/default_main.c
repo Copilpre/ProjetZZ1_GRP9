@@ -5,7 +5,7 @@
 #define TAILLE 20
 #include <SDL2/SDL.h>
 
-int Tnaissance[9] = {0,0, 1, 1, 0, 0, 0, 1, 0} ;
+int Tnaissance[9] = {0,0, 1, 1, 0, 0, 0, 0, 0} ;
 int Tsurvie[9] = {0, 1, 0, 1, 0, 0, 0, 1, 1} ;
 
 int ** SDL_LoadTvoisin(SDL_bool mode) ;
@@ -46,12 +46,6 @@ int main() {
 
 	SDL_GetWindowSize(window, &w, &h) ; 
 
-	if (SDL_RenderDrawRect(renderer, &rect) != 0)
-		SDL_ErrorCase("Trouble with window size") ;
-
-	if (SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a) != 0)
-		SDL_ErrorCase("Trouble with draw color") ;
-
 	taille = TAILLE ;
 	
 	// Variables globales
@@ -65,8 +59,7 @@ int main() {
 	//SDL_DrawWindowOfGame(renderer, c, taille, h, w) ;
 	
 	while ( keepLoop ) {
-
-		while (KeepEvent || SDL_PollEvent(&event)) 
+		while (SDL_PollEvent(&event)) 
 		{
 			switch (event.type) {
 				case SDL_BUTTON_LEFT :
@@ -87,21 +80,28 @@ int main() {
 						grille[i][j] = 1 ;
       					}
       					break;
-				case SDL_WINDOWEVENT_CLOSE | SDL_QUIT :
+				case SDL_WINDOWEVENT :
+					switch (event.window.event)  
+					{
+						case SDL_WINDOWEVENT_CLOSE:  
+							printf("appui sur la croix\n");	
+							break;
+						default:
+							break ;
+					}  
+					break ; 
+				case SDL_QUIT :
 					keepLoop = SDL_FALSE ;
 					break ;
 				default :
 					break ;
 			}
-
+			Tvoisin = SDL_LoadTvoisin(mode) ;
+			grille = SDL_LoadGrille(Tvoisin) ;
+			SDL_LoadWindow(renderer, rect, grille) ;
+			SDL_RenderPresent(renderer) ;
+			SDL_Delay(vitesse) ;
 		}
-
-		Tvoisin = SDL_LoadTvoisin(mode) ;
-		grille = SDL_LoadGrille(Tvoisin) ;
-		SDL_LoadWindow(renderer, rect, grille) ;
-		SDL_RenderPresent(renderer) ;
-		SDL_Delay(vitesse) ;
-
 	}
 
 	SDL_DestroyRenderer(renderer) ;
