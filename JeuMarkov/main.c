@@ -83,8 +83,8 @@ int main(){
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
             probaCumul[i][j]=probaEtat[i][j]*10;
-            if(j>0){
-                probaCumul[i][j]+=probaCumul[i][j-1];
+            if(i>0){
+                probaCumul[i][j]+=probaCumul[i-1][j];
             }
         }
     }

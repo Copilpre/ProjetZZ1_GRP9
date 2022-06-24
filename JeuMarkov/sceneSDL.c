@@ -13,12 +13,26 @@ SDL_Color vert = {0,255,30,255};
 
 void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     SDL_Rect source,position;
+
+    //TITRE
+    SDL_Texture * textureTitre = IMG_LoadTexture(renderer,"./image/titre.png");
+    SDL_Rect positionT,sourceT;
+    SDL_QueryTexture(textureTitre,NULL,NULL,&sourceT.w,&sourceT.h);
+    positionT.x = 0;
+    positionT.y = 0;
+    positionT.w = windowW;
+    positionT.h = windowH*0.3-sourceT.h*0.2;
+    sourceT.x = 0;
+    sourceT.y = 0;
+    sourceT.h = sourceT.h*0.55;
+
     SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/eclosion.png");
 
     SDL_QueryTexture(texture,NULL,NULL,NULL,&source.h);
      int i;
     position.x = windowW/4;
-    position.y = windowH/8;
+    position.y = windowH*0.4;
+
     
     //TABLEAU CONTENANT LES COORDONNES DES 6 SPRITES DE L'OEUF
     SDL_Rect spriteOeuf[6];
@@ -28,42 +42,39 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
         spriteOeuf[i].y = 0;
     }
 
-    for (i = 0;i <3;i++){
-        spriteOeuf[i].x = i*100+35;
-        spriteOeuf[i].w = 100;
-    }
+    spriteOeuf[0].x=35;
+    spriteOeuf[0].w=117-35;
 
-    spriteOeuf[3].x=350;
-    spriteOeuf[3].w=100;
+    spriteOeuf[1].x = 142;
+    spriteOeuf[1].w = 223-142;
 
-    spriteOeuf[4].x=450;
-    spriteOeuf[4].w=150;
+    spriteOeuf[2].x = 249;
+    spriteOeuf[2].w = 330-249;
 
-    spriteOeuf[5].x=600;
-    spriteOeuf[5].w=170;
+    spriteOeuf[3].x=356;
+    spriteOeuf[3].w=447-356;
+
+    spriteOeuf[4].x=460;
+    spriteOeuf[4].w=596-460;
+
+    spriteOeuf[5].x=605;
+    spriteOeuf[5].w=763-605;
 
     //AFFICHAGE OEUFS
     for (i = 0;i<6;i++){
-        position.w = windowH/2;
+        SDL_RenderCopy(renderer, textureTitre, &sourceT, &positionT);
+        position.w = spriteOeuf[i].w*windowH*0.005;
         position.h = windowH/2;
         SDL_RenderCopy(renderer, texture, &spriteOeuf[i], &position);
         SDL_RenderPresent(renderer);
-        SDL_Delay(200);
+        SDL_Delay(300);
         SDL_RenderClear(renderer);
     }
-    SDL_Delay(1000);
+    SDL_Delay(1500);
 
     //AFFICHAGE ECRAN DE DEMARAGE
-    SDL_Texture * textureTitre = IMG_LoadTexture(renderer,"./image/titre.png");
-    SDL_QueryTexture(textureTitre,NULL,NULL,&source.w,&source.h);
-    SDL_Rect positionT;
-    positionT.x = 0;
-    positionT.y = 0;
-    positionT.w = windowW;
-    positionT.h = windowH*0.3;
-    source.x = 0;
-    source.y = 0;
-
+    
+    SDL_QueryTexture(textureTitre,NULL,NULL,&sourceT.w,&sourceT.h);
     texture = IMG_LoadTexture(renderer,"./image/pingouinOut.png");
 
     SDL_Rect flash,pingouin;
@@ -92,14 +103,16 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     for(int i = 0; i < 10;i++){
         flash.x=((i%2)*2*flash.w)/2;
         SDL_RenderCopy(renderer, texture, &flash, &position);
-        SDL_RenderCopy(renderer, textureTitre, &source,&positionT);
+        SDL_RenderCopy(renderer, textureTitre, &sourceT,&positionT);
 
         SDL_RenderCopy(renderer, texturePingouin, &source, &posP);
         SDL_RenderPresent(renderer);
         SDL_Delay(500);
         SDL_RenderClear(renderer);
     }
-    
+    SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texturePingouin);
+    SDL_DestroyTexture(textureTitre);
 }
 
 
@@ -189,7 +202,7 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
 
         SDL_RenderCopy(renderer, texture, &source, &icone);
     }
-    SDL_DestroyTexture(texture);
+    //SDL_DestroyTexture(texture);
 }
 
 void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
@@ -212,6 +225,7 @@ void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
 
         SDL_RenderCopy(renderer, texture, &source, &position);
     }
+    //SDL_DestroyTexture(texture);
 }
 
 void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH,int etat){
@@ -265,5 +279,6 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
 }
 
 void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH){
-    
+    SDL_Texture * texture = IMG_LoadTexture(renderer,".image/explosion.png");
+
 }
