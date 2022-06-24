@@ -76,4 +76,3 @@ void SDL_DrawSnake(SDL_Renderer * renderer, point_t * origin)
 	}
 	
 }
-
