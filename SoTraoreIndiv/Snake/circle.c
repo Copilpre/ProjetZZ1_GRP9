@@ -37,8 +37,8 @@ void SDL_DrawCircle(SDL_Renderer * renderer, SDL_Color c, point_t origin, int r)
 		c = polaire(c, pas) ;
 		p = cartesien(c) ;
 
-		x0 = p->x + origin->x ;
-		y0 = p->y + origin->y ;
+		x1 = p->x + origin->x ;
+		y1 = p->y + origin->y ;
 
 	
 		if (SDL_RenderDrawLine(renderer, x0, y0, x1, y1) != 0)
