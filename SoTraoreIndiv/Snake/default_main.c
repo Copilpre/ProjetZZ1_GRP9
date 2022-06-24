@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "serpent.h"
 
-int main(int argc, char ** argc) 
+int main() 
 {
 	SDL_Window * window ;
 	SDL_Renderer * renderer ;
@@ -14,16 +14,15 @@ int main(int argc, char ** argc)
 	if (window == NULL) 
 		SDL_ErrorCase("Trouble with window") ;
 
-	renderer = SDL_CreateRender(window, -1, 0) ;
+	renderer = SDL_CreateRenderer(window, -1, 0) ;
 
 	if (renderer == 0) 
-		SDL_Errorcase("Trouble with renderer") ;
+		SDL_ErrorCase("Trouble with renderer") ;
 
-	SDL_Point * origin = NULL ;
+	SDL_Point origin ;
 
-	origin = malloc(sizeof(point_t)) ;
-	origin->x = 150 ;
-	origin->y = 150 ;
+	origin.x = 150 ;
+	origin.y = 150 ;
 	
 	SDL_DrawSnake(renderer, origin) ;
 

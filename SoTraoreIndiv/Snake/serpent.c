@@ -1,5 +1,5 @@
 #include "serpent.h"
-#define CARRE 4
+#define CARRE 5
 #define TETE 1
 #define LIGNE 3
 
@@ -40,38 +40,39 @@ void SDL_DrawLine(SDL_Renderer * renderer, SDL_Point p1, SDL_Point p2)
 		SDL_ErrorCase("Trouble with draw line") ;
 }
 
-void SDL_DrawPoint(SDL_Renderer * renderer, point_t p) 
+void SDL_DrawPoint(SDL_Renderer * renderer, SDL_Point p) 
 {
 	if (SDL_RenderDrawPoint(renderer, p.x, p.y) != 0) 
 		SDL_ErrorCase("Trouble with draw point") ;
 }
 
 
-void SDL_DrawCircle(SDL_Renderer * renderer, SDL_Color c, point_t origin, int r)
+void SDL_DrawCircle(SDL_Renderer * renderer, SDL_Color c, SDL_Point origin, int r)
 {
-	if (SDL_RenderDrawColor(renderer, c.r, c.g, c.b, c.a) != 0) 
+	if (SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a) != 0) 
 		SDL_ErrorCase("Trouble with draw color") ;
 
 	int pas = 1 , x0 = 0 , y0 = 0 , x1 = 0, y1 = 0 ;
 
-	circle_t * c = malloc(sizeof(circle_t)) ;
-	c->rayon = r ;
-	c->angle = 0; 
+	circle_t * c1 = malloc(sizeof(circle_t)) ;
+	c1->rayon = r ;
+	c1->angle = 0; 
+	point_t * p ;
 
-	while ( c->angle < 360 ) {
+	while ( c1->angle < 360 ) {
 
-		c = polaire(c, pas) ;
-		p = cartesien(c) ;
+		c1 = polaire(c1, pas) ;
+		p = cartesien(c1) ;
 
-		x0 = p->x + origin->x ;
-		y0 = p->y + origin->y ;
+		x0 = p->x + origin.x ;
+		y0 = p->y + origin.y ;
 
 
-		c = polaire(c, pas) ;
-		p = cartesien(c) ;
+		c1 = polaire(c1, pas) ;
+		p = cartesien(c1) ;
 
-		x1 = p->x + origin->x ;
-		y1 = p->y + origin->y ;
+		x1 = p->x + origin.x ;
+		y1 = p->y + origin.y ;
 
 	
 		if (SDL_RenderDrawLine(renderer, x0, y0, x1, y1) != 0)
@@ -91,38 +92,42 @@ SDL_Point * SDL_GetMidle(void * objet, SDL_Point * origin, SDL_bool isCircle)
 		p->y = origin->y ;
 	
 		if (isCircle == SDL_TRUE)  {
-			objet = ((circle_t*)objet) ;
-			p->x += objet->rayon ;
+			p->x += ((circle_t*)objet)->rayon ;
 		} 
 		else {
-			objet = ((SDL_Rect*)objet) ;	
-			p->x = objet->x + objet->w/2 ;
-			p->y = objet->y ;
+			p->x = ((SDL_Rect*)objet)->x + ((SDL_Rect*)objet)->w ;
+			p->y = ((SDL_Rect*)objet)->y ;
 		}
 	} 
 
 	return p ;
 }
 
-void SDL_DrawSnake(SDL_Renderer * renderer, point_t * origin) 
+void SDL_DrawSnake(SDL_Renderer * renderer, SDL_Point origin) 
 {
 	if (renderer == 0) 
 		SDL_ErrorCase("Trouble with renderer") ;
-	SDL_Rect * rect = malloc(sizeof(rect)) ;
-	rect->x = origin->x ;
-	rect->y = origin->y ;
-	rect->w = 10 ;
-	rect->h = 20 ;
-	int i = 0 ;
-
+	SDL_Rect rect ;
+	rect.w = 20 ;
+	rect.h = 20 ;
+	int i = 0 , r = 20;
+ 
 	SDL_Color c = {0, 255, 0, 255} ;
-	point_t * p  = SDL_DrawCircle(renderer, c, origin, 20) ;
+	SDL_DrawCircle(renderer, c, origin, r) ;
+	SDL_Point * p = malloc(sizeof(SDL_Point)) ;
+	p->x = origin.x + r;
+        p->y = origin.y - (int)(r/2) ;
+	rect.x = p->x ;
+	rect.y = p->y ;
 	
-	while (i < 4) {
-		SDL_DrawRect(renderer, rect, 255, 0, 0, SDL_FALSE) ;
-		p = SDL_GetMidle(rect, p, SDL_FALSE) ;
-		rect->x = p->x ;
-		rect->y = p->y ;
+	while (i < CARRE) {
+		c.r = 255 * cos(p->x) ;
+		c.g = 255 * sin(p->y) ;
+		c.b = 255 * sinh(p->x) ;
+		SDL_DrawRect(renderer, rect, c.r, c.g, c.b, SDL_FALSE) ;
+		p = SDL_GetMidle(&rect, p, SDL_FALSE) ;
+		rect.x = p->x ;
+		rect.y = p->y ;
 		i++ ;
 	}
 	
