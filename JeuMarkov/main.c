@@ -65,12 +65,13 @@ int main(){
                             {0.5, 0.4, 0.1}};
     SDL_Event event;
 
+
     SDL_Rect position;
     position.x = WindowW*0.1;
     position.y = WindowH*(-0.4);
     position.w = WindowW;
     position.h = WindowH;
-    
+    int etatPause = 0;
     int currentRoom = 0;
     int program_on = 1;
     int etat = 1;
@@ -82,18 +83,19 @@ int main(){
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
             probaCumul[i][j]=probaEtat[i][j]*10;
-            if(i>0){
-                probaCumul[i][j]+=probaCumul[i-1][j];
+            if(j>0){
+                probaCumul[i][j]+=probaCumul[i][j-1];
             }
         }
     }
 
     //ECRAN DE DEBUT
-    //eclosion(renderer,WindowW,WindowH);
+    eclosion(renderer,WindowW,WindowH);
 
     //BOUCLE DE JEU
     while(program_on){
-        while(SDL_PollEvent(&event)){
+            
+            while(SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym)
@@ -103,6 +105,10 @@ int main(){
                             break;
                         case SDLK_RIGHT:
                             currentRoom = (currentRoom+1+3)%3;
+                            break;
+                        case SDLK_SPACE:
+                            etatPause = (etatPause+1)%2;
+                            break;
                     }
                     break;
                 case SDL_QUIT:
@@ -118,14 +124,17 @@ int main(){
                         if(curX >= 50 && curX <=WindowH*0.2+50){
                             manger(&barreD,&barreM,&barreJ,drain);
                             currMood = 1;
+                            currentRoom = 1;
                         }
                         else if(curX >= 200 && curX <=WindowH*0.2+200){
                             jouer(&barreD,&barreM,&barreJ,drain);
                             currMood = 2;
+                            currentRoom = 2;
                         }
                         else if(curX >= 350 && curX <=WindowH*0.2+350){
                             dormir(&barreD,&barreM,&barreJ,drain);
                             currMood = 3;
+                            currentRoom = 0;
                         }
                     }
                 default:
@@ -133,9 +142,39 @@ int main(){
             }
         }
 
+        while(etatPause){
+                pause(etat,renderer,WindowW,WindowH);
+                SDL_RenderPresent(renderer);
+                SDL_WaitEvent(&event);
+                    switch(event.type){
+                        case SDL_MOUSEBUTTONDOWN:
+                            curX=event.motion.x;
+                            curY = event.motion.y;
+                            printf("(%d %f)\n",curX,0.875*WindowW);
+                            printf("%f %f",(0.875*WindowW - curX)*(0.875*WindowW - curX)+(0.875*WindowW - curY)*(0.875*WindowW - curY),WindowW*WindowW*0.875*0.875);
+                            if(2*0.875*0.875*WindowW*WindowW+curX*curX+curY*curY-0.875*(curX+curY)<=WindowW*WindowW*0.875*0.875){
+                                printf("SALUT");
+                            }
+                            break;
+                        case SDL_KEYDOWN:
+                            switch (event.key.keysym.sym)
+                            {
+                                case SDLK_SPACE:
+                                etatPause = (etatPause+1)%2;
+                                break;
+                            }
+                            break;
+                        case SDL_QUIT:
+                            program_on = 0;
+                            etatPause = 0;
+                            break;
+                    }
+                
+            }
+
         //BOUCLE DE DETERMINATION DE LA PROCHAINE ACTION (MARKOV)
 
-        if(ticks>10){
+        if(ticks>1){
             ticks = 0;
             outil = rand()%10;
             nextState = 0;
@@ -148,14 +187,17 @@ int main(){
                     case 0:
                         dormir(&barreD,&barreM,&barreJ,drain);
                         currMood = 3;
+                        currentRoom = 0;
                         break;
                     case 1:
                         manger(&barreM,&barreM,&barreJ,drain);
                         currMood = 1;
+                        currentRoom = 1;
                         break;
                     case 2:
                         jouer(&barreD,&barreM,&barreJ,drain);
                         currMood = 2;
+                        currentRoom = 2;
                         break;
                     default:
                         break;
@@ -165,6 +207,8 @@ int main(){
         
         //FIN MARKOV
         
+
+
         if(barreM<=0.0){
             barreM = 0.0;
         }
@@ -175,16 +219,21 @@ int main(){
             barreJ = 0.0;
         }
 
-        //SDL_RenderPresent(renderer);
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
         }
-        initSDL(currentRoom,barreM,barreJ,barreD,renderer,WindowW,WindowH);
-        afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH);
+        
+        
+        if(program_on){
+            afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
+        }
         ticks++;
         currMood=0;
         SDL_Delay(delai);
         actionUser = SDL_FALSE;
+        
     }
+    animeMort(renderer,WindowW,WindowH);
     SDL_DestroyWindow(window_1);
+    SDL_Quit();
 }

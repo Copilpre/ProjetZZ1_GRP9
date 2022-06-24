@@ -54,28 +54,47 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     SDL_Delay(1000);
 
     //AFFICHAGE ECRAN DE DEMARAGE
+    SDL_Texture * textureTitre = IMG_LoadTexture(renderer,"./image/titre.png");
+    SDL_QueryTexture(textureTitre,NULL,NULL,&source.w,&source.h);
+    SDL_Rect positionT;
+    positionT.x = 0;
+    positionT.y = 0;
+    positionT.w = windowW;
+    positionT.h = windowH*0.3;
+    source.x = 0;
+    source.y = 0;
+
     texture = IMG_LoadTexture(renderer,"./image/pingouinOut.png");
 
     SDL_Rect flash,pingouin;
-    SDL_QueryTexture(texture,NULL,NULL,&source.w,&flash.h);
+    SDL_QueryTexture(texture,NULL,NULL,&flash.w,&flash.h);
     
     SDL_Texture * texturePingouin = IMG_LoadTexture(renderer,"./image/pingouin.png");
     flash.y=0;
-    flash.w=source.w/2;
+    flash.w=flash.w/2;
 
-    position.x=windowW/8;
-    position.w = windowW*0.9-position.x;
+    position.x=-0.05*windowH;
+    position.y = 0.25 * windowH;
+    position.w = windowW*1.3;
+    position.h = windowH;
     SDL_QueryTexture(texture,NULL,NULL,&pingouin.w,&flash.h);
     pingouin.x = position.x + position.w/2 - pingouin.w/2;
     pingouin.h = windowH*0.2;
-    pingouin.y = 1.5*position.y;
-    pingouin.w = 0.5*position.w;
+    pingouin.y = position.y;
+    pingouin.w = position.w;
+
+    SDL_Rect posP;
+    posP.x = 0.35*windowW;
+    posP.y = 0.6*windowH;
+    posP.w = 0.2*windowH;
+    posP.h = 0.3*windowH;
 
     for(int i = 0; i < 10;i++){
-        flash.x=((i%2)*source.w)/2;
+        flash.x=((i%2)*2*flash.w)/2;
         SDL_RenderCopy(renderer, texture, &flash, &position);
+        SDL_RenderCopy(renderer, textureTitre, &source,&positionT);
 
-        SDL_RenderCopy(renderer, texturePingouin, &pingouin, &position);
+        SDL_RenderCopy(renderer, texturePingouin, &source, &posP);
         SDL_RenderPresent(renderer);
         SDL_Delay(500);
         SDL_RenderClear(renderer);
@@ -170,12 +189,32 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
 
         SDL_RenderCopy(renderer, texture, &source, &icone);
     }
-
-    //bouton pause
     SDL_DestroyTexture(texture);
 }
 
-void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH){
+void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
+    SDL_Texture * texture;
+    if(etat){
+        texture = IMG_LoadTexture(renderer,"./image/pause.png");
+
+
+        //code qui était en dessous avant
+
+        SDL_Rect position,source;
+        source.x=0;
+        source.y=0;
+        SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+        
+        position.x = WindowW*0.75;
+        position.y = 0;
+        position.h = WindowW*0.25;
+        position.w = WindowW*0.25;
+
+        SDL_RenderCopy(renderer, texture, &source, &position);
+    }
+}
+
+void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH,int etat){
     SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/spriteSheet.png");
     SDL_Rect source,sprite;
     
@@ -203,7 +242,7 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
             sprite.y = 3*hauteurCase;
             break;
         case 3 :
-            nbSprite = 7;
+            nbSprite = 9;
             sprite.y = 6*hauteurCase;
             break;
         case 4 :
@@ -213,7 +252,7 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
     for (int i = 0;i<nbSprite;i++){
         //ON AFFICHE LA SCENE AVANT LE PERSO
         initSDL(currentRoom,barreM,barreJ,barreD,renderer,WindowW,WindowH);
-
+        pause(etat,renderer,WindowW,WindowW);
         //AFFICHAGE TAMAGOCHI
 
         sprite.x = i*LargeurCase;
@@ -223,4 +262,8 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
     }
     
     SDL_DestroyTexture(texture);
+}
+
+void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH){
+    
 }

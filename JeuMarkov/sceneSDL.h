@@ -7,4 +7,8 @@ void initSDL(int currentRoom,float barreM,float barreD,float barreJ,SDL_Renderer
 
 void eclosion(SDL_Renderer * renderer,int windowW,int windowH);
 
-void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH);
+void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH,int etat);
+
+void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH);
+
+void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH);
