@@ -11,4 +11,4 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
 
 void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH);
 
-void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH);
+void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH,SDL_Rect pingouin);

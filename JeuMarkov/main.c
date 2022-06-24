@@ -221,6 +221,7 @@ int main(){
 
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
+            animeMort(renderer,WindowW,WindowH,position);
         }
         
         
@@ -233,7 +234,8 @@ int main(){
         actionUser = SDL_FALSE;
         
     }
-    animeMort(renderer,WindowW,WindowH);
+    
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window_1);
     SDL_Quit();
 }

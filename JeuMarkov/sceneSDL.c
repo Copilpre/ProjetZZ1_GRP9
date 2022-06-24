@@ -202,7 +202,7 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
 
         SDL_RenderCopy(renderer, texture, &source, &icone);
     }
-    //SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texture);
 }
 
 void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
@@ -224,8 +224,8 @@ void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
         position.w = WindowW*0.25;
 
         SDL_RenderCopy(renderer, texture, &source, &position);
+        SDL_DestroyTexture(texture);
     }
-    //SDL_DestroyTexture(texture);
 }
 
 void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int currentRoom,float barreM,float barreJ,float barreD,int WindowW,int WindowH,int etat){
@@ -278,7 +278,45 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
     SDL_DestroyTexture(texture);
 }
 
-void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH){
-    SDL_Texture * texture = IMG_LoadTexture(renderer,".image/explosion.png");
+void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH,SDL_Rect pingouin){
+    SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/explosion.png");
+    //SDL_Texture * pingouinT = IMG_LoadTexture(renderer,"./image/spriteSheet.png");
+    SDL_Rect position,source,sourceP;
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+    int hauteurCase = source.h/5;
+    int largeurCase = source.w/5;
 
+    source.h=hauteurCase;
+    source.w=largeurCase;
+    //SDL_QueryTexture(pingouinT,NULL,NULL,&sourceP.w,&sourceP.h);
+    //sourceP.w/=12;
+    //sourceP.h/=7;
+    
+    //sourceP.y=5*hauteurCase;
+
+    position.x =WindowW/4;
+    position.y = WindowH/4;
+    position.w = WindowW/2;
+    position.h = WindowH/2;
+
+    //pingouin.y =0;
+
+    
+    SDL_SetRenderDrawColor(renderer,0,0,0,255);
+    for (int i =0;i<5;i++){
+        source.y=i*hauteurCase;
+        for (int j = 0; j < 5 ;j++){
+            sourceP.x = j*largeurCase;
+            SDL_RenderClear(renderer);
+
+            //SDL_RenderCopy(renderer,pingouinT,&sourceP,&pingouin);
+            
+            source.x = j*largeurCase;
+            SDL_RenderCopy(renderer,texture,&source,&position);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(200);
+        }
+    }
+
+    SDL_DestroyTexture(texture);
 }
