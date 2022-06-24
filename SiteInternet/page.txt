@@ -20,12 +20,13 @@
 
 ## Principe du jeu :
 > Jeu de simulation dont le principe peut être utilisé pour évaluer l'évolution d'un virus.
->  Il se base sur des règles fixant les conditions de survie pour un élément déjà en vivant,
+>  Il se base sur des règles fixant les conditions de survie pour un élément déjà vivant,
 >  et de naissance pour un élément n'étant pas en vie.
 
 ## Détails d'implémentation :
-> On fixe le départ avec des **SDL_Event** au clique on initialise l'écran de jeu.
-> Utilisation de deux tableaux dont **une table pour savegarder le cycle de vie**  et 
+> A l'aide d'une boucle while, le programme commence en montrant un tableau vide, que 
+> l'on peut remplir à l'aide de la souris.
+> Utilisation de deux tableaux dont **une table pour sauvegarder l'état actuel**  et 
 > **une table pour sauvegader le nombre de voisin de chaque élément**. 
 > Utilisation de deux autres tables  pour fixer les règles de survie et de naissance des
 > éléments. 
@@ -45,7 +46,7 @@
 |-------|--------|---------|---------|
 |Manger |0.1     |0.4      | 0.5     |
 |Jouer  |0.4     |0.2      | 0.4     |
-|Dormir |0.5     |0.1      | 0.4     |
+|Dormir |0.5     |0.1 4    | 0.4  1  |
 
 ```mermaid
 graph LR
@@ -63,3 +64,24 @@ C((Dormir)) -- 40% --> B((Jouer))
 C --> Out
 ```
 
+> Afin de simuler une situation de Markov, on pose ce tableau de probabilité de changement
+> d'état. Dans le programme, on construit un autre tableau, cumulant les probabilités
+> des colonnes précédentes (et les multipliant par 10). Un rand modulo 10 constitue notre
+> changement d'état. On lit les probabilités cumulées de la ligne de l'état donnée, jusqu'à obtenir
+> un nombre plus grand que notre rand. L'indice de la colonne de ce nombre correspond à notre prochain état.
+
+### Matrice donnant les probabilités cumulées multipliées par 10
+|  X/Y  |Manger  |Jouer    |Dormir   |             
+|-------|--------|---------|---------|
+|Manger |1       |5        |10	     |
+|Jouer  |4       |6	       |10       |
+|Dormir |5       |9        |10       |
+
+- Exemple :
+> Etat : Jouer
+> rand()%10 = 5
+> Première colonne : 5 > 4, on continue,
+> Deuxième colonne : 5 < 6, on s'arrête.
+> Notre prochain état sera Jouer.(En vérifiant, on avait 4 chances sur 10 d'être inférieur à 4 (0,1,2,3),
+> deux chances sur 10 d'être compris entre 4 et 6 (4,5), et 4 chances sur 10 d'être supérieur à 6 (6,7,8,9), 
+>ce qui correspond bien au tableau des probabilités).
