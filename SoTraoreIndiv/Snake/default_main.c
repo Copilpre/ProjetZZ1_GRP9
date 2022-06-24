@@ -19,7 +19,7 @@ int main(int argc, char ** argc)
 	if (renderer == 0) 
 		SDL_Errorcase("Trouble with renderer") ;
 
-	point_t * origin = NULL ;
+	SDL_Point * origin = NULL ;
 
 	origin = malloc(sizeof(point_t)) ;
 	origin->x = 150 ;
@@ -27,9 +27,12 @@ int main(int argc, char ** argc)
 	
 	SDL_DrawSnake(renderer, origin) ;
 
+	SDL_RenderPresent(renderer) ;
+	SDL_Delay(5000) ;
+
 	SDL_DestroyRenderer(renderer) ;
 	SDL_DestroyWindow(window) ;
-	SLD_Quit() ;
+	SDL_Quit() ;
 
 	exit(EXIT_FAILURE) ;
 }
