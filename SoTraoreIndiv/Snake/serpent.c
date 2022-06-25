@@ -1,5 +1,5 @@
 #include "serpent.h"
-#define CARRE 5
+#define CARRE 8
 #define TETE 1
 #define LIGNE 3
 
@@ -15,6 +15,94 @@ point_t * cartesien(circle_t * c1) {
 	p->x = c1->rayon * cos(c1->angle) ;
 	p->y = c1->rayon * sin(c1->angle) ;
 	return p ;
+}
+
+liste_t * creerListe() {
+	liste_t * nouv = NULL ;
+	nouv = malloc(sizeof(liste_t)) ;
+	nouv->next = NULL ;
+	return nouv ;
+}
+
+// Il sera preferable d'utiliser une file pour l'ajout ici
+
+
+liste_t * ajoutTeteListe(liste_t * tete, SDL_Point p) {
+
+	liste_t * nouv = creerListe() ;
+
+	if (nouv != NULL)
+	if (tete != NULL) {
+		nouv->p = p ;
+		nouv->next = tete ;
+	} 
+	tete = nouv ;
+
+	return tete ;
+}
+
+liste_t * ajoutFinListe(liste_t * tete, SDL_Point p) {
+	liste_t * nouv = NULL ;
+	nouv = creerListe() ;
+
+	if (nouv != NULL) {
+		nouv->p = p ;
+		if (tete == NULL) {
+			tete = nouv ;
+		} 
+		else {
+			liste_t * cour = tete ;
+			while (cour->next != NULL) 
+				cour = cour->next ;
+			cour->next = nouv ;
+		}
+	}
+
+	return tete ;
+}
+
+liste_t * supprimerTeteListe(liste_t * tete) {
+	if (tete != NULL) 
+	{
+		liste_t * del = tete ;
+		tete = tete->next ;
+		free(del) ;
+		del = NULL ;
+	}
+	return tete ;
+}
+
+liste_t * supprimerFinListe(liste_t * tete) {
+
+	liste_t * del = NULL ;
+
+	if (tete->next != NULL) 
+	{
+		liste_t * cour = tete ;
+		while ((cour = cour->next) != NULL) ;
+		del = cour ;
+	} 
+	else {
+		del = tete ;
+	}
+	free(del) ;
+	del = NULL ;
+
+	return tete ;
+}
+
+void libererListe(liste_t * tete) {
+	if (tete != NULL) 
+	{
+		liste_t * del = NULL ;
+		while (tete != NULL) 
+		{
+			del = tete ;
+			tete = tete->next ;
+			free(del) ;
+			del = NULL ;
+		}
+	}
 }
 
 void SDL_ErrorCase(char * msg) {
@@ -103,16 +191,18 @@ SDL_Point * SDL_GetMidle(void * objet, SDL_Point * origin, SDL_bool isCircle)
 	return p ;
 }
 
-void SDL_DrawSnake(SDL_Renderer * renderer, SDL_Point origin) 
+liste_t * SDL_DrawSnake(SDL_Renderer * renderer, SDL_Point origin) 
 {
 	if (renderer == 0) 
 		SDL_ErrorCase("Trouble with renderer") ;
 	SDL_Rect rect ;
-	rect.w = 20 ;
-	rect.h = 20 ;
-	int i = 0 , r = 20;
- 
-	SDL_Color c = {0, 255, 0, 255} ;
+	rect.w = 15 ;
+	rect.h = 15 ;
+	int i = 0 , r = 15;
+ 	liste_t * tete =  NULL ;
+	SDL_Color c = {255, 0, 0, 255} ;
+	tete = ajoutTeteListe(tete, origin) ;
+
 	SDL_DrawCircle(renderer, c, origin, r) ;
 	SDL_Point * p = malloc(sizeof(SDL_Point)) ;
 	p->x = origin.x + r;
@@ -121,14 +211,64 @@ void SDL_DrawSnake(SDL_Renderer * renderer, SDL_Point origin)
 	rect.y = p->y ;
 	
 	while (i < CARRE) {
-		c.r = 255 * cos(p->x) ;
-		c.g = 255 * sin(p->y) ;
-		c.b = 255 * sinh(p->x) ;
-		SDL_DrawRect(renderer, rect, c.r, c.g, c.b, SDL_FALSE) ;
+		SDL_DrawRect(renderer, rect, 0, 255, 0, SDL_FALSE) ;
+		tete = ajoutFinListe(tete, *p) ;
 		p = SDL_GetMidle(&rect, p, SDL_FALSE) ;
 		rect.x = p->x ;
 		rect.y = p->y ;
 		i++ ;
 	}
 	
+	return tete ;
+}
+
+
+void SDL_MoveSnake(SDL_Renderer * renderer, liste_t * points, char choice, int pas) {
+	if (points != NULL) 
+	{
+		liste_t * cour = points ;
+		SDL_bool okDeleteIt = SDL_FALSE ;
+		switch (choice) {
+		case 'g' :
+			while (cour != NULL) {
+				cour->p.x -= pas ;
+				points = ajoutTeteListe(points, cour->p) ;
+				SDL_DrawSnake(renderer, cour->p) ;
+				cour = cour->next ;
+			}
+			okDeleteIt = SDL_TRUE ;
+			break ;
+		case 'd' :
+			while (cour != NULL) {
+				cour->p.x += pas ;
+				points = ajoutTeteListe(points, cour->p) ;
+				SDL_DrawSnake(renderer, cour->p) ;
+				cour = cour->next ;
+			}
+			okDeleteIt = SDL_TRUE ;
+			break ;
+		case 'h' :
+			while (cour != NULL) {
+				cour->p.y -= pas ;
+				points = ajoutTeteListe(points, cour->p) ;
+				SDL_DrawSnake(renderer, cour->p) ;
+				cour = cour->next ;
+			}
+			okDeleteIt = SDL_TRUE ;
+			break ;
+		case 'b' :
+			while (cour != NULL) {
+				cour->p.y += pas ;
+				points = ajoutTeteListe(points, cour->p) ;
+				SDL_DrawSnake(renderer, cour->p) ;
+				cour = cour->next ;
+			}
+			okDeleteIt = SDL_TRUE ;
+			break ;
+		default :
+			break ;
+		}
+		if (okDeleteIt == SDL_TRUE) 
+			points = supprimerFinListe(points) ;
+	}
 }
