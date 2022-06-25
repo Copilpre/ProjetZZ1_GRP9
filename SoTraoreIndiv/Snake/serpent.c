@@ -223,16 +223,45 @@ liste_t * SDL_DrawSnake(SDL_Renderer * renderer, SDL_Point origin)
 }
 
 
+SDL_bool SDL_IsSnakeVertical( liste_t * points ) {
+	
+	SDL_bool yes = SDL_TRUE ;
+
+	liste_t * cour = points, * suiv =  points->next ;
+
+	if (cour != NULL) {
+		if (suiv != NULL) 
+		if (cour->p.x == suiv->p.x)
+			yes = SDL_FALSE ;
+	}
+
+	return yes ;
+}
+
+
 void SDL_MoveSnake(SDL_Renderer * renderer, liste_t * points, char choice, int pas) {
 	if (points != NULL) 
 	{
 		liste_t * cour = points ;
-		SDL_bool okDeleteIt = SDL_FALSE ;
+		SDL_bool okDeleteIt = SDL_FALSE, first = SDL_TRUE ;
+		SDL_Rect rect = {0, 0, 15, 15} ;
 		switch (choice) {
 		case 'g' :
 			while (cour != NULL) {
-				cour->p.x -= pas ;
+				if (SDL_IsSnakeVertical(points)) {
+					cour->p.y -= pas ;
+				}
+				else { 
+					cour->p.x -= pas ;
+				}
+				rect.y = cour->p.y ;
+				rect.x = cour->p.x ;
 				points = ajoutTeteListe(points, cour->p) ;
+				//SDL_SetRenderDrawColor(renderer, 255, 255, 
+				//				255, 255
+				//			) ;
+				//SDL_RenderFillRect(renderer, &rect) ;
+
 				SDL_DrawSnake(renderer, cour->p) ;
 				cour = cour->next ;
 			}
@@ -240,8 +269,19 @@ void SDL_MoveSnake(SDL_Renderer * renderer, liste_t * points, char choice, int p
 			break ;
 		case 'd' :
 			while (cour != NULL) {
-				cour->p.x += pas ;
-				points = ajoutTeteListe(points, cour->p) ;
+				if (SDL_IsSnakeVertical(points)) {
+					cour->p.y += pas ;
+				}
+				else { 
+					cour->p.x += pas ;
+				}
+				rect.y = cour->p.y ;
+				rect.x = cour->p.x ;
+				//points = ajoutTeteListe(points, cour->p) ;
+				//SDL_SetRenderDrawColor(renderer, 255, 255, 
+				//				255, 255
+				//			) ;
+				//SDL_RenderFillRect(renderer, &rect) ;
 				SDL_DrawSnake(renderer, cour->p) ;
 				cour = cour->next ;
 			}
@@ -249,8 +289,19 @@ void SDL_MoveSnake(SDL_Renderer * renderer, liste_t * points, char choice, int p
 			break ;
 		case 'h' :
 			while (cour != NULL) {
-				cour->p.y -= pas ;
+				if (!SDL_IsSnakeVertical(points)) {
+					cour->p.x -= pas ;
+				}
+				else {
+					cour->p.y -= pas ;
+				}
+				rect.y = cour->p.y ;
+				rect.x = cour->p.x ;
 				points = ajoutTeteListe(points, cour->p) ;
+				//SDL_SetRenderDrawColor(renderer, 255, 255, 
+				//				255, 255
+				//			) ;
+				//SDL_RenderFillRect(renderer, &rect) ;
 				SDL_DrawSnake(renderer, cour->p) ;
 				cour = cour->next ;
 			}
@@ -258,8 +309,19 @@ void SDL_MoveSnake(SDL_Renderer * renderer, liste_t * points, char choice, int p
 			break ;
 		case 'b' :
 			while (cour != NULL) {
-				cour->p.y += pas ;
+				if (!SDL_IsSnakeVertical(points)) {
+					cour->p.x += pas ;
+				}
+				else {
+					cour->p.y += pas ;
+				}
+				rect.y = cour->p.y ;
+				rect.x = cour->p.x ;
 				points = ajoutTeteListe(points, cour->p) ;
+				//SDL_SetRenderDrawColor(renderer, 255, 255, 
+				//				255, 255
+				//			) ;
+				//SDL_RenderFillRect(renderer, &rect) ;
 				SDL_DrawSnake(renderer, cour->p) ;
 				cour = cour->next ;
 			}

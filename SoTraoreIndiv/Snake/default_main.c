@@ -36,13 +36,13 @@ int main()
 	while (program_on) {
 		if (SDL_PollEvent(&event)) 
 		{
+		/*	if (okClear == SDL_TRUE) {
 			if (SDL_SetRenderDrawColor(renderer, 255, 
 						255, 255, 
 						255) != 0)
 				SDL_ErrorCase("Trouble with color") ;
-			if (okClear == SDL_TRUE) {
 				SDL_RenderClear(renderer) ;
-			}
+			}*/
 			switch (event.type) {
 			case SDL_KEYDOWN :
 				switch(event.key.keysym.sym) {
