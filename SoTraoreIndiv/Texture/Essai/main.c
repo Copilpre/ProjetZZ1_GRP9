@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include </SDL2/SDL_ttf.h>
-#include </SDL2/SDL_image.h>
+//#include <SDL2/SDL_ttf.h>
+//#include <SDL2/SDL_image.h>
 
-#define W 500
-#define H 500
+#define W 600
+#define H 600
 
 
 void SDL_ErrorCase(char * msg) {
 	SDL_Log("%s %s\n", msg, SDL_GetError()) ;
-	goto Quit ;
+	exit(EXIT_FAILURE) ;
 }
 
 int main() {
@@ -18,66 +18,48 @@ int main() {
 	SDL_Window * window ;
 	SDL_Renderer * renderer ;
 	SDL_Texture * texture ;
+	SDL_Surface * img , *dst;
 
-	if (0 != SDL_Init(SDL_INITVIDEO))
+	if (0 != SDL_Init(SDL_INIT_VIDEO))
 		SDL_ErrorCase("Trouble with init video") ;
 
 	window = SDL_CreateWindow("Texture",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			W, H
+			W, H, 
+			SDL_WINDOW_OPENGL
 			) ;
 
-	if (NULL != window) 
+	if (NULL == window) 
 		SDL_ErrorCase("Trouble with window") ;
 
 	renderer = SDL_CreateRenderer(window, -1, 0) ;
 
-	if (NULL != renderer)
+	if (NULL == renderer)
 		SDL_ErrorCase("Trouble with renderer") ;
 
-	texture = SDL_CreateTexture(renderer, 
-			SDL_PIXELFORMAT_RGBA8888,
-			SDL_TEXTUREACCESS_TARGET,
-			W, H
-			) ;
+	img = SDL_CreateRGBSurface(0, W/4, H/4, 32, 0, 0, 0, 0) ;
+	dst = SDL_CreateRGBSurface(0, W/6, H/6, 32, 0, 0, 0, 0) ;
 
-	if (NULL != texture)
-		SDL_ErrorCase("Trouble with texture") ;
+	if (img == NULL || dst == NULL) 
+		SDL_ErrorCase("Trouble with surface") ;
 
-	SDL_Rect rect ;
+	SDL_Rect src = {100, 100, 100, 100} ,
+		 srcrect = {50, 50, 150, 150} ;
 	SDL_Color c ;
-	SDL_Event event ;
-	rect.h = rect.w ;
+	
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) ;
+	SDL_RenderClear(renderer) ;
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255) ;
 
-	while (1) {
-		if (SDL_PollEvent(&event)) ;
-		if (event.type == SDL_QUIT)
-			break ;
-		rect.x = rand() % W ;
-		rect.y = rand() % H ;
+	SDL_FillRect(img, &src, SDL_MapRGB(img->format, 255, 0, 0)); 
+	SDL_BlitSurface(img, &srcrect, dst, &src) ;
 
-		c.r = rand() % 255 ;
-		c.g = rand() % 255 ;
-		c.b = rand() % 255 ;
-		c.a = rand() % 255 ;
-
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) :
-		SDL_RenderClear(renderer) ;
-
-		SDL_SetRenderTarget(renderer, texture) ;
-		SDL_SetRenderDrawColor(renderer,
-			       c.r, c.g, c.b, c.a) ;
-		SDL_RenderFill(renderer, &rect) ;
-		SDL_SetRenderTarget(renderer, NULL) ;
-		SDL_RenderCopy(renderer, texture, NULL, NULL) ;
-		SDL_RenderPresent(renderer) ;
-		SDL_Delay(2000) ;
-	}
-
+	SDL_RenderPresent(renderer) ;
+	SDL_Delay(4000) ;
 
 Quit :
-	SDL_DestroyTexture(texture) ;
+	SDL_FreeSurface(img) ;
 	SDL_DestroyRenderer(renderer) ;
 	SDL_DestroyWindow(window) ;
 
