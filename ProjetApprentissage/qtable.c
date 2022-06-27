@@ -25,38 +25,35 @@ typedef struct etat {
 // action vaut 2 alors -> le tamago dort donc s.z croit
 
 
-etat_t etatSuivant(etat_t s, int act, int pas) {
+etat_t etatSuivant(etat_t s, int action, int pas) {
 	etat_t suiv = s ;
-
 	if (action == 0) {
-		suiv.x += pas ;
+		suiv.x += (pas * 3) ;
 		suiv.y -= pas ;
 		suiv.z -= pas ;
 	}
 	if (action == 1) {
 		suiv.x -= pas ;
-		suiv.y += pas ;
+		suiv.y += (pas * 3) ;
 		suiv.z -= pas ;
 	}
 	if (action == 2) {
 		suiv.x -= pas ;
 		suiv.y -= pas ;
-		suiv.z += pas ;
+		suiv.z += (pas * 3) ;
 	}		
-
 	return suiv ;
 }
 
 
 qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
 
-	int n = 0, i = 0, defaite = 0, x = 0, alea, action ;
+	int n = 0, i = 0, defaite = 1, x = 0, alea, action ;
 	lineTab_t line = {0, 0, 0, 0} ;
 	int qua1, qua2, qua3 ; 
-
 	pile_t * p = init_pile(NB_ITER) ;
 
-	while ( !defaite && i < NB_ITER) {
+	while ( defaite && i < NB_ITER) {
 		alea = rand() % NB_ITER ;
 		if (greedy > alea) { 
 			// choix d'une action aleatoire
@@ -84,10 +81,18 @@ qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
 				}
 			}
 		}
-		s = etatSuivant(s, action) ;	
-	
-		//QT[s.x][s.y][s.z]				
 
+		s = etatSuivant(s, action) ;	
+
+		// Mettre à jour le QT	
+		//QT[s.x][s.y][s.z][action] = ;	
+		
+		// Cas ou on a une barre à zero
+		defaite = s.x * s.y * s.z ;
+		// Cas ou on a une barre à 1 ou 10
+		if (defaite != 0) 
+		if (s.x == 1 || s.y == 1 || s.z == 1)
+		defaite = 0 ;
 		line->T[0] = s.x ;
 		line->T[1] = s.y ;
 		line->T[2] = s.z ;
@@ -95,5 +100,6 @@ qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
 		p = empiler(p, line) ;
 		i++ ;
 	}
+
 	return QT ;
 }
