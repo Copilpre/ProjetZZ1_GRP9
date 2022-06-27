@@ -1,9 +1,16 @@
-main : main.o sceneSDL.o
-	gcc -o main main.o sceneSDL.o -lSDL2 -lSDL2_image
 
-main.o : main.c sceneSDL.h
-	gcc -c -Wall -Wextra main.c -o main.o -lSDL2 -lSDL2_image
+GC = gcc -c 
+OBJ = main.o pile.o
+CLFAGS = -Wall -Wextra -g
 
-sceneSDL.o : sceneSDL.c
-	gcc -c -Wall -Wextra sceneSDL.c -o sceneSDL.o -lSDL2 -lSDL2_image
+main : $(OBJ)
+	$(GC) $(CFLAGS) $(OBJ) -o main
 
+main.o : main.c pile.h
+	$(GC) main.c -o main.o 
+
+pile.o : pile.c pile.h
+	$(GC) pile.c $(CFLAGS) -o pile.o  
+	
+clean :
+	rm -f $(OBJ) 
