@@ -5,7 +5,6 @@
 // action vaut 1 alors -> le tamago joue donc s.y croit
 // action vaut 2 alors -> le tamago dort donc s.z croit
 
-
 etat_t etatSuivant(etat_t s, int action, int pas) {
 	etat_t suiv = s ;
 	if (action == 0) {
@@ -88,14 +87,6 @@ pile_t * sauvQtab(int **** QT, int greedy, etat_t s)
 	return p ;
 }
 
-lineTab_t getFirstQ(int **** QT) {
-	lineTab_t result ; 
-
-	// How to get the first (s,a) of departure
-
-	return result ;
-}
-
 
 int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma) 
 {
@@ -103,22 +94,23 @@ int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma)
 	etat_t s1, s2 ;
 	int act, qua1, qua2, qua3, maxQ , r = 10, q_actuel ;
 	lineTab_t QT_futur , QT_actuel ;
-	QT_actuel = getFirstQ( QT ) ;
+	float r = 1/exp(NB_ITER-1) ;
+	QT_futur = QT[NB_ITER-1] + eps*(r*NB_ITER - QT[NB_ITER-1]) ;
 
 	while (p != NULL) {	
 
 		// Q actuel est une liste [i, j, k, act] 
 
 		//QT_actuel = QT[i][j][k][act] ;
- 		s1.x = QT_actuel.T[0] ;
-		s1.y = QT_actuel.T[1] ;
-		s1.z = QT_actuel.T[2] ;
-		act  = QT_actuel.T[3] ;
+ 		s1.x = QT_futur.T[0] ;
+		s1.y = QT_futur.T[1] ;
+		s1.z = QT_futur.T[2] ;
+		act  = QT_futur.T[3] ;
 
-		p = depiler(p, &QT_futur) ;
- 		s2.x = QT_futur.T[0] ;
-		s2.y = QT_futur.T[1] ;
-		s2.z = QT_futur.T[2] ;
+		p = depiler(p, &QT_actuel) ;
+ 		s2.x = QT_actuel.T[0] ;
+		s2.y = QT_actuel.T[1] ;
+		s2.z = QT_actuel.T[2] ;
 		qua1 = QT[s2.x][s2.y][s2.z][0] ;
 		qua2 = QT[s2.x][s2.y][s2.z][1] ;
 		qua3 = QT[s2.x][s2.y][s2.z][2] ;
