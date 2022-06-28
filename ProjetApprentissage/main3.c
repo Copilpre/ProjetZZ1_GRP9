@@ -48,8 +48,8 @@ pile_t *  empiler(pile_t * p, lineTab_t data)
     if (p->position < p->nbElts)
     {
         p->position += 1;
-        p->tab[p->position] = data; 
-    } 
+        p->tab[p->position] = data;
+    }
     return p ;
 }
 
@@ -85,7 +85,10 @@ void afficherPile(pile_t * p)
 
             printf("\n");
         }
-    }   
+    } 
+    else{
+        printf("pile vide");
+    } 
 }
 
 void sauvTable(float Qtable[11][11][11][3]){
@@ -107,7 +110,8 @@ void sauvTable(float Qtable[11][11][11][3]){
                     } 
                 } 
             } 
-        } 
+        }
+    fclose(fichier);
 }
 
 lineTab_t etatSuivant(lineTab_t ligne, int drain){
@@ -139,7 +143,7 @@ int main(){
             } 
         } 
     }
-    sauvTable(Qtable);
+    //sauvTable(Qtable);
     int ite;
     lineTab_t ligne;
     pile_t * p;
@@ -147,12 +151,7 @@ int main(){
 
     float barreM,barreD,barreJ;
 
-    barreM=(rand()%7)+2;
-    barreJ=(rand()%7)+2;
-    barreD=(rand()%7)+2;
-    ligne.x=barreM;
-    ligne.y=barreJ;
-    ligne.z=barreD;
+    
     int drain = 1;
     int greedy = 0,alea;
     int program_on = 1;
@@ -163,9 +162,16 @@ int main(){
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
 
-    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 10 ; CompteurIterationProgramme ++){ 
+    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000 ; CompteurIterationProgramme ++){ 
     //BOUCLE DE REMPLISSAGE DE LA PILE
-    
+    program_on = 1;
+    barreM=(rand()%7)+2;
+    barreJ=(rand()%7)+2;
+    barreD=(rand()%7)+2;
+    ligne.x=barreM;
+    ligne.y=barreJ;
+    ligne.z=barreD;
+    ite = 0;
     while(ite<nbIte&&program_on){
         alea = rand() % NB_ITER ;
 		if (greedy < alea) { 
@@ -204,11 +210,11 @@ int main(){
         
         ligne = etatSuivant(ligne,drain);
         ite ++;
-        greedy++;
+        //greedy++;
         
     }
     
-    afficherPile(p);
+    //afficherPile(p);
     float r = 1/(1+exp(-ite));
     //UPDATE QTABLE
     depiler(p,&prec);
@@ -216,25 +222,23 @@ int main(){
     while(!EstVidePile(p)){
 
         depiler(p,&curr);
-        afficherPile(p);
-        printf("\n ");
         ite--;
         r = 1/(1+exp(-ite));
         Qmax = Qtable[prec.x][prec.y][prec.z][0];
         for(ChoixMax = 1; ChoixMax < 3; ChoixMax++){
-            if (Qtable[prec.x][prec.y][prec.z][prec.a] > Qmax){
-                Qmax = Qtable[prec.x][prec.y][prec.z][prec.a];
+            if (Qtable[prec.x][prec.y][prec.z][ChoixMax] > Qmax){
+                Qmax = Qtable[prec.x][prec.y][prec.z][ChoixMax];
             } 
         } 
         
         Qtable[curr.x][curr.y][curr.z][curr.a] += learnRate * (r + discount*Qmax - Qtable[curr.x][curr.y][curr.z][curr.a]);
-        
+        prec = curr;
     }
     
         
     printf("iteration numero : %d \n ",CompteurIterationProgramme);
-    //afficherPile(p);
     }
-    
+    libererPile(p);
     sauvTable(Qtable);
+    return 0;
 }
