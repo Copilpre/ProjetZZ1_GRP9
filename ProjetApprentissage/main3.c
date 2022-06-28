@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
+
+
 #define nbIte 1000
-#define learnRate 1
+#define learnRate 0.9
 #define discount 0.5
 #define TAILLE 1000
 
@@ -111,8 +114,8 @@ lineTab_t etatSuivant(lineTab_t ligne, int drain){
     if(ligne.a==0){
         ligne.x += drain * 3;
     }
-    else if (ligne.a == 1){
-        ligne.y += drain * 3;
+    else if (ligne.a==1){ 
+            ligne.y += drain * 3;
     }
     else{
         ligne.z += drain *3;
@@ -154,6 +157,9 @@ int main(){
     int greedy = 0,alea;
     int program_on = 1;
     float q1,q2,q3;
+    lineTab_t prec,curr;
+    int ChoixMax;
+    float Qmax;
     
     //BOUCLE DE REMPLISSAGE DE LA PILE
     while(ite<nbIte&&program_on){
@@ -199,10 +205,24 @@ int main(){
     }
     printf("%d : (%d %d %d %d)\n",ite,ligne.x,ligne.y,ligne.z,ligne.a);
     afficherPile(p);
-    
+    float r = 1/(1+exp(-ite));
     //UPDATE QTABLE
-    /*while(!EstVidePile(p)){
+    depiler(p,&prec);
+    Qtable[prec.x][prec.y][prec.z][prec.a] += learnRate * (r - Qtable[prec.x][prec.y][prec.z][prec.a]);
+    while(!EstVidePile(p)){
+        depiler(p,&curr);
+        ite--;
+        r = 1/(1+exp(-ite));
+        Qmax = Qtable[prec.x][prec.y][prec.z][0];
+        for(ChoixMax = 1; ChoixMax < 3; ChoixMax++){
+            if (Qtable[prec.x][prec.y][prec.z][prec.a] > Qmax){
+                Qmax = Qtable[prec.x][prec.y][prec.z][prec.a];
+            } 
+        } 
         
-    }*/
+        Qtable[curr.x][curr.y][curr.z][curr.a] += learnRate * (r + discount*Qmax - Qtable[curr.x][curr.y][curr.z][curr.a]);
+        
+    }
+    sauvTable(Qtable);
     libererPile(p);
 }
