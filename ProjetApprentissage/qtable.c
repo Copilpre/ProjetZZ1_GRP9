@@ -15,9 +15,7 @@ etat_t etatSuivant(etat_t s, int action, int pas) {
 		s.x -= pas ;
 		s.y += (pas * 3) ;
 		s.z -= pas ;
-	}	//etat.x = rand() % 10;
-	//etat.y = rand() % 10;
-	//etat.z = rand() % 10;
+	}
 	if (action == 2) {
 		s.x -= pas ;
 		s.y -= pas ;
@@ -30,19 +28,20 @@ etat_t etatSuivant(etat_t s, int action, int pas) {
 // Cette fonction permet de sauvegarder le contexte
 
 
-pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s) 
+pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] , 
+						int greedy, etat_t s) 
 {
-	lineTab_t line ;
-	float qua1, qua2, qua3 ; 
+	lineTab_t * line = malloc(sizeof(lineTab_t));
+	line->r = 0.0 ;
+	float qua1, qua2, qua3, r = 0.0 ; 
 	int i = 0, defaite = 1, alea, action ;
-	line.T[0] = s.x;
-	line.T[1] = s.y;
-	line.T[2] = s.z;
-	int premierPassage = 1;
+	line->T[0] = s.x;
+	line->T[1] = s.y;
+	line->T[2] = s.z;
 
 	pile_t * p = init_pile(NB_ITER) ;
 
-	while ( defaite && i < NB_ITER) {
+	while ( (defaite != 0) && (i < NB_ITER) ) {
 		alea = rand() % NB_ITER ;
 		if (greedy > alea) { 
 			// choix d'une action aleatoire
@@ -60,61 +59,64 @@ pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s)
 				else {
 					action = 2 ;
 				}
-			}
+			} 
 			else {
-				if (qua2 > qua3) {
-					action = 1 ;
+				if (qua3 > qua2) {
+					action = 2 ;
 				}
 				else {
-					action = 2 ;
+					action = 1 ;
 				}
 			}
 		}
-		line.T[3] = action ;
-		p = empiler(p, line) ;
+		r = 1 / ( 1 + exp( NB_ITER - i ) ) ;
+
+		line->T[3] = action ;
+		line->r = r ;
+
+		p = empiler(p, *line) ;
 		s = etatSuivant(s, action, PAS) ;	
 
 		// Cas ou on a une barre à zero
-		defaite = s.x * s.y * s.z ;
-		// Cas ou on a une barre à 1 ou 10
+		defaite = (s.x) * (s.y) * (s.z) ;
+		// Cas ou on a une barre à 10
 		if (defaite != 0) 
-		if (s.x == 1 || s.y == 1 || s.z == 1) {
+		if (s.x >= 10 || s.y >= 10 || s.z >= 10) {
 			defaite = 0 ;
 		}
-		line.T[0] = s.x ;
-		line.T[1] = s.y ;
-		line.T[2] = s.z ;
-		line.T[3] = action ;				
+
+		line->T[0] = s.x ;
+		line->T[1] = s.y ;
+		line->T[2] = s.z ;
 		i++ ;
 	}
 		
-	afficherPile(p);
-	libererPile(p);
 	return p ;
 }
 
 
-void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma){
-	// Ici la bonne valeur de r à déterminer
+void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] , 
+				pile_t * p, float eps, int gamma)
+{
 	etat_t s1, s2 ;
-	int act;
+	int act, j;
 	float qua1, qua2, qua3, maxQ, q_actuel ;
 	lineTab_t QT_futur , QT_actuel ;
-	float r = 1/exp(NB_ITER-1) ;
-
+	
 	p = depiler(p, &QT_actuel) ;
 	s1.x = QT_actuel.T[0] ;
 	s1.y = QT_actuel.T[1] ;
 	s1.z = QT_actuel.T[2] ;
+
+	float r = QT_actuel.r ;
 	
 	QT[s1.x][s1.y][s1.z][QT_actuel.T[3]] = QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]
 				+ eps*(r*NB_ITER - QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]) ;
-	printf("hello world");
-	while (p != NULL) {	
+	QT_futur = QT_actuel ;
 
-		// Q actuel est une liste [i, j, k, act] 
+	while (p->nbElts > -1) {	
+	
 
-		//QT_actuel = QT[i][j][k][act] ;
  		s1.x = QT_futur.T[0] ;
 		s1.y = QT_futur.T[1] ;
 		s1.z = QT_futur.T[2] ;
@@ -124,24 +126,25 @@ void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma){
  		s2.x = QT_actuel.T[0] ;
 		s2.y = QT_actuel.T[1] ;
 		s2.z = QT_actuel.T[2] ;
+
+		r = QT_actuel.r ;
 		qua1 = QT[s2.x][s2.y][s2.z][0] ;
 		qua2 = QT[s2.x][s2.y][s2.z][1] ;
 		qua3 = QT[s2.x][s2.y][s2.z][2] ;
-	
 		if (qua1 > qua2) {
 			if (qua1 > qua3) {
-				maxQ = qua1 ;
+				maxQ = 0 ;
 			}
 			else {
-				maxQ = qua3 ;
+				maxQ = 2 ;
 			}
-		}
+		} 
 		else {
-			if (qua2 > qua3) {
-				maxQ = qua2 ;
+			if (qua3 > qua2) {
+				maxQ = 2 ;
 			}
 			else {
-				maxQ = qua3 ;
+				maxQ = 1 ;
 			}
 		}
 
@@ -152,3 +155,23 @@ void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma){
 	} 
 
 }
+
+void afficherTab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION]) {
+	int i, j, k, a ;
+	for (i=0; i<I_SIZE; i++) 
+	{
+		for (j=0; j<J_SIZE; j++) 
+		{
+			for (k=0; k<K_SIZE; k++)
+			{
+				for (a=0; a<NB_ACTION; a++)
+				{
+					if (j > 0 && i > 0 && k > 0)
+					if (i <= 10 && j <= 10 && k <= 10)
+					printf("%d %d %d %a %f\n",
+						i, j, k, a, QT[i][j][k][a]) ;
+				}
+			}
+		}	
+	}
+} 

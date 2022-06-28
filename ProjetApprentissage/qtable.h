@@ -1,14 +1,17 @@
 #ifndef __QTABLE__
 #define __QTABLE__
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "pile.h"
 
-#define NB_ITER 50
+#define NB_ITER 10 
 #define NB_ACTION 3
-#define PAS 0.25
+#define PAS 1
+#define I_SIZE 11
+#define J_SIZE 11
+#define K_SIZE 11
 
 // les niveau des barres sont les indices 
 // du table raison pour laquelle on i, j, k
@@ -33,9 +36,10 @@ etat_t etatSuivant(etat_t s, int action, int pas) ;
 
 // Cette permet un sauvegarde de contexte
 
-pile_t * sauvQtab(float QT[11][11][11][3], int greedy, etat_t s) ;
+pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION], int greedy, etat_t s) ;
 
-void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma);
+void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION], pile_t * p, float eps, int gamma);
 
+void afficherTab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION]) ;
 
 #endif
