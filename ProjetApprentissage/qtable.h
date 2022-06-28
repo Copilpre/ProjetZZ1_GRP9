@@ -6,7 +6,7 @@
 #include <math.h>
 #include "pile.h"
 
-#define NB_ITER 200
+#define NB_ITER 50
 #define NB_ACTION 3
 #define PAS 0.25
 

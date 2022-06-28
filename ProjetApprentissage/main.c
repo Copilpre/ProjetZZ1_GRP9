@@ -23,7 +23,7 @@ int main(){
 int x, y, z;
 etat_t etat;
 pile_t *p;
-
+srand(time(NULL));
 
 int greedy = 200;
 

@@ -6,23 +6,24 @@
 // action vaut 2 alors -> le tamago dort donc s.z croit
 
 etat_t etatSuivant(etat_t s, int action, int pas) {
-	etat_t suiv = s ;
 	if (action == 0) {
-		suiv.x += (pas * 3) ;
-		suiv.y -= pas ;
-		suiv.z -= pas ;
+		s.x += (pas * 3) ;
+		s.y -= pas ;
+		s.z -= pas ;
 	}
 	if (action == 1) {
-		suiv.x -= pas ;
-		suiv.y += (pas * 3) ;
-		suiv.z -= pas ;
-	}
+		s.x -= pas ;
+		s.y += (pas * 3) ;
+		s.z -= pas ;
+	}	//etat.x = rand() % 10;
+	//etat.y = rand() % 10;
+	//etat.z = rand() % 10;
 	if (action == 2) {
-		suiv.x -= pas ;
-		suiv.y -= pas ;
-		suiv.z += (pas * 3) ;
+		s.x -= pas ;
+		s.y -= pas ;
+		s.z += (pas * 3) ;
 	}		
-	return suiv ;
+	return s ;
 }
 
 
@@ -34,7 +35,10 @@ pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s)
 	lineTab_t line ;
 	float qua1, qua2, qua3 ; 
 	int i = 0, defaite = 1, alea, action ;
-	line.T[0] = line.T[1] = line.T[2] = line.T[3] = 0 ;
+	line.T[0] = s.x;
+	line.T[1] = s.y;
+	line.T[2] = s.z;
+	int premierPassage = 1;
 
 	pile_t * p = init_pile(NB_ITER) ;
 
@@ -48,7 +52,7 @@ pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s)
 			// Action de plus grande qualité
 			qua1 = QT[s.x][s.y][s.z][0] ;
 			qua2 = QT[s.x][s.y][s.z][1] ;
-			qua3 = QT[s.x][s.y][s.z][1] ;
+			qua3 = QT[s.x][s.y][s.z][2] ;
 			if (qua1 > qua2) {
 				if (qua1 > qua3) {
 					action = 0 ;
@@ -66,7 +70,8 @@ pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s)
 				}
 			}
 		}
-
+		line.T[3] = action ;
+		p = empiler(p, line) ;
 		s = etatSuivant(s, action, PAS) ;	
 
 		// Cas ou on a une barre à zero
@@ -80,10 +85,11 @@ pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s)
 		line.T[1] = s.y ;
 		line.T[2] = s.z ;
 		line.T[3] = action ;				
-		p = empiler(p, line) ;
 		i++ ;
 	}
-
+		
+	afficherPile(p);
+	libererPile(p);
 	return p ;
 }
 
@@ -96,8 +102,14 @@ void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma){
 	lineTab_t QT_futur , QT_actuel ;
 	float r = 1/exp(NB_ITER-1) ;
 
-// rajouter l'init du premier elt
-	QT[s1.x][s1.y][s1.z][QT_actuel ] 
+	p = depiler(p, &QT_actuel) ;
+	s1.x = QT_actuel.T[0] ;
+	s1.y = QT_actuel.T[1] ;
+	s1.z = QT_actuel.T[2] ;
+	
+	QT[s1.x][s1.y][s1.z][QT_actuel.T[3]] = QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]
+				+ eps*(r*NB_ITER - QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]) ;
+	printf("hello world");
 	while (p != NULL) {	
 
 		// Q actuel est une liste [i, j, k, act] 
