@@ -3,9 +3,9 @@
 
 void manger(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama mange.\n");
-    *barreD-=drain;
-    *barreJ-=drain;
-    *barreM+=2*drain;
+    *barreD -= drain;
+    *barreJ -= drain;
+    *barreM += 2*drain;
     if(*barreM>=1.0){
         *barreM=1.0;
     }
@@ -13,9 +13,9 @@ void manger(float * barreD, float * barreM,float * barreJ,float drain){
 
 void dormir(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama dort.\n");
-    *barreM-=drain;
-    *barreJ-=drain;
-    *barreD+=2*drain;
+    *barreM -= drain;
+    *barreJ -= drain;
+    *barreD += 2*drain;
     if(*barreD>=1.0){
         *barreD=1.0;
     }
@@ -23,9 +23,9 @@ void dormir(float * barreD, float * barreM,float * barreJ,float drain){
 
 void jouer(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama joue.\n");
-    *barreM-=drain;
-    *barreD-=drain;
-    *barreJ+=2*drain;
+    *barreM -= drain;
+    *barreD -= drain;
+    *barreJ += 2*drain;
     if(*barreJ>=1.0){
         *barreJ=1.0;
     }
@@ -60,15 +60,15 @@ int main(){
 
     srand( time( NULL ) );
     
-    float barreD = (rand()%5);
+    float barreD = (rand()%6);
     printf("%f\n",barreD);
     barreD = barreD/10+0.2;
     
-    float barreM = (rand()%5);
+    float barreM = (rand()%6);
     printf("%f\n",barreM);
     barreM = barreM/10+0.2;
     
-    float barreJ = (rand()%5);
+    float barreJ = (rand()%6);
     printf("%f\n",barreJ);
     barreJ = barreJ/10+0.2;
     
@@ -274,7 +274,7 @@ int main(){
                         currentRoom = 0;
                         break;
                     case 0:
-                        manger(&barreM,&barreM,&barreJ,drain);
+                        manger(&barreD,&barreM,&barreJ,drain);
                         currMood = 1;
                         currentRoom = 1;
                         break;
