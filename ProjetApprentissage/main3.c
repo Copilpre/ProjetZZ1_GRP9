@@ -162,7 +162,7 @@ int main(){
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
 
-    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000 ; CompteurIterationProgramme ++){ 
+    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 100 ; CompteurIterationProgramme ++){ 
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
     barreM=(rand()%7)+2;
@@ -237,8 +237,10 @@ int main(){
     
         
     printf("iteration numero : %d \n ",CompteurIterationProgramme);
+    
     }
+    //sauvTable(Qtable);
     libererPile(p);
-    sauvTable(Qtable);
+    
     return 0;
 }
