@@ -8,6 +8,7 @@
 
 typedef struct lineTab {
 	int T[TAILLE] ;
+	float r ;
 } lineTab_t ;
 
 typedef struct pile
