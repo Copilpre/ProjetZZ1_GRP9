@@ -19,12 +19,11 @@ typedef struct pile
 
 pile_t * init_pile(int taille) ;
 
-
 int EstVidePile(pile_t *p) ;
 
-int empiler(pile_t * p, lineTab_t data) ;
+pile_t * empiler(pile_t * p, lineTab_t data) ;
 
-pile_t* depiler(pile_t * p, lineTab_t * result) ;
+pile_t * depiler(pile_t * p, lineTab_t * result) ;
 
 void libererPile(pile_t * p) ;
 
