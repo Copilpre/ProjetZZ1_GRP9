@@ -60,15 +60,15 @@ int main(){
 
     srand( time( NULL ) );
     
-    float barreD = (rand()%7);
+    float barreD = (rand()%5);
     printf("%f\n",barreD);
     barreD = barreD/10+0.2;
     
-    float barreM = (rand()%7);
+    float barreM = (rand()%5);
     printf("%f\n",barreM);
     barreM = barreM/10+0.2;
     
-    float barreJ = (rand()%7);
+    float barreJ = (rand()%5);
     printf("%f\n",barreJ);
     barreJ = barreJ/10+0.2;
     
@@ -77,7 +77,7 @@ int main(){
     float barreJ = 0.5;
     float barreM = 0.5;*/
 
-    printf("etat des barres %f %f %f\n", barreM, barreD, barreJ);
+    printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
 
     float probaEtat[3][3] ={{0.1, 0.4, 0.5},
                             {0.4, 0.2, 0.4},
@@ -251,7 +251,7 @@ int main(){
             }
         }
         } */
-        printf("hello");
+        //printf("hello");
         //FIN MARKOV
 
 
@@ -297,6 +297,7 @@ int main(){
         if(barreJ<=0.0){
             barreJ = 0.0;
         }
+        printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
 
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
