@@ -17,17 +17,17 @@ typedef struct pile
     lineTab_t * tab ; 
 }pile_t;
 
-pile_t * init_pile(int taille)
+pile_t * init_pile(int taille) ;
 
 
-int EstVidePile(pile_t *p)
+int EstVidePile(pile_t *p) ;
 
-int empiler(pile_t * p, lineTab_t data)
+int empiler(pile_t * p, lineTab_t data) ;
 
-pile_t* depiler(pile_t * p, lineTab_t * result)
+pile_t* depiler(pile_t * p, lineTab_t * result) ;
 
-void libererPile(pile_t * p)
+void libererPile(pile_t * p) ;
 
-void afficherPile(pile_t * p)
+void afficherPile(pile_t * p) ;
 
 #endif
