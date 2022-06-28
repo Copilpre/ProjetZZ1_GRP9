@@ -24,6 +24,7 @@ int x, y, z;
 etat_t etat;
 pile_t *p;
 
+
 int greedy = 200;
 
     float Qtable[11][11][11][3];
@@ -38,14 +39,17 @@ int greedy = 200;
         } 
     } 
 
+
 for(int i = 0; i < NB_ITER; i++){
 	
 	etat.x = rand() % 10;
 	etat.y = rand() % 10;
 	etat.z = rand() % 10;
 	greedy += -1;
+
 	p = sauvQtab(Qtable , greedy, etat);
-    loadQtab(Qtable, p, eps, gamma);
+
+    //loadQtab(Qtable, p, eps, gamma);
 
 
 
