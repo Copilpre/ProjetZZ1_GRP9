@@ -33,9 +33,9 @@ etat_t etatSuivant(etat_t s, int action, int pas) ;
 
 // Cette permet un sauvegarde de contexte
 
-pile_t * sauvQtab(int **** QT, int greedy, etat_t s) ;
+pile_t * sauvQtab(float QT[11][11][11][3], int greedy, etat_t s) ;
 
-int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma) ;
+void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma);
 
 
 #endif

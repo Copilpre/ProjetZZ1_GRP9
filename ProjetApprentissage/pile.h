@@ -2,8 +2,8 @@
 #define __PILE__
 
 #include <stdio.h>
-
 #include <stdlib.h>
+
 #define TAILLE 4
 
 typedef struct lineTab {

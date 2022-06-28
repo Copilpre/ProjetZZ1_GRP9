@@ -1,17 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#define TAILLE 4
+#include "pile.h"
 
-typedef struct lineTab {
-	int T[TAILLE] ;
-} lineTab_t ;
 
-typedef struct pile
-{
-    int nbElts;
-    int position;
-    lineTab_t * tab ; 
-}pile_t;
+
 
 pile_t * init_pile(int taille)
 {

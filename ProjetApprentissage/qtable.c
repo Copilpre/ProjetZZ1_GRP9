@@ -29,10 +29,10 @@ etat_t etatSuivant(etat_t s, int action, int pas) {
 // Cette fonction permet de sauvegarder le contexte
 
 
-pile_t * sauvQtab(int **** QT, int greedy, etat_t s) 
+pile_t * sauvQtab(float QT[11][11][11][3] , int greedy, etat_t s) 
 {
 	lineTab_t line ;
-	int qua1, qua2, qua3 ; 
+	float qua1, qua2, qua3 ; 
 	int i = 0, defaite = 1, alea, action ;
 	line.T[0] = line.T[1] = line.T[2] = line.T[3] = 0 ;
 
@@ -88,21 +88,16 @@ pile_t * sauvQtab(int **** QT, int greedy, etat_t s)
 }
 
 
-int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma) 
-{
+void loadQtab(float QT[11][11][11][3], pile_t * p, float eps, int gamma){
+	// Ici la bonne valeur de r à déterminer
 	etat_t s1, s2 ;
-	int act, qua1, qua2, qua3, maxQ, q_actuel, q_first ;
+	int act;
+	float qua1, qua2, qua3, maxQ, q_actuel ;
 	lineTab_t QT_futur , QT_actuel ;
 	float r = 1/exp(NB_ITER-1) ;
-	p = depiler(p, &QT_actuel) ;
-	s1.x = QT_actuel.T[0] ;
-	s2.y = QT_actuel.T[1] ;
-	s3.z = QT_actuel.T[2] ;
-	q_first = QT[s1.x][s1.y][s1.z][QT_actuel[3]]
-			 + eps*(r*NB_ITER - QT[s1.x][s1.y][s1.z][QT_actuel[3]]) ;
-	
-	QT_futur = q_first + 
 
+// rajouter l'init du premier elt
+	QT[s1.x][s1.y][s1.z][QT_actuel ] 
 	while (p != NULL) {	
 
 		// Q actuel est une liste [i, j, k, act] 
@@ -141,8 +136,7 @@ int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma)
 		q_actuel = QT[s1.x][s1.y][s1.z][act] ;
 	
 		QT[s1.x][s1.y][s1.z][act] = q_actuel + eps * (
-				(int)(r + gamma * maxQ) - q_actuel) ;
+				(r + gamma * maxQ) - q_actuel) ;
 	} 
 
-	return QT ;
 }
