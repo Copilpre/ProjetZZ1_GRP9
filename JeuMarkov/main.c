@@ -5,7 +5,7 @@ void manger(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama mange.\n");
     *barreD-=drain;
     *barreJ-=drain;
-    *barreM+=2*drain;
+    *barreM+=3*drain;
     if(*barreM>=1.0){
         *barreM=1.0;
     }
@@ -15,7 +15,7 @@ void dormir(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama dort.\n");
     *barreM-=drain;
     *barreJ-=drain;
-    *barreD+=2*drain;
+    *barreD+=3*drain;
     if(*barreD>=1.0){
         *barreD=1.0;
     }
@@ -25,7 +25,7 @@ void jouer(float * barreD, float * barreM,float * barreJ,float drain){
     printf("Tama joue.\n");
     *barreM-=drain;
     *barreD-=drain;
-    *barreJ+=2*drain;
+    *barreJ+=3*drain;
     if(*barreJ>=1.0){
         *barreJ=1.0;
     }
@@ -75,7 +75,7 @@ int main(){
     int currentRoom = 0;
     int program_on = 1;
     int etat = 1;
-    float drain = 0.05;
+    float drain = 0.1;
     int nextState=0;
     int probaCumul[3][3];
     int i,j,outil;
@@ -83,8 +83,8 @@ int main(){
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
             probaCumul[i][j]=probaEtat[i][j]*10;
-            if(i>0){
-                probaCumul[i][j]+=probaCumul[i-1][j];
+            if(j>0){
+                probaCumul[i][j]+=probaCumul[i][j-1];
             }
         }
     }
@@ -94,7 +94,6 @@ int main(){
 
     //BOUCLE DE JEU
     while(program_on){
-            
             while(SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_KEYDOWN:
@@ -147,15 +146,6 @@ int main(){
                 SDL_RenderPresent(renderer);
                 SDL_WaitEvent(&event);
                     switch(event.type){
-                        case SDL_MOUSEBUTTONDOWN:
-                            curX=event.motion.x;
-                            curY = event.motion.y;
-                            printf("(%d %f)\n",curX,0.875*WindowW);
-                            printf("%f %f",(0.875*WindowW - curX)*(0.875*WindowW - curX)+(0.875*WindowW - curY)*(0.875*WindowW - curY),WindowW*WindowW*0.875*0.875);
-                            if(2*0.875*0.875*WindowW*WindowW+curX*curX+curY*curY-0.875*(curX+curY)<=WindowW*WindowW*0.875*0.875){
-                                printf("SALUT");
-                            }
-                            break;
                         case SDL_KEYDOWN:
                             switch (event.key.keysym.sym)
                             {
@@ -177,9 +167,11 @@ int main(){
         if(ticks>1){
             ticks = 0;
             outil = rand()%10;
+            
             nextState = 0;
             if(!actionUser){
-                while(outil>probaCumul[nextState][etat]){
+                
+                while(outil>=probaCumul[etat][nextState]){
                     nextState++;
                 }
                 switch (nextState)
@@ -204,7 +196,7 @@ int main(){
             }
         }
         }
-        
+        etat = nextState;
         //FIN MARKOV
         
 

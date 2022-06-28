@@ -1,8 +1,5 @@
 #include "pile.h"
 
-
-
-
 pile_t * init_pile(int taille)
 {
     pile_t * nouv = NULL;
@@ -65,23 +62,3 @@ void afficherPile(pile_t * p)
         printf("\n");
     } 
 }
-
-/*
-int main() {
-	
-	lineTab_t tab ;
-	tab.T[0] = 1 ;
-	tab.T[1] = 2 ;
-	tab.T[2] = 3 ;
-	tab.T[3] = 3 ;
-	pile_t * p = NULL;
-	p = init_pile(12) ;
-
-	for (int i=0; i<10 ; i++) {
-		empiler(p,  tab) ;
-	}
-	
-	afficherPile(p) ;
-
-	return EXIT_SUCCESS ;
-}*/
