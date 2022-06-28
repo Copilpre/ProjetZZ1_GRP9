@@ -59,17 +59,25 @@ int main(){
     SDL_bool actionUser = SDL_TRUE;
 
     srand( time( NULL ) );
-    /*float barreD = (rand()%8);
+    
+    float barreD = (rand()%7);
+    printf("%f\n",barreD);
     barreD = barreD/10+0.2;
-    float barreM = (rand()%8);
+    
+    float barreM = (rand()%7);
+    printf("%f\n",barreM);
     barreM = barreM/10+0.2;
-    float barreJ = (rand()%8);
-    barreJ = barreJ/10+0.2;*/
-    float barreD = 0.5;
+    
+    float barreJ = (rand()%7);
+    printf("%f\n",barreJ);
+    barreJ = barreJ/10+0.2;
+    
+    
+    /*float barreD = 0.5;
     float barreJ = 0.5;
-    float barreM = 0.5;
+    float barreM = 0.5;*/
 
-    printf("%f %f %f", barreM, barreD, barreJ);
+    printf("etat des barres %f %f %f\n", barreM, barreD, barreJ);
 
     float probaEtat[3][3] ={{0.1, 0.4, 0.5},
                             {0.4, 0.2, 0.4},
@@ -108,7 +116,7 @@ int main(){
             }
         } 
     }
-    for(i = 0; i < 11; i++){
+    /*for(i = 0; i < 11; i++){
         for (j = 0; j < 11 ; j++){
             for (k = 0; k < 11 ; k++){
                 for (a = 0; a < 3 ; a++){
@@ -117,7 +125,7 @@ int main(){
                 printf("\n");
             } 
         }
-    } 
+    }*/
     
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
