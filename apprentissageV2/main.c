@@ -59,12 +59,16 @@ int main(){
     SDL_bool actionUser = SDL_TRUE;
 
     srand( time( NULL ) );
-    float barreD = (rand()%8);
+    /*float barreD = (rand()%8);
     barreD = barreD/10+0.2;
     float barreM = (rand()%8);
     barreM = barreM/10+0.2;
     float barreJ = (rand()%8);
-    barreJ = barreJ/10+0.2;
+    barreJ = barreJ/10+0.2;*/
+    float barreD = 0.5;
+    float barreJ = 0.5;
+    float barreM = 0.5;
+
     printf("%f %f %f", barreM, barreD, barreJ);
 
     float probaEtat[3][3] ={{0.1, 0.4, 0.5},
@@ -256,17 +260,17 @@ int main(){
         //printf("%d",ActionMax);
         switch (ActionMax)
                 {
-                    case 2:
+                    case 1:
                         dormir(&barreD,&barreM,&barreJ,drain);
                         currMood = 3;
                         currentRoom = 0;
                         break;
-                    case 1:
+                    case 0:
                         manger(&barreM,&barreM,&barreJ,drain);
                         currMood = 1;
                         currentRoom = 1;
                         break;
-                    case 0:
+                    case 2:
                         jouer(&barreD,&barreM,&barreJ,drain);
                         currMood = 2;
                         currentRoom = 2;
