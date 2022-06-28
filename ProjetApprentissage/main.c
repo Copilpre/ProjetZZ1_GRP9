@@ -9,7 +9,7 @@
 #define learnRate 1
 #define discount 0.5
 
-#define NB_ITER 200
+#define NB_ITER 50
 #define NB_ACTION 3
 #define eps 0.5
 #define gamma 0.5
@@ -38,23 +38,29 @@ int greedy = 200;
             } 
         } 
     } 
-
-
-for(int i = 0; i < NB_ITER; i++){
-	
 	etat.x = rand() % 10;
 	etat.y = rand() % 10;
 	etat.z = rand() % 10;
-	greedy += -1;
 
-	p = sauvQtab(Qtable , greedy, etat);
+    p = sauvQtab(Qtable , greedy, etat);
+    
+    
+    
+    //for(int i = 0; i < NB_ITER; i++){
+	
+	//etat.x = rand() % 10;
+	//etat.y = rand() % 10;
+	//etat.z = rand() % 10;
+	//greedy += -1;
+
+	//p = sauvQtab(Qtable , greedy, etat);
 
     //loadQtab(Qtable, p, eps, gamma);
 
 
+    return 0;
 
-
-} 
+//} 
 
 
 
