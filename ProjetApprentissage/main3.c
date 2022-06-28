@@ -171,9 +171,10 @@ int main(){
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
 
-    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000000 ; CompteurIterationProgramme ++){ 
+    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 100000000 ; CompteurIterationProgramme ++){ 
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
+    //il faudrait peut etre envisage les situation initiales 0.1 et 0.9
     barreM=(rand()%7)+2;
     barreJ=(rand()%7)+2;
     barreD=(rand()%7)+2;
