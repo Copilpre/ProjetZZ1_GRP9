@@ -90,12 +90,18 @@ pile_t * sauvQtab(int **** QT, int greedy, etat_t s)
 
 int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma) 
 {
-	// Ici la bonne valeur de r à déterminer
 	etat_t s1, s2 ;
-	int act, qua1, qua2, qua3, maxQ , r = 10, q_actuel ;
+	int act, qua1, qua2, qua3, maxQ, q_actuel, q_first ;
 	lineTab_t QT_futur , QT_actuel ;
 	float r = 1/exp(NB_ITER-1) ;
-	QT_futur = QT[NB_ITER-1] + eps*(r*NB_ITER - QT[NB_ITER-1]) ;
+	p = depiler(p, &QT_actuel) ;
+	s1.x = QT_actuel.T[0] ;
+	s2.y = QT_actuel.T[1] ;
+	s3.z = QT_actuel.T[2] ;
+	q_first = QT[s1.x][s1.y][s1.z][QT_actuel[3]]
+			 + eps*(r*NB_ITER - QT[s1.x][s1.y][s1.z][QT_actuel[3]]) ;
+	
+	QT_futur = q_first + 
 
 	while (p != NULL) {	
 
