@@ -1,23 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "pile.h"
-
-#define NB_ITER 200
-#define NB_ACTION 3
-
-typedef int **** qtab_t ;
-
-// les niveau des barres sont les indices 
-// du table raison pour laquelle on i, j, k
-// la 4e valeur vaut {0, 1, 2} qui correspond 
-// Vu que les indices correspondent aux valeurs 
-// des barres 
-
-typedef struct etat {
-	int x ;
-	int y ;
-	int z ;
-} etat_t ;
+#include "qtable.h"
 
 
 // action vaut 0 alors -> le tamago mange donc s.x croit
@@ -46,11 +27,16 @@ etat_t etatSuivant(etat_t s, int action, int pas) {
 }
 
 
-qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
+// Cette fonction permet de sauvegarder le contexte
 
-	int n = 0, i = 0, defaite = 1, x = 0, alea, action ;
-	lineTab_t line = {0, 0, 0, 0} ;
+
+pile_t * sauvQtab(int **** QT, int greedy, etat_t s) 
+{
+	lineTab_t line ;
 	int qua1, qua2, qua3 ; 
+	int i = 0, defaite = 1, alea, action ;
+	line.T[0] = line.T[1] = line.T[2] = line.T[3] = 0 ;
+
 	pile_t * p = init_pile(NB_ITER) ;
 
 	while ( defaite && i < NB_ITER) {
@@ -60,7 +46,7 @@ qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
 			action = rand() % NB_ACTION ;
 		}
 		else {
-			// choix de l'action la plus élévée
+			// Action de plus grande qualité
 			qua1 = QT[s.x][s.y][s.z][0] ;
 			qua2 = QT[s.x][s.y][s.z][1] ;
 			qua3 = QT[s.x][s.y][s.z][1] ;
@@ -82,24 +68,83 @@ qtab_t loadQtab(qtab_t QT, int greedy, etat_t s) {
 			}
 		}
 
-		s = etatSuivant(s, action) ;	
+		s = etatSuivant(s, action, PAS) ;	
 
-		// Mettre à jour le QT	
-		//QT[s.x][s.y][s.z][action] = ;	
-		
 		// Cas ou on a une barre à zero
 		defaite = s.x * s.y * s.z ;
 		// Cas ou on a une barre à 1 ou 10
 		if (defaite != 0) 
-		if (s.x == 1 || s.y == 1 || s.z == 1)
-		defaite = 0 ;
-		line->T[0] = s.x ;
-		line->T[1] = s.y ;
-		line->T[2] = s.z ;
-		line->T[3] = action ;				
+		if (s.x == 1 || s.y == 1 || s.z == 1) {
+			defaite = 0 ;
+		}
+		line.T[0] = s.x ;
+		line.T[1] = s.y ;
+		line.T[2] = s.z ;
+		line.T[3] = action ;				
 		p = empiler(p, line) ;
 		i++ ;
 	}
+
+	return p ;
+}
+
+lineTab_t getFirstQ(int **** QT) {
+	lineTab_t result ; 
+
+	// How to get the first (s,a) of departure
+
+	return result ;
+}
+
+
+int **** loadQtab(int **** QT, pile_t * p, float eps, int gamma) 
+{
+	// Ici la bonne valeur de r à déterminer
+	etat_t s1, s2 ;
+	int act, qua1, qua2, qua3, maxQ , r = 10, q_actuel ;
+	lineTab_t QT_futur , QT_actuel ;
+	QT_actuel = getFirstQ( QT ) ;
+
+	while (p != NULL) {	
+
+		// Q actuel est une liste [i, j, k, act] 
+
+		//QT_actuel = QT[i][j][k][act] ;
+ 		s1.x = QT_actuel.T[0] ;
+		s1.y = QT_actuel.T[1] ;
+		s1.z = QT_actuel.T[2] ;
+		act  = QT_actuel.T[3] ;
+
+		p = depiler(p, &QT_futur) ;
+ 		s2.x = QT_futur.T[0] ;
+		s2.y = QT_futur.T[1] ;
+		s2.z = QT_futur.T[2] ;
+		qua1 = QT[s2.x][s2.y][s2.z][0] ;
+		qua2 = QT[s2.x][s2.y][s2.z][1] ;
+		qua3 = QT[s2.x][s2.y][s2.z][2] ;
+	
+		if (qua1 > qua2) {
+			if (qua1 > qua3) {
+				maxQ = qua1 ;
+			}
+			else {
+				maxQ = qua3 ;
+			}
+		}
+		else {
+			if (qua2 > qua3) {
+				maxQ = qua2 ;
+			}
+			else {
+				maxQ = qua3 ;
+			}
+		}
+
+		q_actuel = QT[s1.x][s1.y][s1.z][act] ;
+	
+		QT[s1.x][s1.y][s1.z][act] = q_actuel + eps * (
+				(int)(r + gamma * maxQ) - q_actuel) ;
+	} 
 
 	return QT ;
 }
