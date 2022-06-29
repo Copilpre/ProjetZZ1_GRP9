@@ -4,9 +4,10 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "pile.h"
 
-#define NB_ITER 10 
+#define NB_ITER 100 
 #define NB_ACTION 3
 #define PAS 1
 #define I_SIZE 11

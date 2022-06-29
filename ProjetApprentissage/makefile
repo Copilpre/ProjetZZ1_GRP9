@@ -16,4 +16,4 @@ pile.o : pile.c pile.h
 	$(GC) pile.c -c $(CFLAGS) -o pile.o  	
 	
 clean :
-	rm -f $(OBJ) main
+	rm -f $(OBJ) prog 

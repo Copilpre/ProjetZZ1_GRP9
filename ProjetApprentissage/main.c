@@ -1,19 +1,22 @@
 #include "qtable.h"
 #include <time.h>
 
-#define eps 0.5
-#define gamma 0.5
+#define NIVEAU_MAX 10
+#define NIVEAU_MIN 0
 
 
 int main(){
-   
-	//génération état aléatoire
 
-	etat_t etat;
-	pile_t *p;
-	srand(time(NULL));
+	// INITIALISATION POUR L'ALEATOIRE   
+	srand(time(NULL)) ;
+
+	// DECLARATION DES VARIABLES
+
+	etat_t etat ;
+	pile_t *p ;
+	float eps = 0.7, gamma = 0.65 ;
 	float Qtable[I_SIZE][J_SIZE][K_SIZE][NB_ACTION];
-	int x, y, z, i, j, k, a, greedy = 200;
+	int x, y, z, i, j, k, a , greedy = 200;
 
 	// INITIALISATION DE LA QTABLE
 
@@ -31,31 +34,27 @@ int main(){
         	} 
         } 
 
-   	// PHASE DE CHARGEMENT DE LA Q TABLE
-		etat.x = rand() % 10;
-		etat.y = rand() % 10;
-		etat.z = rand() % 10;
-		greedy -= 1;
-		p = sauvQtab(Qtable , greedy, etat);
-		afficherPile(p) ;
-//    		loadQtab(Qtable, p, eps, gamma);
  
-	/*for(int i = 0; i < NB_ITER; i++) {
-	
-		etat.x = rand() % 10;
-		etat.y = rand() % 10;
-		etat.z = rand() % 10;
+	for(i = 0; i < NB_ITER; i++) {
+		// CHOIX D'UN ETAT AU HAZAR
+		etat.x = rand() % NIVEAU_MAX ;
+		etat.y = rand() % NIVEAU_MAX ;
+		etat.z = rand() % NIVEAU_MAX ;
 		greedy -= 1;
 
-		p = sauvQtab(Qtable , greedy, etat);
-
+		// SAUVEGARDE DU CONTEXT
+		p = sauvQtab(Qtable, greedy, etat);
+		// MISE A JOUR DE LA TABLE
     		loadQtab(Qtable, p, eps, gamma);
 
-	}*/
+		libererPile(p) ;
+	}
 
-	afficherTab(Qtable) ;
+	//afficherTab(Qtable) ;
  
-	libererPile(p) ;
-
+Quit :
+	if (p != NULL) {
+		libererPile(p) ;
+	}
 	return EXIT_SUCCESS ;
 }
