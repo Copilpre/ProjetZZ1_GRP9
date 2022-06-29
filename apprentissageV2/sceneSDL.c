@@ -115,20 +115,92 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     SDL_DestroyTexture(textureTitre);
 }
 
+void afficheBarre(SDL_Renderer * renderer,int windowW,int windowH){
+    char icones[3][20]={{"./image/manger.png"},{"./image/jouer.png"},{"./image/dormir.png"}};
+    SDL_Rect position,position2,source;
+    SDL_Texture * texture;
+    SDL_SetRenderDrawColor(renderer,grisF.r,grisF.g,grisF.b,grisF.a);
+    
+    //barre du bas
 
+    texture = IMG_LoadTexture(renderer,"./image/hotbar.png");
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+    source.x = 0;
+    source.y = 0;
+    
+    position.y = windowH*0.75;
+    position.h = windowH*0.2;
+    position.w = windowW*0.3;
+    position.x = windowW/2-position.w/2;
+    SDL_RenderCopy(renderer,texture,&source,&position);
+
+    //boutons
+    SDL_SetRenderDrawColor(renderer,grisF.r,grisF.g,grisF.b,grisF.a);
+    
+    SDL_Rect icone;
+    icone.w=position.w*0.3;
+    icone.h=position.h*0.85;
+
+    for (int i = 0; i < 3;i++){
+
+        //icones
+        texture = IMG_LoadTexture(renderer,icones[i]);
+        source.x=0;
+        source.y=0;
+        SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+
+        icone.x=position.x+0.03*icone.w;
+        icone.y=position.y+0.03*icone.h;
+        position.x += position.w*0.35;
+
+        SDL_RenderCopy(renderer, texture, &source, &icone);
+    }
+    SDL_DestroyTexture(texture);
+}
+
+
+void carte(SDL_Renderer * renderer,int currentRoom,int WindowW,int WindowH){
+    SDL_SetRenderDrawColor(renderer,noir.r,noir.g,noir.b,noir.a);
+    SDL_Rect rect;
+    rect.w = WindowW*0.05;
+    rect.x = 0.78*WindowW;
+    rect.y = 0.01*WindowH;
+    rect.h = rect.w;
+    SDL_RenderFillRect(renderer,&rect);
+
+    
+
+    rect.x = 0.88*WindowW;
+     SDL_RenderFillRect(renderer,&rect);
+
+    rect.x = 0.93 * WindowW;
+    rect.y = 0.07*WindowH;
+    SDL_RenderFillRect(renderer,&rect);
+
+    rect.x = 0.78*WindowW;
+    rect.y = 0.01*WindowH;
+    rect.h = rect.w;
+    
+    rect.x += rect.w;
+    rect.w = 0.12*WindowW;
+    rect.y = WindowH*0.025;
+    rect.h = rect.h * 0.2;
+
+    
+    SDL_RenderFillRect(renderer,&rect);
+}
 
 void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer * renderer,int windowW,int windowH){
-    char salles[3][20]={{"./image/chambre.jpg"},{"./image/cuisine.png"},{"./image/stade.jpg"}};
-    char icones[3][20]={{"./image/manger.png"},{"./image/jouer.png"},{"./image/dormir.png"}};
+    char salles[8][20]={{"./image/cuisine.png"},{"./image/couloir.png"},{"./image/chambre.jpg"},{"./image/couloir.png"},{"./image/stade.jpg"},{"./image/couloir.png"},{"./image/couloir2.png"}};
+    
     SDL_Rect position,position2,source;
 
 
     //image de fond
     SDL_Texture * texture = IMG_LoadTexture(renderer,salles[currentRoom]);
-    SDL_QueryTexture(texture,NULL,NULL,NULL,&source.h);
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
     source.x = 0;
-    source.y= source.h/4;
-    source.w=source.h;
+    source.y= 0;
 
     position.x = 0;
     position.y = 0;
@@ -136,11 +208,12 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
     position.h = windowH;
     SDL_RenderCopy(renderer, texture, &source, &position);
         
+    //barres de vie
     SDL_Color couleur[3]={rouge,vert,cyan};
     float barres[3] = {barreM,barreJ,barreD};
 
-    //barres de vie
-    int ecartBarre = windowW*0.02;
+    
+    int ecartBarre = windowW*0.01;
 
     position.w = windowW/16;
     position.y = ecartBarre;
@@ -161,47 +234,7 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
         SDL_SetRenderDrawColor(renderer,couleur[i].r,couleur[i].g,couleur[i].b,couleur[i].a);
         SDL_RenderFillRect(renderer,&position2);
     }
-
-    //barre du bas
-    SDL_SetRenderDrawColor(renderer,gris.r,gris.g,gris.b,gris.a);
-    position.x = 0;
-    position.y = windowH*0.7;
-    position.h = windowH*0.3;
-    position.w = windowW;
-    SDL_RenderFillRect(renderer,&position);
-
-    //boutons
-    SDL_SetRenderDrawColor(renderer,grisF.r,grisF.g,grisF.b,grisF.a);
     
-    //positions boutons
-    int ecartBoutons = windowW*0.05;
-    position.y = windowH*0.75;
-    position.w = (windowW-4*ecartBoutons)/3;
-    position.h = position.w;
-
-
-    //positions icones relatives aux boutons
-    SDL_Rect icone;
-    icone.w=position.w*0.85;
-    icone.h=position.h*0.85;
-
-    for (int i = 0; i < 3;i++){
-        //boutons
-        position.x= i * position.w + ecartBoutons *(i+1);
-        SDL_SetRenderDrawColor(renderer,couleur[i].r,couleur[i].g,couleur[i].b,couleur[i].a);
-        SDL_RenderFillRect(renderer,&position);
-
-        //icones
-        texture = IMG_LoadTexture(renderer,icones[i]);
-        source.x=0;
-        source.y=0;
-        SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
-
-        icone.x=position.x+0.1*icone.w;
-        icone.y=position.y+0.1*icone.w;
-
-        SDL_RenderCopy(renderer, texture, &source, &icone);
-    }
     SDL_DestroyTexture(texture);
 }
 
@@ -266,11 +299,13 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
     for (int i = 0;i<nbSprite;i++){
         //ON AFFICHE LA SCENE AVANT LE PERSO
         initSDL(currentRoom,barreM,barreJ,barreD,renderer,WindowW,WindowH);
+        carte(renderer,currentRoom,WindowW,WindowW);
         pause(etat,renderer,WindowW,WindowW);
         //AFFICHAGE TAMAGOCHI
 
         sprite.x = i*LargeurCase;
         SDL_RenderCopy(renderer, texture, &sprite, &position);
+        afficheBarre(renderer,WindowW,WindowH);
         SDL_RenderPresent(renderer);
         SDL_Delay(150);
     }
