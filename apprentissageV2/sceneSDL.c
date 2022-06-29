@@ -160,34 +160,19 @@ void afficheBarre(SDL_Renderer * renderer,int windowW,int windowH){
 
 
 void carte(SDL_Renderer * renderer,int currentRoom,int WindowW,int WindowH){
-    SDL_SetRenderDrawColor(renderer,noir.r,noir.g,noir.b,noir.a);
-    SDL_Rect rect;
-    rect.w = WindowW*0.05;
-    rect.x = 0.78*WindowW;
-    rect.y = 0.01*WindowH;
-    rect.h = rect.w;
-    SDL_RenderFillRect(renderer,&rect);
+    char map[8][30]={{"./image/mapCuisine.png"},{"./image/mapCouloir1.png"},{"./image/mapChambre.png"},{"./image/mapCouloir2.png"},{"./image/mapSalleJeu.png"},{"./image/mapCouloir3.png"},{"./image/mapCouloir4.png"}};
+    SDL_Texture * texture = IMG_LoadTexture(renderer,map[currentRoom]);
 
-    
+    SDL_Rect position,source;
 
-    rect.x = 0.88*WindowW;
-     SDL_RenderFillRect(renderer,&rect);
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
 
-    rect.x = 0.93 * WindowW;
-    rect.y = 0.07*WindowH;
-    SDL_RenderFillRect(renderer,&rect);
 
-    rect.x = 0.78*WindowW;
-    rect.y = 0.01*WindowH;
-    rect.h = rect.w;
-    
-    rect.x += rect.w;
-    rect.w = 0.12*WindowW;
-    rect.y = WindowH*0.025;
-    rect.h = rect.h * 0.2;
-
-    
-    SDL_RenderFillRect(renderer,&rect);
+    position.x = 0.75 * WindowW;
+    position.y = 0;
+    position.w = source.w;
+    position.h = source.h;
+    SDL_RenderCopy(renderer, texture, &source, &position);
 }
 
 void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer * renderer,int windowW,int windowH){
