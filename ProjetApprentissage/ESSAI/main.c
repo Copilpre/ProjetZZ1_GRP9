@@ -12,7 +12,7 @@ int main(){
 
 	// DECLARATION DES VARIABLES
 
-	etat_t etat ;
+	etat_t * etat = malloc(sizeof(etat_t)) ;
 	pile_t *p ;
 	float eps = 0.7, gamma = 0.65 ;
 	float Qtable[I_SIZE][J_SIZE][K_SIZE][NB_ACTION];
@@ -37,16 +37,16 @@ int main(){
  
 	for(i = 0; i < NB_ITER; i++) {
 		// CHOIX D'UN ETAT AU HAZAR
-		etat.x = rand() % NIVEAU_MAX ;
-		etat.y = rand() % NIVEAU_MAX ;
-		etat.z = rand() % NIVEAU_MAX ;
+		etat->x = rand() % NIVEAU_MAX ;
+		etat->y = rand() % NIVEAU_MAX ;
+		etat->z = rand() % NIVEAU_MAX ;
 		greedy -= 1;
 
 		// SAUVEGARDE DU CONTEXT
 		p = sauvQtab(Qtable, greedy, etat);
 		// MISE A JOUR DE LA TABLE
     		loadQtab(Qtable, p, eps, gamma);
-
+		//afficherPile(p) ;
 		libererPile(p) ;
 	}
 

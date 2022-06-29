@@ -7,7 +7,7 @@
 #include <time.h>
 #include "pile.h"
 
-#define NB_ITER 100 
+#define NB_ITER 10 
 #define NB_ACTION 3
 #define PAS 1
 #define I_SIZE 11
@@ -33,11 +33,11 @@ typedef struct etat etat_t ;
 // action vaut 1 alors -> le tamago joue donc s.y croit
 // action vaut 2 alors -> le tamago dort donc s.z croit
 
-etat_t etatSuivant(etat_t s, int action, int pas) ;
+etat_t * etatSuivant(etat_t * s, int action, int pas) ;
 
 // Cette permet un sauvegarde de contexte
 
-pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION], int greedy, etat_t s) ;
+pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION], int greedy, etat_t * s) ;
 
 void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION], pile_t * p, float eps, int gamma);
 

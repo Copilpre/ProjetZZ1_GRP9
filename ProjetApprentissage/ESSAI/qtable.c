@@ -5,21 +5,21 @@
 // action vaut 1 alors -> le tamago joue donc s.y croit
 // action vaut 2 alors -> le tamago dort donc s.z croit
 
-etat_t etatSuivant(etat_t s, int action, int pas) {
+etat_t * etatSuivant(etat_t * s, int action, int pas) {
 	if (action == 0) {
-		s.x += (pas * 2) ;
-		s.y -= pas ;
-		s.z -= pas ;
+		s->x = s->x + (pas * 2) ;
+		s->y = s->y - pas ;
+		s->z = s->z - pas ;
 	}
 	if (action == 1) {
-		s.x -= pas ;
-		s.y += (pas * 2) ;
-		s.z -= pas ;
+		s->x = s->x - pas ;
+		s->y = s->y + (pas * 2) ;
+		s->z = s->z - pas ;
 	}
 	if (action == 2) {
-		s.x -= pas ;
-		s.y -= pas ;
-		s.z += (pas * 2) ;
+		s->x = s->x - pas ;
+		s->y = s->y - pas ;
+		s->z = s->z + (pas * 2) ;
 	}		
 	return s ;
 }
@@ -29,16 +29,16 @@ etat_t etatSuivant(etat_t s, int action, int pas) {
 
 
 pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] , 
-						int greedy, etat_t s) 
+						int greedy, etat_t * s) 
 {
 	srand(time(NULL)) ;
 	lineTab_t * line = malloc(sizeof(lineTab_t));
 	line->r = 0.0 ;
 	float qua1, qua2, qua3, r = 0.0 ; 
 	int i = 1, defaite = 1, alea, action ;
-	line->T[0] = s.x;
-	line->T[1] = s.y;
-	line->T[2] = s.z;
+	line->T[0] = s->x;
+	line->T[1] = s->y;
+	line->T[2] = s->z;
 	float facteur = 0.0015 ;
 
 	pile_t * p = init_pile(NB_ITER) ;
@@ -51,9 +51,9 @@ pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] ,
 		}
 		else {
 			// Action de plus grande qualité
-			qua1 = QT[s.x][s.y][s.z][0] ;
-			qua2 = QT[s.x][s.y][s.z][1] ;
-			qua3 = QT[s.x][s.y][s.z][2] ;
+			qua1 = QT[s->x][s->y][s->z][0] ;
+			qua2 = QT[s->x][s->y][s->z][1] ;
+			qua3 = QT[s->x][s->y][s->z][2] ;
 			if (qua1 > qua2) {
 				if (qua1 > qua3) {
 					action = 0 ;
@@ -78,18 +78,18 @@ pile_t * sauvQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] ,
 
 
 		// Cas ou on a une barre à zero
-		if (s.x <= 0 || s.y <= 0 || s.z <= 0) {
+		if (s->x <= 0 || s->y <= 0 || s->z <= 0) {
 			defaite = 0 ;
 		} 
 		else { 	
 		// Cas ou on a une barre à 10
-		if (s.x >= 10 || s.y >= 10 || s.z >= 10) {
+		if (s->x >= 10 || s->y >= 10 || s->z >= 10) {
 			defaite = 0 ;
 		} 
 		else {
-			line->T[0] = s.x ;
-			line->T[1] = s.y ;
-			line->T[2] = s.z ;
+			line->T[0] = s->x ;
+			line->T[1] = s->y ;
+			line->T[2] = s->z ;
 			p = empiler(p, *line) ;
 			s = etatSuivant(s, action, PAS) ;	
 		}
@@ -120,8 +120,9 @@ void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] ,
 	QT[s1.x][s1.y][s1.z][QT_actuel.T[3]] = QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]
 				+ eps*(r*NB_ITER - QT[s1.x][s1.y][s1.z][QT_actuel.T[3]]) ;
 	QT_futur = QT_actuel ;
+	int stop = 1 ;
 
-	while (p->position > -1) {	
+	while (p->position > -1 && stop) {	
 	
  		s1.x = QT_futur.T[0] ;
 		s1.y = QT_futur.T[1] ;
@@ -137,6 +138,7 @@ void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] ,
 		qua1 = QT[s2.x][s2.y][s2.z][0] ;
 		qua2 = QT[s2.x][s2.y][s2.z][1] ;
 		qua3 = QT[s2.x][s2.y][s2.z][2] ;
+
 		if (qua1 > qua2) {
 			if (qua1 > qua3) {
 				maxQ = qua1 ;
@@ -155,14 +157,18 @@ void loadQtab(float QT[I_SIZE][J_SIZE][K_SIZE][NB_ACTION] ,
 		}
 
 		q_actuel = QT[s2.x][s2.y][s2.z][act] ;
-	
-		QT[s2.x][s2.y][s2.z][act] = q_actuel + eps * (
+		
+		if (s2.x < 10 && s2.y < 10 && s2.z < 10) {
+		if (s2.x > -1 && s2.y > -1 && s2.z > -1) { 
+			QT[s2.x][s2.y][s2.z][act] = q_actuel + eps * (
 				(r + gamma * maxQ) - q_actuel) ;
 
-		QT_futur = QT_actuel ;
-
-		printf("load q_actuel %d %d %d %d %f\n", 
+			QT_futur = QT_actuel ;
+			stop = 0 ;
+			printf("%d %d %d %d %f\n", 
 			s2.x, s2.y, s2.z, act, QT[s2.x][s2.y][s2.z][act]) ;
+		}
+		}
 	} 
 
 }
