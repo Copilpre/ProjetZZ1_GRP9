@@ -1,35 +1,70 @@
 #include "sceneSDL.h"
 #include <time.h>
 
-void manger(float * barreD, float * barreM,float * barreJ,float drain){
+void manger(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
     printf("Tama mange.\n");
-    *barreD -= drain;
-    *barreJ -= drain;
-    *barreM += 2*drain;
+    if(currentRoom == 0){
+        *barreD -= drain;
+        *barreJ -= drain;
+        *barreM += 2*drain;
+    }
+    else{
+        *barreD -= drain;
+        *barreJ -= drain;
+        *barreM += drain;
+    }
     if(*barreM>=1.0){
         *barreM=1.0;
     }
 }
 
-void dormir(float * barreD, float * barreM,float * barreJ,float drain){
+void dormir(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
     printf("Tama dort.\n");
-    *barreM -= drain;
-    *barreJ -= drain;
-    *barreD += 2*drain;
+    if(currentRoom == 2){
+        *barreM -= drain;
+        *barreJ -= drain;
+        *barreD += 2*drain;
+    }
+    else{
+        *barreM -= drain;
+        *barreJ -= drain;
+        *barreD += drain;
+    }
     if(*barreD>=1.0){
         *barreD=1.0;
     }
 }
 
-void jouer(float * barreD, float * barreM,float * barreJ,float drain){
+void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
     printf("Tama joue.\n");
-    *barreM -= drain;
-    *barreD -= drain;
-    *barreJ += 2*drain;
+    if(currentRoom == 4){
+        *barreM -= drain;
+        *barreD -= drain;
+        *barreJ += 2*drain;
+    }
+    else{
+        *barreM -= drain;
+        *barreD -= drain;
+        *barreJ += drain;
+    }
     if(*barreJ>=1.0){
         *barreJ=1.0;
     }
 }
+
+void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    *currentRoom=(*currentRoom+1+7)%7;
+    *barreM -= drain;
+    *barreD -= drain;
+    *barreJ -= drain;
+};
+
+void deplaceGauche(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    *currentRoom=(*currentRoom-1+7)%7;
+    *barreM -= drain;
+    *barreD -= drain;
+    *barreJ -= drain;
+};
 
 int main(){
     //init sdl
@@ -47,10 +82,10 @@ int main(){
     SDL_GetCurrentDisplayMode(0, &current);
     int curX,curY;
     int currMood = 0;
-    int WindowW = current.h/2;
-    int WindowH = 1.3*current.h/2;
+    int WindowW = current.w;
+    int WindowH = current.h;
 
-    window_1 = SDL_CreateWindow("Tama!Go!CHI!",current.w/2-current.h/4,0,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
+    window_1 = SDL_CreateWindow("Tama!Go!CHI!",0,0,WindowW,WindowH,SDL_WINDOW_RESIZABLE);
 
     SDL_Renderer *renderer;
     renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
@@ -84,12 +119,16 @@ int main(){
                             {0.5, 0.4, 0.1}};
     SDL_Event event;
 
-
+    SDL_Rect source;
+    SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/hotbar.png");
+    SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+    int posXicone = WindowW/2-(WindowW*0.3)/2;
+    int posYicone = WindowH*0.8;
     SDL_Rect position;
-    position.x = WindowW*0.1;
-    position.y = WindowH*(-0.4);
-    position.w = WindowW;
-    position.h = WindowH;
+    position.x = WindowW*0.15;
+    position.y = WindowH*(-0.7);
+    position.w = WindowW*0.7;
+    position.h = WindowH*1.6;
     int etatPause = 0;
     int currentRoom = 0;
     int program_on = 1;
@@ -124,7 +163,7 @@ int main(){
                 }
                 printf("\n");
             } 
-        }
+        }*currentRoom--;
     }*/
     
     for (i = 0;i<3;i++){
@@ -148,10 +187,10 @@ int main(){
                     switch (event.key.keysym.sym)
                     {
                         case SDLK_LEFT:
-                            currentRoom = (currentRoom-1+3)%3;
+                            deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
                             break;
                         case SDLK_RIGHT:
-                            currentRoom = (currentRoom+1+3)%3;
+                            deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
                             break;
                         case SDLK_SPACE:
                             etatPause = (etatPause+1)%2;
@@ -167,21 +206,18 @@ int main(){
                     actionUser=SDL_TRUE;
                     ticks =0;
                     //DETERMINATION BOUTON APPUYE
-                    if((curY)>=WindowH*0.75 && curY<=WindowH*0.95+50){
-                        if(curX >= 50 && curX <=WindowH*0.2+50){
-                            manger(&barreD,&barreM,&barreJ,drain);
+                    if((curY)>=posYicone && curY<=posYicone+0.2*WindowH){
+                        if(curX >= posXicone && curX <= posXicone + posXicone/3){
+                            manger(&barreD,&barreM,&barreJ,currentRoom,drain);
                             currMood = 1;
-                            currentRoom = 1;
                         }
-                        else if(curX >= 200 && curX <=WindowH*0.2+200){
-                            jouer(&barreD,&barreM,&barreJ,drain);
+                        else if(curX >= (posXicone + posXicone/3) && curX <=(posXicone + posXicone/3)+posXicone/3){
+                            jouer(&barreD,&barreM,&barreJ,currentRoom,drain);
                             currMood = 2;
-                            currentRoom = 2;
                         }
-                        else if(curX >= 350 && curX <=WindowH*0.2+350){
-                            dormir(&barreD,&barreM,&barreJ,drain);
+                        else if(curX >= 0.2 && ((posXicone + posXicone/3)+posXicone/3)+posXicone/3){
+                            dormir(&barreD,&barreM,&barreJ,currentRoom,drain);
                             currMood = 3;
-                            currentRoom = 0;
                         }
                     }
                 default:
@@ -194,15 +230,6 @@ int main(){
                 SDL_RenderPresent(renderer);
                 SDL_WaitEvent(&event);
                     switch(event.type){
-                        case SDL_MOUSEBUTTONDOWN:
-                            curX=event.motion.x;
-                            curY = event.motion.y;
-                            printf("(%d %f)\n",curX,0.875*WindowW);
-                            printf("%f %f",(0.875*WindowW - curX)*(0.875*WindowW - curX)+(0.875*WindowW - curY)*(0.875*WindowW - curY),WindowW*WindowW*0.875*0.875);
-                            if(2*0.875*0.875*WindowW*WindowW+curX*curX+curY*curY-0.875*(curX+curY)<=WindowW*WindowW*0.875*0.875){
-                                printf("SALUT");
-                            }
-                            break;
                         case SDL_KEYDOWN:
                             switch (event.key.keysym.sym)
                             {
@@ -255,13 +282,12 @@ int main(){
         //FIN MARKOV
 
 
-        Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][0];
+        /*Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][0];
         printf("%f",Qmax);
         ActionMax = 0;
         for(a = 1; a < 3 ; a++){
             if (Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a] > Qmax){
                 Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a];
-                printf("%f",Qmax);
                 ActionMax = a;
             } 
         }
@@ -269,24 +295,27 @@ int main(){
         switch (ActionMax)
                 {
                     case 1:
-                        dormir(&barreD,&barreM,&barreJ,drain);
+                        dormir(&barreD,&barreM,&barreJ,currentRoom,drain);
                         currMood = 3;
-                        currentRoom = 0;
                         break;
                     case 0:
-                        manger(&barreD,&barreM,&barreJ,drain);
+                        manger(&barreD,&barreM,&barreJ,currentRoom,drain);
                         currMood = 1;
-                        currentRoom = 1;
                         break;
                     case 2:
-                        jouer(&barreD,&barreM,&barreJ,drain);
+                        jouer(&barreD,&barreM,&barreJ,currentRoom,drain);
                         currMood = 2;
-                        currentRoom = 2;
+                        break;
+                    case 3:
+                        deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                        break;
+                    case 4:
+                        deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
                         break;
                     default:
                         break;
             }
-
+*/
 
         if(barreM<=0.0){
             barreM = 0.0;
