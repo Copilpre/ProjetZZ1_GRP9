@@ -167,9 +167,9 @@ lineTab_t etatSuivant(lineTab_t ligne, int drain){
     
     
     
-    ligne.x-=drain;
+    /*ligne.x-=drain;
     ligne.y-=drain;
-    ligne.z-=drain;
+    ligne.z-=drain;*/
     
     return ligne;
 }
@@ -209,7 +209,7 @@ int main(){
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
 
-    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000000 ; CompteurIterationProgramme ++){ 
+    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 2000000000 ; CompteurIterationProgramme ++){ 
      
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
@@ -287,8 +287,8 @@ int main(){
         prec = curr;
     }
     
-        
-    printf("iteration numero : %d \n ",CompteurIterationProgramme);
+    if((CompteurIterationProgramme%1000000)==1){ 
+    printf("iteration numero : %d \n ",CompteurIterationProgramme);}
     
     }
     sauvTable(Qtable);
