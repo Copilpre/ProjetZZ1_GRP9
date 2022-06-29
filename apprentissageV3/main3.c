@@ -209,19 +209,20 @@ int main(){
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
 
-    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000000 ; CompteurIterationProgramme ++){ 
+    for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 1000000000 ; CompteurIterationProgramme ++){ 
      
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
     //il faudrait peut etre envisage les situation initiales 0.1 et 0.9
     barreM=(rand()%8)+2;
     barreJ=(rand()%8)+2;
-    barreD=(rand()%8)+2; 
-    //barreD = barreM = barreJ = 9;
+    barreD=(rand()%8)+2;
+    //barreD = barreM = barreJ = 10;
     ligne.x=barreM;
     ligne.y=barreJ;
     ligne.z=barreD;
     ligne.position=rand()%7;
+    //ligne.position=0;
     ite = 0;
     while(ite<nbIte&&program_on){
         alea = rand() % NB_ITER ;
@@ -257,7 +258,7 @@ int main(){
         
         ligne = etatSuivant(ligne,drain);
         ite ++;
-        greedy++;
+        //greedy++;
         
     }
     
@@ -287,8 +288,8 @@ int main(){
         prec = curr;
     }
     
-    //if((CompteurIterationProgramme%1000000)==1){ 
-    printf("iteration numero : %d \n ",CompteurIterationProgramme);//}
+    if((CompteurIterationProgramme%1000000)==1){ 
+    printf("iteration numero : %d \n ",CompteurIterationProgramme);}
     
     }
     sauvTable(Qtable);
