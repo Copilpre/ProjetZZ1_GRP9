@@ -121,41 +121,24 @@ void sauvTable(float Qtable[11][11][11][7][5]){
 lineTab_t etatSuivant(lineTab_t ligne, int drain){
     if(ligne.a==0){     //si je veux manger
         if (ligne.position == 0){   //si je suis dans la cuisine je mange mieux
-            ligne.x += drain * 5;
-        }
-        else{
-            //ligne.x += 2*drain;
-            } 
-        if(ligne.x >10){
             ligne.x = 11;
         }
+    
         }
 
     if(ligne.a==1){     //si je veux manger
         if (ligne.position == 2){   //si je suis dans la cuisine je mange mieux
-            ligne.y += drain * 5;
-        }
-        else{
-            //ligne.y += 2*drain;
-            } 
-        if(ligne.y >10){
             ligne.y = 11;
         }
+       
         }
-    
-
-    
+        
     
     if(ligne.a==2){     //si je veux manger
         if (ligne.position == 4){   //si je suis dans la cuisine je mange mieux
-            ligne.z += drain * 5;
-        }
-        else{
-            //ligne.z += 2*drain;
-            } 
-        if(ligne.z >10){
             ligne.z = 11;
         }
+    
     }   
 
     if(ligne.a==3){
@@ -209,25 +192,25 @@ int main(){
     float Qmax;
     int CompteurIterationProgramme;
     p = init_pile(TAILLE);
-    int couloir;
+    //int couloir;
 
     for(CompteurIterationProgramme = 0 ; CompteurIterationProgramme < 10000000 ; CompteurIterationProgramme ++){ 
-     
+    greedy++;
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
     //il faudrait peut etre envisage les situation initiales 0.1 et 0.9
-    barreM=(rand()%8)+2;
+    /*barreM=(rand()%8)+2;
     barreJ=(rand()%8)+2;
-    barreD=(rand()%8)+2;
-    //barreD = barreM = barreJ = 10;
+    barreD=(rand()%8)+2;*/
+    barreD = barreM = barreJ = 9;
     ligne.x=barreM;
     ligne.y=barreJ;
     ligne.z=barreD;
-    ligne.position=rand()%7;
+    ligne.position= 0;
     //ligne.position=0;
     ite = 0;
     while(ite<nbIte&&program_on){
-        alea = rand() % 100000000 ;
+        alea = rand() % 10000000 ;
 		if (greedy < alea) { 
 			if (ligne.position==0||ligne.position==2||ligne.position==4){ 
             // choix d'une action aleatoire
@@ -252,36 +235,43 @@ int main(){
         }
         
         
-        if(ligne.x<=0/*||ligne.y<=0||ligne.z<=0*/){
+        if(ligne.x<=0||ligne.y<=0||ligne.z<=0){
             program_on = 0;
         }
         //printf("%d : (%d %d %d %d)\n",ite,ligne.x,ligne.y,ligne.z,ligne.a);
-        if(ligne.y<0){
+       /* if(ligne.y<0){
             ligne.y=0;
         }
         if(ligne.z<0){
             ligne.z=0;
-        } 
+        } */
         
         empiler(p,ligne);
         
         
         ligne = etatSuivant(ligne,drain);
         ite ++;
-        //greedy++;
+        
         
     }
     
     //afficherPile(p);
-    float r = 1/(1+exp(-ite));
+    float r = 1/(1+exp(-ite*10+150));
+    /*if (r>0.01){
+        printf("%f",r);
+    } */
+    //printf("recompense : %f", r);
     //UPDATE QTABLE
+    if (ite > 25){
+        printf("%d\n ",ite);
+    } 
     depiler(p,&prec);
     Qtable[prec.x][prec.y][prec.z][prec.position][prec.a] += learnRate * (r - Qtable[prec.x][prec.y][prec.z][prec.position][prec.a]);
     while(!EstVidePile(p)){
 
         depiler(p,&curr);
         ite--;
-        r = 1/(1+exp(-ite));
+        //r = 1/(1+exp(-ite));
 
         Qmax = Qtable[prec.x][prec.y][prec.z][prec.position][0];
         for(ChoixMax = 1; ChoixMax < 5; ChoixMax++){
@@ -296,8 +286,8 @@ int main(){
             printf("COUCOU %f\n",Qtable[curr.x][curr.y][curr.z][curr.position][curr.a]);
         }
         //mise à jour via proches voisins
-        
-        /*if (curr.position == 0 || curr.position==2 || curr.position==4){ 
+        /*
+        if (curr.position == 0 || curr.position==2 || curr.position==4){ 
             if(curr.x<10){
                 Qtable[curr.x+1][curr.y][curr.z][curr.position][curr.a] += (learnRate/2) * (0 + discount*Qmax - Qtable[curr.x+1][curr.y][curr.z][curr.position][curr.a]);
             }
@@ -316,8 +306,8 @@ int main(){
             if(curr.z>0){
                 Qtable[curr.x][curr.y][curr.z-1][curr.position][curr.a] += (learnRate/2) * (0 + discount*Qmax - Qtable[curr.x][curr.y][curr.z-1][curr.position][curr.a]);
             } 
-        }*/
-        
+        }
+        */
         
         prec = curr;
     }
@@ -326,7 +316,7 @@ int main(){
     printf("iteration numero : %d \n ",CompteurIterationProgramme);}
     
     }
-    //sauvTable(Qtable);
+    sauvTable(Qtable);
     libererPile(p);
     
     return 0;
