@@ -162,22 +162,25 @@ void afficheBarre(SDL_Renderer * renderer,int windowW,int windowH){
 void carte(SDL_Renderer * renderer,int currentRoom,int WindowW,int WindowH){
     char map[8][30]={{"./image/mapCuisine.png"},{"./image/mapCouloir1.png"},{"./image/mapChambre.png"},{"./image/mapCouloir2.png"},{"./image/mapSalleJeu.png"},{"./image/mapCouloir3.png"},{"./image/mapCouloir4.png"}};
     SDL_Texture * texture = IMG_LoadTexture(renderer,map[currentRoom]);
-
+    
     SDL_Rect position,source;
 
     SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
-
+    source.x = 0;
+    source.y = 0;
 
     position.x = 0.75 * WindowW;
     position.y = 0;
     position.w = source.w;
     position.h = source.h;
     SDL_RenderCopy(renderer, texture, &source, &position);
+    SDL_DestroyTexture(texture);
 }
 
 void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer * renderer,int windowW,int windowH){
     char salles[8][20]={{"./image/cuisine.png"},{"./image/couloir.png"},{"./image/chambre.jpg"},{"./image/couloir.png"},{"./image/stade.jpg"},{"./image/couloir.png"},{"./image/couloir2.png"}};
-    
+    char barre[3][20]={{"./image/barreM.png"},{"./image/barreJ.png"},{"./image/barreD.png"}};
+    int barreVal[3]={barreM*10,barreJ*10,barreD*10};
     SDL_Rect position,position2,source;
 
 
@@ -194,30 +197,22 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
     SDL_RenderCopy(renderer, texture, &source, &position);
         
     //barres de vie
-    SDL_Color couleur[3]={rouge,vert,cyan};
     float barres[3] = {barreM,barreJ,barreD};
 
-    
-    int ecartBarre = windowW*0.01;
+    int ecartBarre = -100;
 
-    position.w = windowW/16;
-    position.y = ecartBarre;
+    position.w = windowW/8;
+    position.y = 50;
     position.h = windowH/4;
-        
+      
     for (int i = 0; i < 3;i++){
-        position.x= i * position.w + ecartBarre *(i+1);
-        position2.x = position.x+0.5*ecartBarre;
-        position2.w = position.w-ecartBarre;
-        position2.h = position.h*barres[i];
-        position2.y = (position.h+position.y-(position2.h));
-           if(barres[i]!=0){
-           position2.h -= 5;
-        }
-            
-        SDL_SetRenderDrawColor(renderer,gris.r,gris.g,gris.b,gris.a);
-        SDL_RenderFillRect(renderer,&position);
-        SDL_SetRenderDrawColor(renderer,couleur[i].r,couleur[i].g,couleur[i].b,couleur[i].a);
-        SDL_RenderFillRect(renderer,&position2);
+        texture = IMG_LoadTexture(renderer,barre[i]);
+        SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
+        source.w = source.w /10;
+        source.x = barreVal[i]*source.w;  
+        position.x= i * (position.w + 100)/3;
+
+        SDL_RenderCopy(renderer, texture, &source, &position);
     }
     
     SDL_DestroyTexture(texture);
