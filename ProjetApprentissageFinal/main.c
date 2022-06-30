@@ -62,7 +62,7 @@ void dormir(float * barreD, float * barreM,float * barreJ,int currentRoom,float 
         *barreD=1.0;
     }*/
 }
-
+} 
 void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
     printf("Tama joue.\n");
     //int temp;
@@ -93,12 +93,12 @@ void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float d
 }
 
 void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
-    int temp;
+    //int temp;
     *currentRoom=(*currentRoom+1+7)%7;
-    /**barreM -= drain;
+    *barreM -= drain;
     *barreD -= drain;
-    *barreJ -= drain; */
-        temp = rand()%3;
+    *barreJ -= drain;
+       /* temp = rand()%3;
         if(temp == 0){
             *barreM-=drain;
         } 
@@ -108,16 +108,16 @@ void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRo
 
         if(temp == 2){
             *barreJ-=drain;
-        } 
+        } */
 };
 
 void deplaceGauche(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
-    int temp;
+    //int temp;
     *currentRoom=(*currentRoom-1+7)%7;
    /* *barreM -= drain;
     *barreD -= drain;
     *barreJ -= drain;*/
-        temp = rand()%3;
+        /*temp = rand()%3;
         if(temp == 0){
             *barreM-=drain;
         } 
@@ -127,7 +127,7 @@ void deplaceGauche(float * barreD, float * barreM,float * barreJ,int * currentRo
 
         if(temp == 2){
             *barreJ-=drain;
-        } 
+        } */
 };
 
 int main(){
