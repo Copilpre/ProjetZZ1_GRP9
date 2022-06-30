@@ -93,17 +93,17 @@ deux chances sur 10 d'être compris entre 4 et 6 (4,5), et 4 chances sur 10 d'ê
 		Le principe est que pour que le Tama sache jouer tout seul nous utilisons une table appélée Q-table qui permet au Tama de se baser sur son experience pour mieux jouer/survivre.
 		Sachant qu'au début le Tama joue en mode exploration (assurer par l'aleatoire) et gràce au Q-table on recupère la qualité de son parcours ou son jeu dans le Q-table qui sera une memoire de sauvegarde. 
 		Ensuite quand le Tama aura plus d'experience on fera jouer le Tama plus dans un mode d'exploitation qui le permettra de se baser sur la qualité de ces choix pour jouer pour mieux jouer/survivre.
-		
-		<strong>FORMULE DU CALCUL DE LA QUALITE DES ACTIONS<strong>
-		Q(v,s) = Q(v,s) + eps( (R_futur + gamma * Max_futur) - Q(v,s) )
 	</p>
+	
+	<h3>FORMULE DU CALCUL DE LA QUALITE DES ACTIONS</h3>
+	<p>Q(v,s) = Q(v,s) + eps( (R_futur + gamma * Max_futur) - Q(v,s) )</p>
 
 	<h3> TABLE ILLUSTRANT UN CAS D'EXEMPLE </h3>
 	<table>
 		<thead>
 			<tr>
-				<td> i </td><td> j </td><td> k </td><td> Manger </td>
-				<td> Dormir </td><td> Jouer </td><td> Gauche </td><td> Droite </td>
+				<th> i </th><th> j </th><th> k </th><th> Manger </th>
+				<th Dormir </th><th> Jouer </th>
 			</tr> 
 		</thead>
 		<tbody>
