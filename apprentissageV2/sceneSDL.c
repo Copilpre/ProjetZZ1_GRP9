@@ -209,7 +209,7 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
         texture = IMG_LoadTexture(renderer,barre[i]);
         SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
         source.w = source.w /10;
-        source.x = barreVal[i]*source.w;  
+        source.x = (barreVal[i]-1)*source.w;  
         position.x= i * (position.w + 100)/3;
 
         SDL_RenderCopy(renderer, texture, &source, &position);

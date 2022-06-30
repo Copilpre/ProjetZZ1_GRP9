@@ -6,16 +6,16 @@ void manger(float * barreD, float * barreM,float * barreJ,int currentRoom,float 
     if(currentRoom == 0){
         *barreD -= drain;
         *barreJ -= drain;
-        *barreM += 2*drain;
+        *barreM = 1.0;
     }
-    else{
+    /*else{
         *barreD -= drain;
         *barreJ -= drain;
         *barreM += drain;
     }
     if(*barreM>=1.0){
         *barreM=1.0;
-    }
+    }*/
 }
 
 void dormir(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
@@ -23,16 +23,16 @@ void dormir(float * barreD, float * barreM,float * barreJ,int currentRoom,float 
     if(currentRoom == 2){
         *barreM -= drain;
         *barreJ -= drain;
-        *barreD += 2*drain;
+        *barreD = 1.0;
     }
-    else{
+    /*else{
         *barreM -= drain;
         *barreJ -= drain;
         *barreD += drain;
     }
     if(*barreD>=1.0){
         *barreD=1.0;
-    }
+    }*/
 }
 
 void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
@@ -40,19 +40,20 @@ void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float d
     if(currentRoom == 4){
         *barreM -= drain;
         *barreD -= drain;
-        *barreJ += 2*drain;
+        *barreJ = 1.0;
     }
-    else{
+    /*else{
         *barreM -= drain;
         *barreD -= drain;
         *barreJ += drain;
     }
     if(*barreJ>=1.0){
         *barreJ=1.0;
-    }
+    }*/
 }
 
 void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    
     *currentRoom=(*currentRoom+1+7)%7;
     *barreM -= drain;
     *barreD -= drain;
@@ -60,6 +61,7 @@ void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRo
 };
 
 void deplaceGauche(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    
     *currentRoom=(*currentRoom-1+7)%7;
     *barreM -= drain;
     *barreD -= drain;
@@ -95,7 +97,7 @@ int main(){
 
     srand( time( NULL ) );
     
-    float barreD = (rand()%6);
+    /*float barreD = (rand()%6);
     printf("%f\n",barreD);
     barreD = barreD/10+0.2;
     
@@ -105,12 +107,12 @@ int main(){
     
     float barreJ = (rand()%6);
     printf("%f\n",barreJ);
-    barreJ = barreJ/10+0.2;
+    barreJ = barreJ/10+0.2;*/
     
     
-    /*float barreD = 0.5;
-    float barreJ = 0.5;
-    float barreM = 0.5;*/
+    float barreD = 0.9;
+    float barreJ = 0.9;
+    float barreM = 0.9;
 
     printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
 
@@ -188,9 +190,19 @@ int main(){
                     {
                         case SDLK_LEFT:
                             deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            while(currentRoom!=0&&currentRoom!=2&&currentRoom!=4){
+                                afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
+                                SDL_Delay(500);
+                                deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            }
                             break;
                         case SDLK_RIGHT:
                             deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            while(currentRoom!=0&&currentRoom!=2&&currentRoom!=4){
+                                afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
+                                SDL_Delay(500);
+                                deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            }
                             break;
                         case SDLK_SPACE:
                             etatPause = (etatPause+1)%2;
@@ -328,7 +340,7 @@ int main(){
         }
         printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
 
-        if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
+        if(barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
             animeMort(renderer,WindowW,WindowH,position);
         }
