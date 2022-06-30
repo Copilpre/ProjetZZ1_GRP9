@@ -1,6 +1,8 @@
 #include "sceneSDL.h"
 #include <time.h>
 
+#define FLOAT_TO_INT(x) ((x)>= 0?(int)((x)+0.5):(int)((x)-0.5)) 
+
 void manger(float * barreD, float * barreM,float * barreJ,int currentRoom,float drain){
     printf("Tama mange.\n");
     if(currentRoom == 0){
@@ -138,25 +140,32 @@ int main(){
     float drain = 0.1;
     int nextState=0;
     int probaCumul[3][3];
-    int i,j,k,a,outil;
+    int i,j,k,a,l,outil;
     int delai = 200;
     // variable pour faire fonctionner l'IA
     float Qmax;
     int ActionMax;
-    //int tempM, tempJ, tempD;
+    int tempM, tempJ, tempD;
+    float Qtable[11][11][11][7][5];  
+    FILE *fichier = fopen ("Qtable.txt", "r" );
+    if (fichier == NULL){
+        printf("erreur lors de l'ouverture du fichier");
+        }
+    else{
+        for(i = 0; i<11; i++){
+            for(j = 0; j<11; j++){
+                for(k = 0; k<11; k++){
+                    for(l = 0; l<7; l++){
+                        fscanf(fichier,"%*d %*d %*d %*d %f %f %f %f %f", &Qtable[i][j][k][l][0], &Qtable[i][j][k][l][1], &Qtable[i][j][k][l][2], &Qtable[i][j][k][l][3], &Qtable[i][j][k][l][4]);
+                        }
+                    } 
+                } 
+            } 
+        }
+    fclose(fichier);
 
-    FILE * fichier = fopen("Qtable.txt","r");      //chargement d'un fichier
-    float Qtable[11][11][11][3];
-    
-    for(i = 0; i < 11; i++){
-        for (j = 0; j < 11 ; j++){
-            for (k = 0; k < 11 ; k++){
-  
-                    fscanf(fichier,"%*d %*d %*d %f %f %f", &Qtable[i][j][k][0],&Qtable[i][j][k][1],&Qtable[i][j][k][2]);
-                 
-            }
-        } 
-    }
+
+    printf("qtable qui eifpozfp :%f\n ",Qtable[8][6][6][2][1]);
     /*for(i = 0; i < 11; i++){
         for (j = 0; j < 11 ; j++){
             for (k = 0; k < 11 ; k++){
@@ -293,16 +302,28 @@ int main(){
         //printf("hello");
         //FIN MARKOV
 
+        tempM = FLOAT_TO_INT(barreM*10);
+        tempD = FLOAT_TO_INT(barreD*10);
+        tempJ = FLOAT_TO_INT(barreJ*10);
+        printf("temp M %d temp D %d temps J %d \n ",tempM,tempD,tempJ);
 
-        /*Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][0];
-        printf("%f",Qmax);
+
+        //printf("etat des barres manger : %f dormir :%f jouer :%f\n position : %d\n ", barreM, barreD, barreJ, currentRoom);
+        Qmax = Qtable[tempM][tempD][tempJ][currentRoom][0];
+        
         ActionMax = 0;
-        for(a = 1; a < 3 ; a++){
-            if (Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a] > Qmax){
-                Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a];
+        for(a = 1; a < 5 ; a++){
+            printf("voici le Qtable :%f\n ",Qtable[tempM][tempD][tempJ][currentRoom][a]);
+
+            if (Qtable[tempM][tempD][tempJ][currentRoom][a] > Qmax){
+                Qmax = Qtable[tempM][tempD][tempJ][currentRoom][a];
+                
                 ActionMax = a;
             } 
         }
+
+        printf("\n action a effectuer numero : %d\n ",ActionMax);
+
         //printf("%d",ActionMax);
         switch (ActionMax)
                 {
@@ -327,7 +348,7 @@ int main(){
                     default:
                         break;
             }
-*/
+
 
         if(barreM<=0.0){
             barreM = 0.0;
@@ -338,7 +359,7 @@ int main(){
         if(barreJ<=0.0){
             barreJ = 0.0;
         }
-        printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
+        //printf("etat des barres manger : %f dormir :%f jouer :%f\n position : %d\n ", barreM, barreD, barreJ, currentRoom);
 
         if(barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
