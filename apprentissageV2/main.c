@@ -53,6 +53,7 @@ void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float d
 }
 
 void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    
     *currentRoom=(*currentRoom+1+7)%7;
     *barreM -= drain;
     *barreD -= drain;
@@ -60,6 +61,7 @@ void deplaceDroite(float * barreD, float * barreM,float * barreJ,int * currentRo
 };
 
 void deplaceGauche(float * barreD, float * barreM,float * barreJ,int * currentRoom,float drain){
+    
     *currentRoom=(*currentRoom-1+7)%7;
     *barreM -= drain;
     *barreD -= drain;
@@ -188,9 +190,19 @@ int main(){
                     {
                         case SDLK_LEFT:
                             deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            while(currentRoom!=0&&currentRoom!=2&&currentRoom!=4){
+                                afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
+                                SDL_Delay(500);
+                                deplaceGauche(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            }
                             break;
                         case SDLK_RIGHT:
                             deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            while(currentRoom!=0&&currentRoom!=2&&currentRoom!=4){
+                                afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
+                                SDL_Delay(500);
+                                deplaceDroite(&barreD,&barreM,&barreJ,&currentRoom,drain);
+                            }
                             break;
                         case SDLK_SPACE:
                             etatPause = (etatPause+1)%2;
