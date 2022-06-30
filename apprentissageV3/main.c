@@ -6,7 +6,7 @@ void manger(float * barreD, float * barreM,float * barreJ,int currentRoom,float 
     if(currentRoom == 0){
         *barreD -= drain;
         *barreJ -= drain;
-        *barreM += 4*drain;
+        *barreM += 10*drain;
     }
     else{
         *barreD -= drain;
@@ -23,7 +23,7 @@ void dormir(float * barreD, float * barreM,float * barreJ,int currentRoom,float 
     if(currentRoom == 2){
         *barreM -= drain;
         *barreJ -= drain;
-        *barreD += 4*drain;
+        *barreD += 10*drain;
     }
     else{
         *barreM -= drain;
@@ -40,7 +40,7 @@ void jouer(float * barreD, float * barreM,float * barreJ,int currentRoom,float d
     if(currentRoom == 4){
         *barreM -= drain;
         *barreD -= drain;
-        *barreJ += 4*drain;
+        *barreJ += 10*drain;
     }
     else{
         *barreM -= drain;
@@ -95,7 +95,7 @@ int main(){
 
     srand( time( NULL ) );
     
-    /*float barreD = (rand()%6);
+    /* float barreD = (rand()%6);
     printf("%f\n",barreD);
     barreD = barreD/10+0.2;
     
@@ -130,7 +130,7 @@ int main(){
     position.w = WindowW*0.7;
     position.h = WindowH*1.6;
     int etatPause = 0;
-    int currentRoom = 0;
+    int currentRoom = rand()%7;
     int program_on = 1;
     int etat = 1;
     float drain = 0.1;
@@ -189,7 +189,6 @@ int main(){
 
     //ECRAN DE DEBUT
     //eclosion(renderer,WindowW,WindowH);
-
     //BOUCLE DE JEU
     while(program_on){
             
@@ -343,7 +342,7 @@ int main(){
 
         if(barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
-            animeMort(renderer,WindowW,WindowH,position);
+            //animeMort(renderer,WindowW,WindowH,position);
         }
         
         

@@ -7,7 +7,7 @@
 #define nbIte 1000
 #define learnRate 0.9
 #define discount 0.5
-#define TAILLE 1001
+#define TAILLE 1000
 
 #define NB_ITER 200
 #define NB_ACTION 5
@@ -121,26 +121,30 @@ void sauvTable(float Qtable[11][11][11][7][5]){
 lineTab_t etatSuivant(lineTab_t ligne, int drain){
     if(ligne.a==0){     //si je veux manger
         if (ligne.position == 0){   //si je suis dans la cuisine je mange mieux
-            ligne.x += drain * 5;
+            ligne.x += drain * 10;
         }
         else{
-            //ligne.x += 2*drain;
+            ligne.x += 2*drain;
             } 
         if(ligne.x >10){
-            ligne.x = 11;
+            ligne.x = 10;
         }
+        ligne.y-=drain;
+        ligne.z-=drain;
         }
 
     if(ligne.a==1){     //si je veux manger
         if (ligne.position == 2){   //si je suis dans la cuisine je mange mieux
-            ligne.y += drain * 5;
+            ligne.y += drain * 10;
         }
         else{
-            //ligne.y += 2*drain;
+            ligne.y += 2*drain;
             } 
         if(ligne.y >10){
-            ligne.y = 11;
+            ligne.y = 10;
         }
+        ligne.x-=drain;
+        ligne.z-=drain;
         }
     
 
@@ -148,28 +152,32 @@ lineTab_t etatSuivant(lineTab_t ligne, int drain){
     
     if(ligne.a==2){     //si je veux manger
         if (ligne.position == 4){   //si je suis dans la cuisine je mange mieux
-            ligne.z += drain * 5;
+            ligne.z += drain * 10;
         }
         else{
-            //ligne.z += 2*drain;
+            ligne.z += 2*drain;
             } 
         if(ligne.z >10){
-            ligne.z = 11;
+            ligne.z = 10;
         }
-    }   
+        ligne.x-=drain;
+        ligne.y-=drain;
+        }   
 
     if(ligne.a==3){
         ligne.position = (ligne.position - 1 + NB_SALLES)%NB_SALLES; //deplacement a gauche
+        ligne.x-=drain;
+        ligne.y-=drain;
+        ligne.z-=drain;
     } 
     if(ligne.a==4){
         ligne.position = (ligne.position + 1 + NB_SALLES)%NB_SALLES; //deplacement a droite
+        ligne.x-=drain;
+        ligne.y-=drain;
+        ligne.z-=drain;
     } 
     
-    
-    
-    ligne.x-=drain;
-    ligne.y-=drain;
-    ligne.z-=drain;
+
     
     return ligne;
 }
@@ -216,10 +224,10 @@ int main(){
     //BOUCLE DE REMPLISSAGE DE LA PILE
     program_on = 1;
     //il faudrait peut etre envisage les situation initiales 0.1 et 0.9
-    barreM=(rand()%8)+2;
+    /*barreM=(rand()%8)+2;
     barreJ=(rand()%8)+2;
-    barreD=(rand()%8)+2;
-    //barreD = barreM = barreJ = 10;
+    barreD=(rand()%8)+2;*/
+    barreD = barreM = barreJ = 9;
     ligne.x=barreM;
     ligne.y=barreJ;
     ligne.z=barreD;
@@ -227,12 +235,48 @@ int main(){
     //ligne.position=0;
     ite = 0;
     while(ite<nbIte&&program_on){
-        alea = rand() % 100000000 ;
+        alea = rand() % NB_ITER ;
 		if (greedy < alea) { 
-			if (ligne.position==0||ligne.position==2||ligne.position==4){ 
+			if (ligne.position==0){ 
             // choix d'une action aleatoire
-			ligne.a = rand() % NB_ACTION ;
+                couloir = rand()%3;
+                if(couloir == 0){
+                    ligne.a = 0;
+                } 
+                if(couloir == 1){
+                    ligne.a = 3;
+                }
+                if(couloir == 2){
+                    ligne.a = 4;
+                }
+            } 
+			if (ligne.position==2){ 
+            // choix d'une action aleatoire
+                couloir = rand()%3;
+                if(couloir == 0){
+                    ligne.a = 1;
+                } 
+                if(couloir == 1){
+                    ligne.a = 3;
+                }
+                if(couloir == 2){
+                    ligne.a = 4;
+                }
             }
+			if (ligne.position==4){ 
+            // choix d'une action aleatoire
+                couloir = rand()%3;
+                if(couloir == 2){
+                    ligne.a = 0;
+                } 
+                if(couloir == 1){
+                    ligne.a = 3;
+                }
+                if(couloir == 2){
+                    ligne.a = 4;
+                }
+            }  
+
 
         //peut etre un else a add ici
 
@@ -252,28 +296,21 @@ int main(){
         }
         
         
-        if(ligne.x<=0/*||ligne.y<=0||ligne.z<=0*/){
+        if(ligne.x<=0||ligne.y<=0||ligne.z<=0){
             program_on = 0;
         }
         //printf("%d : (%d %d %d %d)\n",ite,ligne.x,ligne.y,ligne.z,ligne.a);
-        if(ligne.y<0){
-            ligne.y=0;
-        }
-        if(ligne.z<0){
-            ligne.z=0;
-        } 
-        
         empiler(p,ligne);
         
         
         ligne = etatSuivant(ligne,drain);
         ite ++;
-        //greedy++;
+        greedy++;
         
     }
     
     //afficherPile(p);
-    float r = 1/(1+exp(-ite));
+    float r = 1/(1+exp(-ite*0.1));
     //UPDATE QTABLE
     depiler(p,&prec);
     Qtable[prec.x][prec.y][prec.z][prec.position][prec.a] += learnRate * (r - Qtable[prec.x][prec.y][prec.z][prec.position][prec.a]);
@@ -297,7 +334,7 @@ int main(){
         }
         //mise à jour via proches voisins
         
-        /*if (curr.position == 0 || curr.position==2 || curr.position==4){ 
+        if (curr.position == 0 || curr.position==2 || curr.position==4){ 
             if(curr.x<10){
                 Qtable[curr.x+1][curr.y][curr.z][curr.position][curr.a] += (learnRate/2) * (0 + discount*Qmax - Qtable[curr.x+1][curr.y][curr.z][curr.position][curr.a]);
             }
@@ -316,7 +353,7 @@ int main(){
             if(curr.z>0){
                 Qtable[curr.x][curr.y][curr.z-1][curr.position][curr.a] += (learnRate/2) * (0 + discount*Qmax - Qtable[curr.x][curr.y][curr.z-1][curr.position][curr.a]);
             } 
-        }*/
+        }
         
         
         prec = curr;
@@ -326,7 +363,7 @@ int main(){
     printf("iteration numero : %d \n ",CompteurIterationProgramme);}
     
     }
-    //sauvTable(Qtable);
+    sauvTable(Qtable);
     libererPile(p);
     
     return 0;
