@@ -100,6 +100,10 @@ void eclosion(SDL_Renderer * renderer,int windowW,int windowH){
     posP.w = 0.2*windowH;
     posP.h = 0.3*windowH;
 
+    source.x = 0;
+    source.y = 0;
+    SDL_QueryTexture(texturePingouin,NULL,NULL,&source.w,&source.h);
+
     for(int i = 0; i < 10;i++){
         flash.x=((i%2)*2*flash.w)/2;
         SDL_RenderCopy(renderer, texture, &flash, &position);
@@ -205,7 +209,7 @@ void initSDL(int currentRoom,float barreM,float barreJ,float barreD,SDL_Renderer
     SDL_DestroyTexture(texture);
 }
 
-void pause(int etat,SDL_Renderer * renderer,int WindowW,int WindowH){
+void pause(int etat,SDL_Renderer * renderer,int WindowW){
     SDL_Texture * texture;
     if(etat){
         texture = IMG_LoadTexture(renderer,"./image/pause.png");
@@ -266,7 +270,7 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
     for (int i = 0;i<nbSprite;i++){
         //ON AFFICHE LA SCENE AVANT LE PERSO
         initSDL(currentRoom,barreM,barreJ,barreD,renderer,WindowW,WindowH);
-        pause(etat,renderer,WindowW,WindowW);
+        pause(etat,renderer,WindowW);
         //AFFICHAGE TAMAGOCHI
 
         sprite.x = i*LargeurCase;
@@ -280,7 +284,7 @@ void afficheTama(SDL_Renderer * renderer,SDL_Rect position,int currMood,int curr
 
 void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH,SDL_Rect pingouin){
     SDL_Texture * texture = IMG_LoadTexture(renderer,"./image/explosion.png");
-    //SDL_Texture * pingouinT = IMG_LoadTexture(renderer,"./image/spriteSheet.png");
+    SDL_Texture * pingouinT = IMG_LoadTexture(renderer,"./image/spriteSheet.png");
     SDL_Rect position,source,sourceP;
     SDL_QueryTexture(texture,NULL,NULL,&source.w,&source.h);
     int hauteurCase = source.h/5;
@@ -288,31 +292,30 @@ void animeMort(SDL_Renderer * renderer,int WindowW,int WindowH,SDL_Rect pingouin
 
     source.h=hauteurCase;
     source.w=largeurCase;
-    //SDL_QueryTexture(pingouinT,NULL,NULL,&sourceP.w,&sourceP.h);
-    //sourceP.w/=12;
-    //sourceP.h/=7;
-    
-    //sourceP.y=5*hauteurCase;
+    SDL_QueryTexture(pingouinT,NULL,NULL,&sourceP.w,&sourceP.h);
+    sourceP.w/=12;
+    sourceP.h/=7;
+    sourceP.y=5*sourceP.h;
 
     position.x =WindowW/4;
     position.y = WindowH/4;
     position.w = WindowW/2;
     position.h = WindowH/2;
 
-    //pingouin.y =0;
 
     
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
     for (int i =0;i<5;i++){
         source.y=i*hauteurCase;
-        for (int j = 0; j < 5 ;j++){
-            sourceP.x = j*largeurCase;
+        for (int j = 0; j < 4 ;j++){
+            sourceP.x = j*sourceP.w;
             SDL_RenderClear(renderer);
 
-            //SDL_RenderCopy(renderer,pingouinT,&sourceP,&pingouin);
+            
             
             source.x = j*largeurCase;
             SDL_RenderCopy(renderer,texture,&source,&position);
+            SDL_RenderCopy(renderer,pingouinT,&sourceP,&position);
             SDL_RenderPresent(renderer);
             SDL_Delay(200);
         }

@@ -32,6 +32,7 @@ void jouer(float * barreD, float * barreM,float * barreJ,float drain){
 }
 
 int main(){
+
     //init sdl
     SDL_Window 
        *window_1 = NULL;
@@ -56,28 +57,19 @@ int main(){
     renderer = SDL_CreateRenderer(window_1, -1, SDL_RENDERER_ACCELERATED );
     //fin init
 
-    SDL_bool actionUser = SDL_TRUE;
 
     srand( time( NULL ) );
     
     float barreD = (rand()%6);
-    printf("%f\n",barreD);
     barreD = barreD/10+0.2;
     
     float barreM = (rand()%6);
-    printf("%f\n",barreM);
     barreM = barreM/10+0.2;
     
     float barreJ = (rand()%6);
-    printf("%f\n",barreJ);
     barreJ = barreJ/10+0.2;
     
-    
-    /*float barreD = 0.5;
-    float barreJ = 0.5;
-    float barreM = 0.5;*/
-
-    printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
+    printf("Etat de départ des barres => Manger : %f, Dormir : %f, Jouer : %f\n", barreM, barreD, barreJ);
 
     float probaEtat[3][3] ={{0.1, 0.4, 0.5},
                             {0.4, 0.2, 0.4},
@@ -95,14 +87,14 @@ int main(){
     int program_on = 1;
     int etat = 1;
     float drain = 0.1;
-    int nextState=0;
     int probaCumul[3][3];
-    int i,j,k,a,outil;
+    int i,j,k,a;
     int delai = 200;
+    SDL_bool actionUser = SDL_FALSE;
+
     // variable pour faire fonctionner l'IA
     float Qmax;
     int ActionMax;
-    //int tempM, tempJ, tempD;
 
     FILE * fichier = fopen("Qtable.txt","r");      //chargement d'un fichier
     float Qtable[11][11][11][3];
@@ -116,16 +108,6 @@ int main(){
             }
         } 
     }
-    /*for(i = 0; i < 11; i++){
-        for (j = 0; j < 11 ; j++){
-            for (k = 0; k < 11 ; k++){
-                for (a = 0; a < 3 ; a++){
-                    printf("%f",Qtable[i][j][k][a]); 
-                }
-                printf("\n");
-            } 
-        }
-    }*/
     
     for (i = 0;i<3;i++){
         for (j = 0; j<3;j++){
@@ -137,7 +119,7 @@ int main(){
     }
 
     //ECRAN DE DEBUT
-    //eclosion(renderer,WindowW,WindowH);
+    eclosion(renderer,WindowW,WindowH);
 
     //BOUCLE DE JEU
     while(program_on){
@@ -164,8 +146,8 @@ int main(){
                 case SDL_MOUSEBUTTONDOWN:
                     curX=event.motion.x;
                     curY = event.motion.y;
-                    actionUser=SDL_TRUE;
                     ticks =0;
+                    actionUser = SDL_TRUE;
                     //DETERMINATION BOUTON APPUYE
                     if((curY)>=WindowH*0.75 && curY<=WindowH*0.95+50){
                         if(curX >= 50 && curX <=WindowH*0.2+50){
@@ -190,18 +172,13 @@ int main(){
         }
 
         while(etatPause){
-                pause(etat,renderer,WindowW,WindowH);
+                pause(etat,renderer,WindowW);
                 SDL_RenderPresent(renderer);
                 SDL_WaitEvent(&event);
                     switch(event.type){
                         case SDL_MOUSEBUTTONDOWN:
                             curX=event.motion.x;
                             curY = event.motion.y;
-                            printf("(%d %f)\n",curX,0.875*WindowW);
-                            printf("%f %f",(0.875*WindowW - curX)*(0.875*WindowW - curX)+(0.875*WindowW - curY)*(0.875*WindowW - curY),WindowW*WindowW*0.875*0.875);
-                            if(2*0.875*0.875*WindowW*WindowW+curX*curX+curY*curY-0.875*(curX+curY)<=WindowW*WindowW*0.875*0.875){
-                                printf("SALUT");
-                            }
                             break;
                         case SDL_KEYDOWN:
                             switch (event.key.keysym.sym)
@@ -251,21 +228,19 @@ int main(){
             }
         }
         } */
-        //printf("hello");
         //FIN MARKOV
 
-
-        Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][0];
-        printf("%f",Qmax);
+        if(!actionUser){
+            Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][0];
         ActionMax = 0;
         for(a = 1; a < 3 ; a++){
             if (Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a] > Qmax){
                 Qmax = Qtable[(int)(barreM*10)][(int)(barreD*10)][(int)(barreJ*10)][a];
-                printf("%f",Qmax);
                 ActionMax = a;
             } 
         }
-        //printf("%d",ActionMax);
+
+
         switch (ActionMax)
                 {
                     case 1:
@@ -286,8 +261,10 @@ int main(){
                     default:
                         break;
             }
+        }
+        
 
-
+    
         if(barreM<=0.0){
             barreM = 0.0;
         }
@@ -297,7 +274,6 @@ int main(){
         if(barreJ<=0.0){
             barreJ = 0.0;
         }
-        printf("etat des barres manger : %f dormir :%f jouer :%f\n", barreM, barreD, barreJ);
 
         if(barreM>=1.0||barreD>=1.0||barreJ>=1.0||barreM<=0.0||barreD<=0.0||barreJ<=0.0){
             program_on = 0;
@@ -308,11 +284,11 @@ int main(){
         if(program_on){
             afficheTama(renderer,position,currMood,currentRoom,barreM,barreJ,barreD,WindowW,WindowH,etatPause);
         }
+
         ticks++;
         currMood=0;
         SDL_Delay(delai);
         actionUser = SDL_FALSE;
-        
     }
     
     SDL_DestroyRenderer(renderer);
